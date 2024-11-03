@@ -707,36 +707,526 @@ body{
 }
 
 
-/* rensponsive */
-/* Styling dropdown di layar kecil */
-@media (max-width: 768px) {
-    .container-navbar {
-        flex-direction: row;
+@media (max-width: 992px) {
+    /* rensponsive untuk home */
+    .home {
+        flex-direction: column-reverse;
         align-items: center;
-        margin-inline: 20px;
-        padding: 20px;
+        padding-inline: 48px;
+      margin-top: 20px;
+      gap: 10px;
+    }
+  
+    .home .home-info {
+        align-items: center;
+        text-align: center;
+    }
+    
+    .home .home-info .job {
+        font-size: 60px;
+    }
+    
+    .home .home-info .keterangan {
+        font-size: 18px;
+        width: 100%;
+        max-width: 500px;
+        text-align: center;
+    }
+    
+    .home .home-info a .hire-me {
+        width: 150px;
+        font-size: 18px;
+    }
+    
+    .home-img-wrapper {
+        max-width: 400px;
+        margin-top: 20px;
+        margin-right: 0;
+    }
+    
+    .home-img {
+        width: 100%;
+        max-width: 400px;
+        height: 400px;
+    }
+    
+    .label {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+    }
+    
+}
+
+/* Gaya Responsif untuk Mobile */
+@media (max-width: 576px) {
+    /* rensponsive untuk home */
+    .home {
+        padding-inline: 24px;
+    }
+    
+    .home .home-info .greeting {
+        font-size: 18px;
+    }
+  
+    .home .home-info .name {
+      font-size: 24px;
+    }
+  
+    .home .home-info .job {
+      font-size: 36px;
+    }
+    
+    .home .home-info .keterangan {
+        font-size: 16px;
+        max-width: 100%;
+    }
+  
+    .home .home-info a .hire-me {
+        width: 120px;
+        font-size: 16px;
+      padding: 8px;
+    }
+    
+    .home-img-wrapper {
+        width: 100%;
+        max-width: 300px;
+        margin-top: 20px;
+    }
+    
+    .home-img {
+      max-width: 280px;
+      height: 280px;
+    }
+  
+    /* Penyesuaian ukuran dan posisi label untuk layar kecil */
+    .label {
+      font-size: 0.8rem;
+      padding: 8px 16px;
+    }
+    
+    .label-1 {
+        top: 10px;
+        left: 10px;
+    }
+    
+    .label-2 {
+        top: 10px;
+      right: 10px;
+    }
+  
+    .label-3 {
+        bottom: 10px;
+        left: 10px;
+    }
+    
+    .label-4 {
+        bottom: 10px;
+        right: 10px;
+    }
+  
+    .label-5 {
+      top: 45%;
+      left: -10px;
+      transform: translateY(-50%);
+    }
+    
+    .label-6 {
+        top: 45%;
+        right: -10px;
+        transform: translateY(-50%);
+    }
+  
+    .label-7 {
+        top: 85%;
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+}
+
+/* Responsive Styling */
+
+/* Large screens (desktops) */
+@media (max-width: 1200px) {
+    .container-about {
+        padding-inline: 48px;
+    }
+
+    .container-about .about-deskripsi .about-heading {
+        font-size: 55px;
+    }
+
+    .container-about .about-deskripsi .about-paragraf {
+        font-size: 18px;
+    }
+}
+
+/* Medium screens (tablets, landscape) */
+@media (max-width: 992px) {
+    .container-about {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding-inline: 32px;
+    }
+
+    .container-about .about-img {
+        width: 400px;
+        height: 400px;
+    }
+
+    .container-about .about-deskripsi {
         width: 100%;
     }
 
-    .container-navbar .nav {
-        display: none;
+    .container-about .about-deskripsi .about-heading {
+        font-size: 48px;
+    }
+
+    .container-about .about-deskripsi .about-paragraf {
+        font-size: 18px;
+    }
+}
+
+/* Small screens (portrait tablets and large phones) */
+@media (max-width: 768px) {
+    .container-about {
+        padding-inline: 16px;
+    }
+
+    .container-about .about-img {
+        width: 300px;
+        height: 300px;
+    }
+
+    .container-about .about-deskripsi .about-heading {
+        font-size: 40px;
+    }
+
+    .container-about .about-deskripsi .about-paragraf {
+        font-size: 16px;
+    }
+}
+
+/* Extra small screens (phones) */
+@media (max-width: 576px) {
+    .container-about {
+        padding-inline: 8px;
+    }
+
+    .container-about .about-img {
+        width: 250px;
+        height: 250px;
+    }
+
+    .container-about .about-deskripsi .about-heading {
+        font-size: 32px;
+    }
+
+    .container-about .about-deskripsi .about-paragraf {
+        font-size: 14px;
+    }
+}
+
+/* Responsive Styling */
+
+/* Large screens (desktops) */
+@media (max-width: 1200px) {
+    .container-service {
+        padding-inline: 48px;
+    }
+    .container-service .deskripsi-service .heading-service {
+        font-size: 55px;
+    }
+    .container-service .deskripsi-service .paragraf-service {
+        font-size: 18px;
+        width: 800px;
+    }
+}
+
+/* Medium screens (tablets, landscape) */
+@media (max-width: 992px) {
+    .container-service {
+        padding-inline: 32px;
+    }
+    .container-service .deskripsi-service .heading-service {
+        font-size: 45px;
+    }
+    .container-service .deskripsi-service .paragraf-service {
+        font-size: 18px;
+        width: 650px;
+    }
+    .container-service .container-card {
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+    .container-service .container-card .card {
+        width: 45%;
+        padding: 20px;
+    }
+}
+
+/* Small screens (portrait tablets and large phones) */
+@media (max-width: 768px) {
+    .container-service {
+        padding-inline: 16px;
+    }
+    .container-service .deskripsi-service .heading-service {
+        font-size: 35px;
+    }
+    .container-service .deskripsi-service .paragraf-service {
+        font-size: 16px;
+        width: 100%;
+    }
+    .container-service .container-card .card {
+        width: 100%;
+        padding: 15px;
+    }
+}
+
+/* Extra small screens (phones) */
+@media (max-width: 576px) {
+    .container-service {
+        padding-inline: 8px;
+    }
+    .container-service .deskripsi-service .heading-service {
+        font-size: 28px;
+    }
+    .container-service .deskripsi-service .paragraf-service {
+        font-size: 14px;
+        width: 100%;
+    }
+    .container-service .container-card {
+        flex-direction: column;
+    }
+    .container-service .container-card .card {
+        padding: 12px;
+    }
+    .container-service .container-card .card .heading-service {
+        font-size: 24px;
+    }
+    .container-service .container-card .card .paragraf-service {
+        font-size: 13px;
+    }
+}
+
+/* Responsive adjustments */
+
+/* Tablet size */
+@media (max-width: 992px) {
+    .container-project {
+        padding-inline: 48px;
+        margin-top: 150px;
+    }
+
+    .container-project .deskripsi-project .heading-project {
+        font-size: 50px;
+    }
+
+    .container-project .deskripsi-project .paragraf-project {
+        font-size: 18px;
+        width: 90%;
+    }
+
+    .container-project .container-bread-crump .bread-crump {
+        font-size: 20px;
+        padding: 12px;
+    }
+    
+    .container-project .container-card .wrapper-card p {
+        font-size: 20px;
+    }
+    
+    .container-project .container-card .wrapper-card .card-project {
+        max-width: 350px;
+    }
+
+    .container-project .container-card {
+        display: flex;
+        flex-direction: column ;
+    }
+}
+
+/* Mobile size */
+@media (max-width: 576px) {
+    .container-project {
+        padding-inline: 24px;
+        margin-top: 100px;
+    }
+
+    .container-project .deskripsi-project .heading-project {
+        font-size: 36px;
+    }
+
+    .container-project .deskripsi-project .paragraf-project {
+        font-size: 16px;
+        width: 100%;
+    }
+
+    .container-project .container-bread-crump {
+        gap: 10px;
+    }
+
+    .container-project .container-bread-crump .bread-crump {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .container-project .container-card .wrapper-card p {
+        font-size: 18px;
+    }
+
+    .container-project .container-card .wrapper-card .card-project {
+        max-width: 100%;
+    }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    /* Adjust padding */
+    .container-news-letter {
+        padding-inline: 20px;
+    }
+
+    /* Font and layout adjustments */
+    .container-news-letter .wrapper-news-letter .deskripsi .heading {
+        font-size: 28px;
+    }
+    .container-news-letter .wrapper-news-letter .deskripsi p {
+        font-size: 14px;
+        width: 100%;
+    }
+
+    /* Input container for tablet */
+    .container-news-letter .wrapper-news-letter .container-input {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+    }
+
+    /* Adjust icons positioning */
+    .container-news-letter .wrapper-news-letter .pesawat,
+    .container-news-letter .wrapper-news-letter .location {
+        position: static;
+        max-width: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Font size for mobile */
+    .container-news-letter .wrapper-news-letter .deskripsi .heading {
+        font-size: 24px;
+    }
+    .container-news-letter .wrapper-news-letter .deskripsi p {
+        font-size: 14px;
+    }
+
+    /* Input and button full-width */
+    .container-news-letter .wrapper-news-letter .container-input input,
+    .container-news-letter .wrapper-news-letter .container-input button {
+        width: 100%;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .container-footer .footer-contain {
+        padding-inline: 50px;
+    }
+
+    .container-footer .footer-contain .wrapper-footer .description p {
+        font-size: 18px;
+    }
+
+    .container-footer .footer-contain .wrapper-footer .quick-links .heading {
+        font-size: 18px;
+    }
+
+    .container-footer .footer-contain .wrapper-footer .quick-links .link a p {
+        font-size: 15px;
+    }
+
+    .container-footer .footer-contain .copyright p {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container-footer .footer-contain {
+        padding-inline: 20px;
+    }
+
+    .container-footer .footer-contain .wrapper-footer {
         flex-direction: column;
         gap: 20px;
-        align-items: center;
-        justify-content: center;
+    }
+
+    .container-footer .footer-contain .wrapper-footer .description p,
+    .container-footer .footer-contain .wrapper-footer .quick-links .heading,
+    .container-footer .footer-contain .wrapper-footer .quick-links .link a p {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container-footer .footer-contain .wrapper-footer .description p,
+    .container-footer .footer-contain .wrapper-footer .quick-links .heading,
+    .container-footer .footer-contain .wrapper-footer .quick-links .link a p {
+        font-size: 14px;
+    }
+
+    .container-footer .footer-contain .copyright p {
+        font-size: 16px;
+    }
+}
+
+/* CSS tambahan untuk tampilan responsif */
+
+/* Tampilan untuk tablet dan ke bawah */
+@media (max-width: 768px) {
+    .container-navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+        margin-inline: 20px;
+    }
+
+    .container-navbar .nav {
+        display: none; /* Awalnya sembunyikan nav untuk mobile */
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
     }
 
     .container-navbar .icon {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
+        display: none;
     }
 
-    /* Menampilkan hamburger pada layar kecil */
+    /* Tampilkan tombol hamburger */
     .hamburger {
         display: flex;
+        margin: 20px;
+    }
+}
+
+/* Tampilan untuk ponsel */
+@media (max-width: 480px) {
+    .container-navbar {
+        padding: 5px;
+        margin-inline: 10px;
     }
 
-    /* Menampilkan navbar saat hamburger diklik */
-    .nav.active {
-        display: flex;
+    .container-navbar .nav .button-nav {
+        padding: 10px 20px;
     }
+
+    .container-navbar .nav .button-nav p {
+        font-size: 18px;
+    }
+}
+
+
+.nav.active {
+    display: flex;
 }

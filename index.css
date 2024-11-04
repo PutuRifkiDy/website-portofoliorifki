@@ -581,10 +581,11 @@ body{
     display: flex;
     flex-direction: row;
     gap: 20px;
+    width: 40%;
 }
 
 .container-news-letter .wrapper-news-letter .container-input input{
-    width: 400px;
+    width: 900px;
     padding-inline: 24px;
     padding-top: 16px;
     padding-bottom: 16px;
@@ -842,6 +843,149 @@ body{
         transform: translate(-50%, 0);
     }
 }
+
+.kontainer-kontak {
+    margin-top: 100px;
+    background-color: #fff;
+    padding: 2em;
+    border-radius: 30px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #e57b2d;
+    margin-inline: 430px;
+    color: white;
+}
+.kontainer-kontak h2{
+    font-size: 54px;
+}
+
+.kontainer-kontak form {
+    width: 100%;
+    margin-top: 28px;
+}
+
+.kontainer-kontak form .container-identitas {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap:10px;
+}
+
+.kontainer-kontak form .container-metode{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 24px;
+}
+
+.kontainer-kontak form .container-metode .wrapper-metode{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.kontainer-kontak form .container-metode .wrapper-metode .wrapper-email{
+    display: flex;
+    gap: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
+.kontainer-kontak form .container-metode .wrapper-metode .wrapper-telpon{
+    display: flex;
+    gap: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
+.kontainer-kontak form .container-layanan{
+    display: flex;
+    flex-direction: column;
+    margin-top: 24px;
+}
+
+.kontainer-kontak form .container-layanan p{
+    color: #333;
+}
+
+.kontainer-kontak form .container-pesan{
+    margin-top: 20px;
+}
+
+.kontainer-kontak form .wrapper-layanan{
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.kontainer-kontak form .wrapper-layanan .wrapp-layanan{
+    display: flex;
+    gap: 2px;
+    align-items: center;
+}
+
+.header-kontak h2 {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    text-align: center;
+    font-size: 36px;
+}
+
+.kontainer-kontak .header-kontak form .container-metode p{
+    color: #333;
+}
+.header-kontak p {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    text-align: center;
+    font-size: 1em;
+    color: #333;
+}
+
+label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5em;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+    margin-right: 0.5em;
+}
+
+button {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 0.75em 1.5em;
+    font-size: 22px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 1em;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+button:hover {
+    opacity: 60%;
+}
+
 
 /* Responsive Styling */
 

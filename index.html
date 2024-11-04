@@ -319,6 +319,88 @@
             </div>
        </div>
 
+
+    <!-- contact me -->
+    <div class="kontainer-kontak" id="kontak" data-aos="fade-up">
+        <h2>Hubungi Saya</h2>
+        <div class="header-kontak">
+            <p>Jika Anda ingin bekerja sama atau sekadar menyapa, jangan ragu untuk menghubungi saya!</p>
+        </div>
+        <form id="formKontak">
+            <div class="container-metode">
+                <p>Metode Kontak yang Diinginkan</p>
+                <div class="wrapper-metode">
+                    <div class="wrapper-email">
+                        <input type="radio" id="kontak_email" name="preferensi_kontak" value="Email" checked>
+                        <label for="kontak_email">Email</label>
+                    </div>
+                    <div class="wrapper-telpon">
+                        <input type="radio" id="kontak_telepon" name="preferensi_kontak" value="Telepon">
+                        <label for="kontak_telepon">Telepon</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-identitas">
+                <div class="container-form-name">
+                    <label for="nama">Nama</label>
+                    <input type="text" id="nama" name="nama" placeholder="Masukkan nama anda" required>
+                </div>
+                
+                <!-- Input Email, tampil hanya saat preferensi Email dipilih -->
+                <div class="container-form-email" id="emailContainer">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Masukkan email anda">
+                </div>
+
+                <!-- Input Telepon, tampil hanya saat preferensi Telepon dipilih -->
+                <div class="container-form-telepon" id="teleponContainer" style="display: none;">
+                    <label for="telepon">No Telepon</label>
+                    <input type="number" id="telepon" name="telepon" placeholder="Masukkan no telepon anda">
+                </div>
+            </div>
+
+            <div class="container-layanan">
+                <p>Layanan yang Diinginkan</p>
+                <div class="wrapper-layanan">
+                    <div class="wrapp-layanan">
+                        <input type="checkbox" id="layanan_web" name="layanan" value="Pengembangan Web">
+                        <label for="layanan_web">Pengembangan Web</label>
+                    </div>
+                    <div class="wrapp-layanan">
+                        <input type="checkbox" id="layanan_aplikasi" name="layanan" value="Pengembangan Aplikasi">
+                        <label for="layanan_aplikasi">Pengembangan Aplikasi</label>
+                    </div>
+                    <div class="wrapp-layanan">
+                        <input type="checkbox" id="layanan_grafis" name="layanan" value="Desain Grafis">
+                        <label for="layanan_grafis">Desain Grafis</label>
+                    </div>
+                    <div class="wrapp-layanan">
+                        <input type="checkbox" id="layanan_grafis" name="layanan" value="Desain Website">
+                        <label for="layanan_grafis">Design Website</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-pesan">
+                <label for="pesan">Pesan</label>
+                <textarea id="pesan" name="pesan" rows="4" placeholder="Masukkan pesan yang ingin disampaikan" required></textarea>
+            </div>
+
+            <button type="submit">Submit Pesan</button>
+        </form>
+
+        <div id="opsiTerpilih" style="margin-top: 20px;">
+            <h3>Data Anda</h3>
+            <p id="namaSaya"></p>
+            <p id="emailSaya"></p>
+            <p id="preferensiKontak"></p>
+            <ul id="daftarLayanan"></ul>
+            <p id="pesanSaya"></p>
+        </div>
+    </div>
+
+
        <!-- start footer -->
         <div class="container-footer" id="contact">
             <div class="footer-contain">

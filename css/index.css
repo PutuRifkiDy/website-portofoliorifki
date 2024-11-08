@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700;800&display=swap');
 :root{
     --primary-color: #0077FF;
     --secondary-color: #222222;
@@ -6,8 +6,8 @@
 }
 
 *{
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 body{
@@ -23,7 +23,7 @@ body{
 
 .container-navbar .wrapper-navbar{
     display: flex;
-    flex-wrap: row;
+    flex-direction: row;
     justify-content: space-between;
 }
 
@@ -44,7 +44,7 @@ body{
     color: var(--black-color-navbar);
     font-size: 18px;
     line-height: 21.11px;
-    font-weight: 600;
+    font-weight: 500;
     transition: 0.3s ease-in-out;
 }
 
@@ -68,3 +68,209 @@ body{
 .container-navbar .wrapper-navbar .navbar-route a button:hover{
     background-color: #89b9f0;
 }
+/* end style navbar */
+
+/* start style home */
+.container-homePage{
+    padding-inline: 96px;
+}
+
+.container-homePage .wrapper-homePage{
+    display: flex;
+    justify-content: space-between;
+}
+
+.container-homePage .wrapper-homePage .deskripsi-homePage{
+    padding-top: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 544.39px;
+}
+
+.container-homePage .wrapper-homePage .deskripsi-homePage .judul{
+    font-weight: 600;
+    font-size: 25px;
+    color: var(--secondary-color);
+}
+
+.container-homePage .wrapper-homePage .deskripsi-homePage .deskripsi{
+    display: flex;
+    flex-direction: column;
+}
+
+.container-homePage .wrapper-homePage .deskripsi-homePage .deskripsi span{
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 60px;
+}
+
+.container-homePage .wrapper-homePage .deskripsi-homePage h1{
+    font-weight: 700;
+    font-size: 60px;
+    color: var(--secondary-color);
+}
+
+.container-homePage .wrapper-homePage .deskripsi-homePage p{
+    font-weight: 400;
+    font-size: 25px;
+    line-height: 35px;
+    color: var(--secondary-color);
+}
+
+.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage{
+    display: flex;
+    flex-direction: row;
+    gap: 48px;
+}
+
+.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage button{
+    border: none;
+}
+
+.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage .hire{
+    background-color: var(--primary-color);
+    width: 161px;
+    height: 50px;
+    border-radius: 50px;
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 23.46px;
+    transition: border 0.5s;
+    cursor: pointer;
+}
+
+.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage .hire:hover{
+    border: 2px solid #008cff;
+    box-shadow: 0 0 10px #008cff;
+}
+
+.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage .download-cv{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--primary-color);
+    width: 240px;
+    height: 50px;
+    border-radius: 50px;
+    background-color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 23.26px;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage .download-cv:hover{
+    color: white;
+    background-color: var(--primary-color);
+    box-shadow: 0 0 10px #008cff;
+}
+
+.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage .download-cv:hover svg path{
+    fill: #ffffff;
+}
+
+.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage .download-cv p{
+}
+
+.container-homePage .wrapper-homePage .img-homePage{
+    position: relative; 
+    width: 100%;
+    max-width: 500px;
+    height: 550;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items:  center;
+}
+
+.home-img {
+    max-width: 485.87px;
+    width: 100%;
+    height: 485.87px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    border: 2px solid var(--primary-color);
+}
+
+.home-img img {
+    width: auto;
+    height: 100%;
+    object-fit: cover;
+    transition: all 300ms
+}
+
+.home-img img:hover{
+    transform: scale(1.25);
+}
+
+/* Styling untuk label teknologi */
+.label {
+    position: absolute;
+    background-color: white;
+    border-radius: 40px;
+    padding-inline: 30px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Styling untuk ikon */
+.icon-tool {
+    width: 28px;
+    height: 28px;
+    margin-right: 10px; /* Spasi antara ikon dan teks */
+}
+
+/* Posisi label di sekitar gambar */
+.label-1 {
+    top: 70px;
+    left: 0;
+}
+
+.label-2 {
+    top: 70px;
+    right: -30px;
+}
+
+.label-3 {
+    bottom: 70px;
+    left: 0;
+}
+
+.label-4 {
+    bottom: 70px;
+    right: -50px;
+}
+
+.label-5 {
+    top: 50%;
+    left: -50px;
+    transform: translateY(-50%);
+}
+
+.label-6 {
+    top: 50%;
+    right: -50px;
+    transform: translateY(-50%);
+}
+.label-7{
+    top: 90%;
+}
+
+/* end style home */
+
+/* start style about me rifki */
+
+/* end style about me rifki */

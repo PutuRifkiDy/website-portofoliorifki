@@ -13,5 +13,6 @@
 <body>
     <?php navbar(); ?>
     <?php homePage(); ?>
+    <?php aboutMe(); ?>
 </body>
 </html>

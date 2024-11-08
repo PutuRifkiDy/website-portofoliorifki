@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap');
+:root{
+    --primary-color: #0077FF;
+    --secondary-color: #222222;
+    --black-color-navbar: #333333;
+}
+
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+body{
+    font-family: 'Work Sans', sans-serif;
+}
+
+/* start style navbar */
+.container-navbar{
+    padding-inline: 96px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+}
+
+.container-navbar .wrapper-navbar{
+    display: flex;
+    flex-wrap: row;
+    justify-content: space-between;
+}
+
+.container-navbar .wrapper-navbar .navbar-route{
+    display: flex;
+    gap: 96px;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-navbar .wrapper-navbar .navbar-route .link-nav{
+    display: flex;
+    gap: 36px;
+}
+
+.container-navbar .wrapper-navbar .navbar-route .link-nav a{
+    text-decoration: none;
+    color: var(--black-color-navbar);
+    font-size: 18px;
+    line-height: 21.11px;
+    font-weight: 600;
+    transition: 0.3s ease-in-out;
+}
+
+.container-navbar .wrapper-navbar .navbar-route .link-nav a:hover{
+    color: #0077FF;
+}
+
+.container-navbar .wrapper-navbar .navbar-route a button{
+    border: none;
+    background-color: var(--primary-color);
+    border-radius: 50px;
+    width: 160px;
+    height: 50px;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 23.46px;
+    color: white;
+    cursor: pointer;
+}
+
+.container-navbar .wrapper-navbar .navbar-route a button:hover{
+    background-color: #89b9f0;
+}

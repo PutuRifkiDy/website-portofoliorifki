@@ -14,5 +14,6 @@
     <?php navbar(); ?>
     <?php homePage(); ?>
     <?php aboutMe(); ?>
+    <?php services(); ?>
 </body>
 </html>

@@ -3,6 +3,7 @@
     --primary-color: #0077FF;
     --secondary-color: #222222;
     --black-color-navbar: #333333;
+    --white-color: #ffffff;
 }
 
 *{
@@ -161,6 +162,7 @@ body{
     line-height: 23.26px;
     color: var(--primary-color);
     cursor: pointer;
+    transition: background 0.5s;
 }
 
 .container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage .download-cv:hover{
@@ -171,9 +173,6 @@ body{
 
 .container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage .download-cv:hover svg path{
     fill: #ffffff;
-}
-
-.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage .download-cv p{
 }
 
 .container-homePage .wrapper-homePage .img-homePage{
@@ -188,9 +187,9 @@ body{
 }
 
 .home-img {
-    max-width: 485.87px;
+    max-width: 450px;
     width: 100%;
-    height: 485.87px;
+    height: 450px;
     border-radius: 50%;
     overflow: hidden;
     display: flex;
@@ -272,5 +271,270 @@ body{
 /* end style home */
 
 /* start style about me rifki */
+.container-aboutMe{
+    padding-inline: 96px;
+    margin-top: 128px;
+}
 
+.container-aboutMe .wrapper-aboutMe{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-img{
+    width: 485.87px;
+    height: 485.87px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    border: 2px solid var(--primary-color);
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-img img{
+    width: auto;
+    height: 100%;
+    transition: all 300ms;
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-img img:hover{
+    transform: scale(1.25);
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-contain{
+    display: flex;
+    flex-direction: column;
+    width: 580px;
+    gap: 36px;
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-contain .aboutMe-contain-deskripsi{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-contain .aboutMe-contain-deskripsi .heading{
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 23.46px;
+    letter-spacing: 0.010em;
+    color: var(--primary-color);
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-contain .aboutMe-contain-deskripsi h1{
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 58.65px;
+    color: var(--secondary-color);
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-contain .aboutMe-contain-deskripsi h1 span{
+    color: var(--primary-color);
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-contain .aboutMe-contain-deskripsi p{
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 25px;
+    color: var(--secondary-color);
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-contain .aboutMe-contain-deskripsi p span{
+    font-weight: 700;
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-contain .aboutMe-contain-skill{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-contain .aboutMe-contain-skill .aboutMe-category-nav{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-contain .aboutMe-contain-skill .aboutMe-category-nav button{
+    width: 170px;
+    height: 50px;
+    border-radius: 50px;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 23.46px;
+    cursor: pointer;
+    background-color: var(--white-color);
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-contain .aboutMe-contain-skill .aboutMe-category-nav button:hover{
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    box-shadow: 0 0 10px #008cff;
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-contain .aboutMe-contain-skill .aboutMe-content-nav #main-skill .skills {
+    margin-top: 20px;
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-contain .aboutMe-contain-skill .aboutMe-content-nav #main-skill .skills .skill {
+    margin-bottom: 20px;
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-contain .aboutMe-contain-skill .aboutMe-content-nav #main-skill .skills .skill p {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    line-height: 30px;
+    color: var(--secondary-color);
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-contain .aboutMe-contain-skill .aboutMe-content-nav #main-skill .skills .skill .progress-bar {
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    height: 10px;
+    width: 100%;
+    position: relative;
+}
+
+.container-aboutMe .wrapper-aboutMe .aboutMe-contain .aboutMe-contain-skill .aboutMe-content-nav #main-skill .skills .skill .progress-bar .progress {
+    background-color: var(--primary-color);
+    height: 100%;
+    border-radius: 10px;
+    position: relative;
+}
 /* end style about me rifki */
+
+/* start style services rifki */
+.container-services{
+    padding-inline: 96px;
+    margin-top: 96px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.container-services .heading-services{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.container-services .heading-services .heading{
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 23.46px;
+    letter-spacing: 0.010em;
+}
+
+.container-services .heading-services h1{
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 50px;
+    color: var(--secondary-color);
+}
+
+.container-services .heading-services h1 span{
+    color: var(--primary-color);
+}
+
+.container-services .heading-services p{
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 25px;
+    width: 652px;
+    color: var(--secondary-color);
+}
+
+.container-services .container-button-services{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    gap: 20px;
+}
+
+.container-services .container-button-services button{
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    border: 1px solid var(--primary-color);
+    background-color: white;
+}
+
+.container-services .container-button-services button:hover{
+    background-color: var(--primary-color);
+    box-shadow: 0 0 10px #008cff;
+}
+
+.container-services .container-button-services button:hover svg path{
+    fill: var(--white-color);
+}
+
+.container-services .contain-services{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+    
+}
+
+.container-services .contain-services .card{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: var(--white-color);
+    color: var(--secondary-color);
+    width: 406px;
+    padding: 18px;
+    border: 1px solid #DDDDDD;
+}
+
+.container-services .contain-services .card .deskripsi-services{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.container-services .contain-services .card .deskripsi-services h4{
+    width: 280px;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 30px;
+    letter-spacing: -0.1px;
+    color: #000000;
+}
+
+.container-services .contain-services .card .deskripsi-services p{
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+    letter-spacing: -0.1px;
+    color: var(--black-color-navbar);
+}
+
+.container-services .contain-services .card .deskripsi-services .learn-more-services{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+.container-services .contain-services .card .deskripsi-services .learn-more-services p{
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+    letter-spacing: -0.1px;
+    color: var(--primary-color);
+}
+/* end style services rifki */

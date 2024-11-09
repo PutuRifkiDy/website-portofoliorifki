@@ -395,7 +395,192 @@
     function ourProject(){
         ?>
             <div class="container-ourProject">
-                
+                <div class="container-ourProject-heading">
+                    <p>
+                        OUR PROJECTS
+                    </p>
+                    <h1>
+                        Presenting My Design Portfolio and Case Studies
+                    </h1>
+                </div>
+                <div class="container-ourProject-nav">
+                    <button>
+                        All
+                    </button>
+                    <button>
+                        UI/UX Design
+                    </button>
+                    <button>
+                        Web Development
+                    </button>
+                    <button>
+                        API
+                    </button>
+                </div>
+                <div class="container-card-ourProject">
+                    <div class="card-ourProject">
+                        <div class="container-img-ourProject">
+                            <img src="assets/itcc.png" alt="">
+                        </div>
+                        <div class="deskripsi-ourProject">
+                            <h5>
+                                ITCC 2024
+                            </h5>
+                            <p>
+                                Information Technology Creative Competition (ITCC) is the largest competition in the field of Information Technology in Bali, which is organized by the Information Technology Student Association (HMTI) of Udayana University.
+                            </p>
+                        </div>
+                        <div class="container-seeMore-ourProject">
+                            <div class="wrapper-seeMore-ourProject">
+                                <div class="container-seeMore-desc">
+                                    <h5>
+                                        Web Development
+                                    </h5>
+                                    <p>ITCC 2024 </p>
+                                </div>
+    
+                                <a href="">
+                                    See More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-ourProject">
+                        <div class="container-img-ourProject">
+                            <img src="assets/itcc.png" alt="">
+                        </div>
+                        <div class="deskripsi-ourProject">
+                            <h5>
+                                ITCC 2024
+                            </h5>
+                            <p>
+                                Information Technology Creative Competition (ITCC) is the largest competition in the field of Information Technology in Bali, which is organized by the Information Technology Student Association (HMTI) of Udayana University.
+                            </p>
+                        </div>
+                        <div class="container-seeMore-ourProject">
+                            <div class="wrapper-seeMore-ourProject">
+                                <div class="container-seeMore-desc">
+                                    <h5>
+                                        Web Development
+                                    </h5>
+                                    <p>ITCC 2024 </p>
+                                </div>
+    
+                                <a href="">
+                                    See More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-ourProject">
+                        <div class="container-img-ourProject">
+                            <img src="assets/itcc.png" alt="">
+                        </div>
+                        <div class="deskripsi-ourProject">
+                            <h5>
+                                ITCC 2024
+                            </h5>
+                            <p>
+                                Information Technology Creative Competition (ITCC) is the largest competition in the field of Information Technology in Bali, which is organized by the Information Technology Student Association (HMTI) of Udayana University.
+                            </p>
+                        </div>
+                        <div class="container-seeMore-ourProject">
+                            <div class="wrapper-seeMore-ourProject">
+                                <div class="container-seeMore-desc">
+                                    <h5>
+                                        Web Development
+                                    </h5>
+                                    <p>ITCC 2024 </p>
+                                </div>
+    
+                                <a href="">
+                                    See More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-ourProject">
+                        <div class="container-img-ourProject">
+                            <img src="assets/itcc.png" alt="">
+                        </div>
+                        <div class="deskripsi-ourProject">
+                            <h5>
+                                ITCC 2024
+                            </h5>
+                            <p>
+                                Information Technology Creative Competition (ITCC) is the largest competition in the field of Information Technology in Bali, which is organized by the Information Technology Student Association (HMTI) of Udayana University.
+                            </p>
+                        </div>
+                        <div class="container-seeMore-ourProject">
+                            <div class="wrapper-seeMore-ourProject">
+                                <div class="container-seeMore-desc">
+                                    <h5>
+                                        Web Development
+                                    </h5>
+                                    <p>ITCC 2024 </p>
+                                </div>
+    
+                                <a href="">
+                                    See More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-ourProject">
+                        <div class="container-img-ourProject">
+                            <img src="assets/itcc.png" alt="">
+                        </div>
+                        <div class="deskripsi-ourProject">
+                            <h5>
+                                ITCC 2024
+                            </h5>
+                            <p>
+                                Information Technology Creative Competition (ITCC) is the largest competition in the field of Information Technology in Bali, which is organized by the Information Technology Student Association (HMTI) of Udayana University.
+                            </p>
+                        </div>
+                        <div class="container-seeMore-ourProject">
+                            <div class="wrapper-seeMore-ourProject">
+                                <div class="container-seeMore-desc">
+                                    <h5>
+                                        Web Development
+                                    </h5>
+                                    <p>ITCC 2024 </p>
+                                </div>
+    
+                                <a href="">
+                                    See More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+`                    <div class="card-ourProject">
+                        <div class="container-img-ourProject">
+                            <img src="assets/itcc.png" alt="">
+                        </div>
+                        <div class="deskripsi-ourProject">
+                            <h5>
+                                ITCC 2024
+                            </h5>
+                            <p>
+                                Information Technology Creative Competition (ITCC) is the largest competition in the field of Information Technology in Bali, which is organized by the Information Technology Student Association (HMTI) of Udayana University.
+                            </p>
+                        </div>
+                        <div class="container-seeMore-ourProject">
+                            <div class="wrapper-seeMore-ourProject">
+                                <div class="container-seeMore-desc">
+                                    <h5>
+                                        Web Development
+                                    </h5>
+                                    <p>ITCC 2024 </p>
+                                </div>
+    
+                                <a href="">
+                                    See More
+                                </a>
+                            </div>
+                        </div>
+                    </div>`
+                </div>
             </div>
         <?php
     }

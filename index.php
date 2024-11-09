@@ -16,5 +16,6 @@
     <?php aboutMe(); ?>
     <?php services(); ?>
     <?php ourMileStones(); ?>
+    <?php ourProject(); ?>
 </body>
 </html>

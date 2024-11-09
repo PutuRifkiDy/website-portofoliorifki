@@ -605,5 +605,176 @@ body{
 /* end milestones rifki */
 
 /* start style ourProjectRifki */
+.container-ourProject{
+    padding-inline: 96px;
+    margin-top: 128px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
 
+.container-ourProject .container-ourProject-heading{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-ourProject .container-ourProject-heading p{
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 23.46px;
+    letter-spacing: 0.010em;
+    color: var(--primary-color);
+}
+
+
+.container-ourProject .container-ourProject-heading h1{
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 50px;
+    text-align: center;
+    color: var(--secondary-color);
+    width: 684px;
+}
+
+.container-ourProject .container-ourProject-nav{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-ourProject .container-ourProject-nav button{
+    padding-inline: 36px;
+    height: 50px;
+    border: 1px solid var(--primary-color);
+    border-radius: 50px;
+    color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 23.46px;
+    background-color: var(--white-color);
+    cursor: pointer;
+}
+
+.container-ourProject .container-ourProject-nav button:hover{
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    box-shadow: 0 0 10px #008cff;
+}
+
+.container-ourProject .container-card-ourProject{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.container-ourProject .container-card-ourProject .card-ourProject{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.container-ourProject .container-card-ourProject .card-ourProject .container-img-ourProject{
+    width: 389px;
+    height: 276px;
+    border-radius: 38.89px;
+    overflow: hidden;
+    box-shadow: 0 0 5px #008cff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-ourProject .container-card-ourProject .card-ourProject .container-img-ourProject img{
+    width: 100%;
+    height: auto;
+    transition: 300ms;
+}
+
+.container-ourProject .container-card-ourProject .card-ourProject .container-img-ourProject img:hover{
+    transform: scale(1.25);
+}
+
+.container-ourProject .container-card-ourProject .card-ourProject .deskripsi-ourProject{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-inline: 24px;
+}
+
+.container-ourProject .container-card-ourProject .card-ourProject .deskripsi-ourProject h5{
+    font-weight: 600;
+    font-size: 23.34px;
+    color: var(--secondary-color);
+    line-height: 27.72px;
+}
+
+.container-ourProject .container-card-ourProject .card-ourProject .deskripsi-ourProject p{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 15.56px;
+    color: var(--secondary-color);
+    opacity: 0.8;
+    line-height: 1.8em;
+}
+
+.container-ourProject .container-card-ourProject .card-ourProject .container-seeMore-ourProject{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #F6F5F5;
+    border-bottom-left-radius: 29px;
+    border-bottom-right-radius: 29px;
+}
+
+.container-ourProject .container-card-ourProject .card-ourProject .container-seeMore-ourProject .wrapper-seeMore-ourProject{
+    padding-inline: 24px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+.container-ourProject .container-card-ourProject .card-ourProject .container-seeMore-ourProject .container-seeMore-desc{
+    display: flex;
+    flex-direction: column;
+}
+
+.container-ourProject .container-card-ourProject .card-ourProject .container-seeMore-ourProject .container-seeMore-desc h5{
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--secondary-color);
+    line-height: 27.72px;
+    border-bottom-left-radius: 29px;
+    border-bottom-right-radius: 29px;
+}
+
+.container-ourProject .container-card-ourProject .card-ourProject .container-seeMore-ourProject .container-seeMore-desc p{
+    font-size: 15.56px;
+    color: var(--secondary-color);
+    opacity: 0.8;
+    line-height: 1.8em;
+}
+
+.container-ourProject .container-card-ourProject .card-ourProject .container-seeMore-ourProject a{
+    text-decoration: none;
+    color: var(--white-color);
+    background-color: var(--primary-color);
+    padding-inline: 24px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-radius: 29px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 /* end style ourProjectRifki */

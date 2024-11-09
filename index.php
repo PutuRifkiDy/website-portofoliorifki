@@ -17,5 +17,8 @@
     <?php services(); ?>
     <?php ourMileStones(); ?>
     <?php ourProject(); ?>
+    <?php testimoni(); ?>
+    <?php contactMe(); ?>
+    <?php footer(); ?>
 </body>
 </html>

@@ -672,7 +672,9 @@ body{
 .container-ourProject .container-card-ourProject{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    gap: 36px;
+    justify-content: center;
+    align-items: center;
 }
 
 .container-ourProject .container-card-ourProject .card-ourProject{
@@ -682,11 +684,11 @@ body{
 }
 
 .container-ourProject .container-card-ourProject .card-ourProject .container-img-ourProject{
-    width: 389px;
-    height: 276px;
+    width: 350px;
+    height: 250px;
     border-radius: 38.89px;
     overflow: hidden;
-    box-shadow: 0 0 5px #008cff;
+    border: 1px solid var(--primary-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -778,3 +780,276 @@ body{
     align-items: center;
 }
 /* end style ourProjectRifki */
+
+/* start style testimoni rifki */
+.testimoni-container{
+    padding-inline: 96px;
+    margin-top: 124px;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+}
+
+.testimoni-container .testimoni-heading{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+}
+
+.testimoni-container .testimoni-heading p{
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 0.010em;
+}
+
+.testimoni-container .testimoni-heading h4{
+    font-weight: bold;
+    font-size: 50px;
+    line-height: 0.5em;
+}
+
+.testimoni-container .testimoni-nav{
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+}
+
+.testimoni-container .testimoni-nav button{
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    border: 1px solid var(--primary-color);
+    background-color: white;
+    cursor: pointer;
+}
+
+.testimoni-container .testimoni-nav button:hover{
+    background-color: var(--primary-color);
+    box-shadow: 0 0 10px #008cff;
+}
+
+.testimoni-container .testimoni-nav button:hover svg path{
+    fill: var(--white-color);
+}
+
+.testimoni-container .container-card-testimoni{
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.testimoni-container .container-card-testimoni .card-testimoni{
+    width: 297px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #DDDDDD;
+    border-radius: 15px;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    gap: 16px;
+    color: var(--secondary-color);
+}
+
+.testimoni-container .container-card-testimoni .card-testimoni:hover{
+    background-color: var(--primary-color);
+    color: var(--white-color);
+}
+
+.testimoni-container .container-card-testimoni .card-testimoni .container-img-testimoni{
+    overflow: hidden;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
+.testimoni-container .container-card-testimoni .card-testimoni .container-img-testimoni:hover{
+    box-shadow: 0 0 10px #008cff;
+}
+
+.testimoni-container .container-card-testimoni .card-testimoni .container-img-testimoni img{
+    width: 100%;
+    height: auto;
+    transition: 300ms;
+}
+
+.testimoni-container .container-card-testimoni .card-testimoni .container-img-testimoni img:hover{
+    scale: 1.25;
+}
+
+.testimoni-container .container-card-testimoni .card-testimoni .star-testimoni{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.testimoni-container .container-card-testimoni .card-testimoni p{
+    font-weight: 400;
+    font-size: 16;
+    line-height: 20px;
+    text-align: center;
+}
+
+.testimoni-container .container-card-testimoni .card-testimoni .indetity-container-testimoni h4{
+    font-weight: 600;
+    font-size: 16;
+    text-transform: uppercase;
+}
+
+.testimoni-container .container-card-testimoni .card-testimoni .identity-container-testimoni p{
+    font-weight: 400;
+    font-size: 16px;
+    opacity: 0.7;
+}
+/* end style testinomi rifki */
+
+/* start style contactMe Rifki */
+.container-contactMe{
+    background-color: var(--primary-color);
+    margin-top: 128px;
+}
+
+.container-contactMe .wrapper-contactMe{
+    padding-inline: 96px;
+    padding-top: 48px;
+    padding-bottom: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-contactMe .wrapper-contactMe .heading-contactMe{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+}
+
+.container-contactMe .wrapper-contactMe .heading-contactMe p{
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 0.010em;
+    color: var(--white-color);
+}
+
+.container-contactMe .wrapper-contactMe .heading-contactMe h1{
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 0.5em;
+    color: white;
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe{
+    display: flex;
+    flex-direction: row;
+    gap: 48px;
+    margin-top: 48px;
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe .detailInformation-contactMe{
+    background-color: var(--white-color);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    border-radius: 15px;
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe .detailInformation-contactMe .heading-detailInformation-contactMe{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe .detailInformation-contactMe .heading-detailInformation-contactMe h4{
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    color: var(--black-color-navbar);
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe .detailInformation-contactMe .heading-detailInformation-contactMe h3{
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 30px;
+    color: var(--black-color-navbar);
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe .detailInformation-contactMe .deskripsi-detailInformation-contactMe{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe .detailInformation-contactMe .deskripsi-detailInformation-contactMe p{
+    font-size: 16px;
+    line-height: 26px;
+    color: var(--black-color-navbar);
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe .detailInformation-contactMe .deskripsi-detailInformation-contactMe p span{
+    font-weight: 600;
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe form .nameAndEmail-contactMe{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+
+.container-contactMe .wrapper-contactMe .form-contactMe form .nameAndEmail-contactMe input{
+    background-color: var(--white-color);
+    border-radius: 5px;
+    border: none;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-inline: 12px;
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe form input{
+    background-color: var(--white-color);
+    border-radius: 5px;
+    border: none;
+    padding-top: 12px;
+    padding-bottom: 16px;
+    padding-inline: 16px;
+    outline: none;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe form .long-text{
+    height: 142px;
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe form button{
+    background-color: #00489A;
+    height: 54px;
+    color: var(--white-color);
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe form button:hover{
+    border: 2px solid #008cff;
+    box-shadow: 0 0 10px #008cff;
+}
+/* end style contactMe */

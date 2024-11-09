@@ -418,6 +418,91 @@
                     </button>
                 </div>
                 <div class="container-card-ourProject">
+
+                    <div class="card-ourProject">
+                        <div class="container-img-ourProject">
+                            <img src="assets/itcc.png" alt="">
+                        </div>
+                        <div class="deskripsi-ourProject">
+                            <h5>
+                                ITCC 2024
+                            </h5>
+                            <p>
+                                Information Technology Creative Competition (ITCC) is the largest competition in the field of Information Technology in Bali, which is organized by the Information Technology Student Association (HMTI) of Udayana University.
+                            </p>
+                        </div>
+                        <div class="container-seeMore-ourProject">
+                            <div class="wrapper-seeMore-ourProject">
+                                <div class="container-seeMore-desc">
+                                    <h5>
+                                        Web Development
+                                    </h5>
+                                    <p>ITCC 2024 </p>
+                                </div>
+    
+                                <a href="">
+                                    See More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-ourProject">
+                        <div class="container-img-ourProject">
+                            <img src="assets/itcc.png" alt="">
+                        </div>
+                        <div class="deskripsi-ourProject">
+                            <h5>
+                                ITCC 2024
+                            </h5>
+                            <p>
+                                Information Technology Creative Competition (ITCC) is the largest competition in the field of Information Technology in Bali, which is organized by the Information Technology Student Association (HMTI) of Udayana University.
+                            </p>
+                        </div>
+                        <div class="container-seeMore-ourProject">
+                            <div class="wrapper-seeMore-ourProject">
+                                <div class="container-seeMore-desc">
+                                    <h5>
+                                        Web Development
+                                    </h5>
+                                    <p>ITCC 2024 </p>
+                                </div>
+    
+                                <a href="">
+                                    See More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-ourProject">
+                        <div class="container-img-ourProject">
+                            <img src="assets/itcc.png" alt="">
+                        </div>
+                        <div class="deskripsi-ourProject">
+                            <h5>
+                                ITCC 2024
+                            </h5>
+                            <p>
+                                Information Technology Creative Competition (ITCC) is the largest competition in the field of Information Technology in Bali, which is organized by the Information Technology Student Association (HMTI) of Udayana University.
+                            </p>
+                        </div>
+                        <div class="container-seeMore-ourProject">
+                            <div class="wrapper-seeMore-ourProject">
+                                <div class="container-seeMore-desc">
+                                    <h5>
+                                        Web Development
+                                    </h5>
+                                    <p>ITCC 2024 </p>
+                                </div>
+    
+                                <a href="">
+                                    See More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="card-ourProject">
                         <div class="container-img-ourProject">
                             <img src="assets/itcc.png" alt="">
@@ -499,89 +584,190 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-ourProject">
-                        <div class="container-img-ourProject">
-                            <img src="assets/itcc.png" alt="">
-                        </div>
-                        <div class="deskripsi-ourProject">
-                            <h5>
-                                ITCC 2024
-                            </h5>
-                            <p>
-                                Information Technology Creative Competition (ITCC) is the largest competition in the field of Information Technology in Bali, which is organized by the Information Technology Student Association (HMTI) of Udayana University.
-                            </p>
-                        </div>
-                        <div class="container-seeMore-ourProject">
-                            <div class="wrapper-seeMore-ourProject">
-                                <div class="container-seeMore-desc">
-                                    <h5>
-                                        Web Development
-                                    </h5>
-                                    <p>ITCC 2024 </p>
-                                </div>
-    
-                                <a href="">
-                                    See More
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-ourProject">
-                        <div class="container-img-ourProject">
-                            <img src="assets/itcc.png" alt="">
-                        </div>
-                        <div class="deskripsi-ourProject">
-                            <h5>
-                                ITCC 2024
-                            </h5>
-                            <p>
-                                Information Technology Creative Competition (ITCC) is the largest competition in the field of Information Technology in Bali, which is organized by the Information Technology Student Association (HMTI) of Udayana University.
-                            </p>
-                        </div>
-                        <div class="container-seeMore-ourProject">
-                            <div class="wrapper-seeMore-ourProject">
-                                <div class="container-seeMore-desc">
-                                    <h5>
-                                        Web Development
-                                    </h5>
-                                    <p>ITCC 2024 </p>
-                                </div>
-    
-                                <a href="">
-                                    See More
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-`                    <div class="card-ourProject">
-                        <div class="container-img-ourProject">
-                            <img src="assets/itcc.png" alt="">
-                        </div>
-                        <div class="deskripsi-ourProject">
-                            <h5>
-                                ITCC 2024
-                            </h5>
-                            <p>
-                                Information Technology Creative Competition (ITCC) is the largest competition in the field of Information Technology in Bali, which is organized by the Information Technology Student Association (HMTI) of Udayana University.
-                            </p>
-                        </div>
-                        <div class="container-seeMore-ourProject">
-                            <div class="wrapper-seeMore-ourProject">
-                                <div class="container-seeMore-desc">
-                                    <h5>
-                                        Web Development
-                                    </h5>
-                                    <p>ITCC 2024 </p>
-                                </div>
-    
-                                <a href="">
-                                    See More
-                                </a>
-                            </div>
-                        </div>
-                    </div>`
+
                 </div>
             </div>
+        <?php
+    }
+
+
+    function iconStar(){
+        ?>
+            <svg width="27" height="25" viewBox="0 0 27 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.9259 0.978455C12.5698 -0.326145 14.4301 -0.326158 15.074 0.978455L18.1399 7.19047L24.9952 8.18661C26.4349 8.39582 27.0098 10.1651 25.968 11.1806L21.0074 16.0159L22.1785 22.8437C22.4243 24.2776 20.9193 25.371 19.6316 24.694L13.5 21.4704L7.36836 24.694C6.08065 25.371 4.57561 24.2776 4.82155 22.8437L5.99259 16.0159L1.03199 11.1806C-0.00979716 10.1651 0.565076 8.39582 2.00479 8.18661L8.86017 7.19047L11.9259 0.978455Z" fill="#FFB400"/>
+            </svg>
+        <?php
+    }
+    function  testiMoni(){
+        ?>
+            <div class="testimoni-container">
+                <div class="testimoni-heading">
+                    <p>
+                        TESTIMONIALS
+                    </p>
+                    <h4>
+                        The Trust From Clients
+                    </h4>
+                </div>
+                <div class="testimoni-nav">
+                    <button>
+                        <?php iconArrowLeft(); ?>
+                    </button>
+                    <button>
+                        <?php iconArrowRight(); ?>
+                    </button>
+                </div>
+                <div class="container-card-testimoni">
+                    <div class="card-testimoni">
+                        <div class="container-img-testimoni">
+                            <img src="assets/puturifki.png" alt="">
+                        </div>
+                        <div class="star-testimoni">
+                            <?php iconStar(); ?>
+                            <?php iconStar(); ?>
+                            <?php iconStar(); ?>
+                            <?php iconStar(); ?>
+                            <?php iconStar(); ?>
+                        </div>
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur. Nibh porttitor aliquet tellus eget egestas. Enim ultrices dictumst tortor in eget neque vestibulum potenti tempus
+                        </p>
+                        <div class="identity-container-testimoni">
+                            <h4>
+                                Savannah Nguyen
+                            </h4>
+                            <p>
+                                President of Sales
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-testimoni">
+                        <div class="container-img-testimoni">
+                            <img src="assets/puturifki.png" alt="">
+                        </div>
+                        <div class="star-testimoni">
+                            <?php iconStar(); ?>
+                            <?php iconStar(); ?>
+                            <?php iconStar(); ?>
+                            <?php iconStar(); ?>
+                            <?php iconStar(); ?>
+                        </div>
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur. Nibh porttitor aliquet tellus eget egestas. Enim ultrices dictumst tortor in eget neque vestibulum potenti tempus
+                        </p>
+                        <div class="identity-container-testimoni">
+                            <h4>
+                                Savannah Nguyen
+                            </h4>
+                            <p>
+                                President of Sales
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-testimoni">
+                        <div class="container-img-testimoni">
+                            <img src="assets/puturifki.png" alt="">
+                        </div>
+                        <div class="star-testimoni">
+                            <?php iconStar(); ?>
+                            <?php iconStar(); ?>
+                            <?php iconStar(); ?>
+                            <?php iconStar(); ?>
+                            <?php iconStar(); ?>
+                        </div>
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur. Nibh porttitor aliquet tellus eget egestas. Enim ultrices dictumst tortor in eget neque vestibulum potenti tempus
+                        </p>
+                        <div class="identity-container-testimoni">
+                            <h4>
+                                Savannah Nguyen
+                            </h4>
+                            <p>
+                                President of Sales
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-testimoni">
+                        <div class="container-img-testimoni">
+                            <img src="assets/puturifki.png" alt="">
+                        </div>
+                        <div class="star-testimoni">
+                            <?php iconStar(); ?>
+                            <?php iconStar(); ?>
+                            <?php iconStar(); ?>
+                            <?php iconStar(); ?>
+                            <?php iconStar(); ?>
+                        </div>
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur. Nibh porttitor aliquet tellus eget egestas. Enim ultrices dictumst tortor in eget neque vestibulum potenti tempus
+                        </p>
+                        <div class="identity-container-testimoni">
+                            <h4>
+                                Savannah Nguyen
+                            </h4>
+                            <p>
+                                President of Sales
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php
+    }
+
+    function contactMe(){
+        ?>
+            <div class="container-contactMe">
+                <div class="wrapper-contactMe">
+                    <div class="heading-contactMe">
+                        <p>CONTACT ME</p>
+                        <h1>Request Free Consultant</h1>
+                    </div>
+                    <div class="form-contactMe">
+                        <div class="detailInformation-contactMe">
+                            <div class="heading-detailInformation-contactMe">
+                                <h4>
+                                    Hotline 24/7
+                                </h4>
+                                <h3>
+                                    +62 881038694017
+                                </h3>
+                            </div>
+
+                            <div class="deskripsi-detailInformation-contactMe">
+                                <p>
+                                    <span>Address:</span> Jalan Gunung Patas Gg Dampang Sari II
+                                </p>
+                                <p>
+                                <span>Email:</span> puturifki56@gmail.com       
+                                </p>
+                                <p>
+                                    <span>Phone Number: </span> 0881038694017
+                                </p>
+                                <p>
+                                    <span>Work Hour: </span>Mon - Sat 09.00 - 18.00
+                                </p>
+                            </div>
+                        </div>
+
+                        <form action="">
+                            <div class="nameAndEmail-contactMe">
+                                <input type="text" placeholder="Name*">
+                                <input type="email" placeholder="Email Address*">
+                            </div>
+                            <!-- <input type="text" placeholder="No Telepon"> -->
+                            <input class="long-text" type="text" placeholder="How can we help you?">
+                            <button type="submit">Request Now</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        <?php
+    }
+
+    function footer(){
+        ?>
+            <div></div>
         <?php
     }
 ?>

@@ -413,7 +413,7 @@ body{
 /* start style services rifki */
 .container-services{
     padding-inline: 96px;
-    margin-top: 96px;
+    margin-top: 128px;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -539,3 +539,71 @@ body{
     color: var(--primary-color);
 }
 /* end style services rifki */
+
+/* start mile stones rifki */
+.container-mileStones{
+    background-color: var(--primary-color);
+    margin-top: 128px;
+    overflow: hidden;
+}
+
+.container-mileStones .wrapper-mileStones{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 56px;
+    padding-inline: 96px;
+    padding-bottom: 54px;
+    padding-top: 54px;
+    z-index: 50;
+}
+
+.container-mileStones .wrapper-mileStones .heading-mileStones{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-mileStones .wrapper-mileStones .heading-mileStones p{
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 23.46px;
+    letter-spacing: 0.010em;
+    color: #E9EFFF;
+    
+}
+
+.container-mileStones .wrapper-mileStones .heading-mileStones h1{
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 50px;
+    color: var(--white-color);
+    width: 684px;
+    text-align: center;
+}
+
+.container-mileStones .wrapper-mileStones .container-card-mileStones{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+
+.container-mileStones .wrapper-mileStones .container-card-mileStones .card-mileStones{
+    background-color: var(--white-color);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 15px;
+}
+/* end milestones rifki */
+
+/* start style ourProjectRifki */
+
+/* end style ourProjectRifki */

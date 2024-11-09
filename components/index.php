@@ -340,4 +340,63 @@
         <?php
     }
 
+
+    function ourMileStones(){
+        ?>
+            <div class="container-mileStones">
+                <div class="wrapper-mileStones">
+                    <div class="heading-mileStones">
+                        <p>
+                            OUR MILESTONES
+                        </p>
+                        <h1>
+                            What sets our studio apart for your projects?
+                        </h1>
+                    </div>
+                    <div class="container-card-mileStones">
+                        <div class="card-mileStones">
+                            <h1>
+                                8300+
+                            </h1>
+                            <p>
+                                Figma ipsum component variant main layer. Hand.
+                            </p>
+                        </div>
+                        <div class="card-mileStones">
+                            <h1>
+                                100%
+                            </h1>
+                            <p>
+                                Figma ipsum component variant main layer. Union.
+                            </p>
+                        </div>
+                        <div class="card-mileStones">
+                            <h1>
+                                3.5K
+                            </h1>
+                            <p>
+                                Figma ipsum component variant main layer.
+                            </p>
+                        </div>
+                        <div class="card-mileStones">
+                            <h1>
+                                240+
+                            </h1>
+                            <p>
+                                Figma ipsum component variant main layer.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php
+    }
+
+    function ourProject(){
+        ?>
+            <div class="container-ourProject">
+                
+            </div>
+        <?php
+    }
 ?>

@@ -496,6 +496,7 @@ body{
     width: 406px;
     padding: 18px;
     border: 1px solid #DDDDDD;
+    border-radius: 10px;
 }
 
 .container-services .contain-services .card .deskripsi-services{

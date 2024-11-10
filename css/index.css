@@ -11,6 +11,10 @@
     padding: 0;
 }
 
+html{
+    scroll-behavior: smooth;
+}
+
 body{
     font-family: 'Work Sans', sans-serif;
 }
@@ -20,6 +24,13 @@ body{
     padding-inline: 96px;
     padding-top: 24px;
     padding-bottom: 24px;
+    position: fixed; 
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000; 
+    background-color: var(--white-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .container-navbar .wrapper-navbar{
@@ -64,16 +75,19 @@ body{
     line-height: 23.46px;
     color: white;
     cursor: pointer;
+    transition: background 0.5s;
 }
 
 .container-navbar .wrapper-navbar .navbar-route a button:hover{
-    background-color: #89b9f0;
+    background-color: #008cff;
+    box-shadow: 0 0 10px var(--primary-color);
 }
 /* end style navbar */
 
 /* start style home */
 .container-homePage{
     padding-inline: 96px;
+    padding-top: 96px;
 }
 
 .container-homePage .wrapper-homePage{
@@ -125,11 +139,15 @@ body{
     gap: 48px;
 }
 
-.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage button{
+.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage a{
+    text-decoration: none;
+}
+
+.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage a button{
     border: none;
 }
 
-.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage .hire{
+.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage a .hire{
     background-color: var(--primary-color);
     width: 161px;
     height: 50px;
@@ -140,14 +158,16 @@ body{
     line-height: 23.46px;
     transition: border 0.5s;
     cursor: pointer;
+    text-decoration: none;
+    transition: background 0.5s;
 }
 
-.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage .hire:hover{
-    border: 2px solid #008cff;
-    box-shadow: 0 0 10px #008cff;
+.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage a .hire:hover{
+    background-color: #008cff;
+    box-shadow: 0 0 10px var(--primary-color);
 }
 
-.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage .download-cv{
+.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage a .download-cv{
     display: flex;
     gap: 10px;
     justify-content: center;
@@ -165,13 +185,13 @@ body{
     transition: background 0.5s;
 }
 
-.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage .download-cv:hover{
+.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage a .download-cv:hover{
     color: white;
     background-color: var(--primary-color);
     box-shadow: 0 0 10px #008cff;
 }
 
-.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage .download-cv:hover svg path{
+.container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage a .download-cv:hover svg path{
     fill: #ffffff;
 }
 
@@ -218,7 +238,6 @@ body{
     padding-inline: 30px;
     padding: 20px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    font-family: 'Poppins', sans-serif;
     font-weight: 500;
     display: flex;
     align-items: center;
@@ -370,6 +389,12 @@ body{
     line-height: 23.46px;
     cursor: pointer;
     background-color: var(--white-color);
+    transition: background 0.5s;
+}
+.container-aboutMe .wrapper-aboutMe .aboutMe-contain .aboutMe-contain-skill .aboutMe-category-nav button.active{
+    color: white;
+    background-color: var(--primary-color);
+    box-shadow: 0 0 10px #008cff;
 }
 
 .container-aboutMe .wrapper-aboutMe .aboutMe-contain .aboutMe-contain-skill .aboutMe-category-nav button:hover{
@@ -416,6 +441,7 @@ body{
     margin-top: 128px;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
     gap: 20px;
 }
 
@@ -468,6 +494,8 @@ body{
     border-radius: 50px;
     border: 1px solid var(--primary-color);
     background-color: white;
+    transition: background 0.5s;
+    cursor: pointer;
 }
 
 .container-services .container-button-services button:hover{
@@ -479,33 +507,42 @@ body{
     fill: var(--white-color);
 }
 
-.container-services .contain-services{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 20px;
-    
+.container-services .wrapper-services{
+    overflow-x: hidden;
 }
 
-.container-services .contain-services .card{
+.container-services .wrapper-services .contain-services{
+    width: 100%;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% / 3) - 16px);
+    gap: 20px;
+    transition: transform 0.4s ease; 
+}
+
+.container-services .wrapper-services .contain-services .card{
     display: flex;
     flex-direction: column;
     gap: 15px;
     background-color: var(--white-color);
     color: var(--secondary-color);
-    width: 406px;
     padding: 18px;
     border: 1px solid #DDDDDD;
     border-radius: 10px;
+    transition: 0.4s ease;
 }
 
-.container-services .contain-services .card .deskripsi-services{
+.container-services .wrapper-services .contain-services .card:hover{
+    border: 2px solid #5372F0;
+}
+
+.container-services .wrapper-services .contain-services .card .deskripsi-services{
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.container-services .contain-services .card .deskripsi-services h4{
+.container-services .wrapper-services .contain-services .card .deskripsi-services h4{
     width: 280px;
     font-weight: 700;
     font-size: 25px;
@@ -514,7 +551,10 @@ body{
     color: #000000;
 }
 
-.container-services .contain-services .card .deskripsi-services p{
+.container-services .wrapper-services .contain-services .card .deskripsi-services a{
+    text-decoration: none;
+}
+.container-services .wrapper-services .contain-services .card .deskripsi-services p{
     font-weight: 400;
     font-size: 18px;
     line-height: 28px;
@@ -522,7 +562,7 @@ body{
     color: var(--black-color-navbar);
 }
 
-.container-services .contain-services .card .deskripsi-services .learn-more-services{
+.container-services .wrapper-services .contain-services .card .deskripsi-services a .learn-more-services{
     display: flex;
     flex-direction: row;
     gap: 10px;
@@ -531,7 +571,7 @@ body{
     margin-top: 12px;
 }
 
-.container-services .contain-services .card .deskripsi-services .learn-more-services p{
+.container-services .wrapper-services .contain-services .card .deskripsi-services a .learn-more-services p{
     font-weight: 400;
     font-size: 18px;
     line-height: 28px;
@@ -661,6 +701,7 @@ body{
     line-height: 23.46px;
     background-color: var(--white-color);
     cursor: pointer;
+    transition: background 0.5s;
 }
 
 .container-ourProject .container-ourProject-nav button:hover{
@@ -778,6 +819,12 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: background 0.5s;
+}
+
+.container-ourProject .container-card-ourProject .card-ourProject .container-seeMore-ourProject a:hover{
+    background-color: #008cff;
+    box-shadow: 0 0 10px var(--primary-color);
 }
 /* end style ourProjectRifki */
 
@@ -826,6 +873,7 @@ body{
     border: 1px solid var(--primary-color);
     background-color: white;
     cursor: pointer;
+    transition: background 0.5s;
 }
 
 .testimoni-container .testimoni-nav button:hover{
@@ -854,6 +902,7 @@ body{
     padding: 24px;
     gap: 16px;
     color: var(--secondary-color);
+    transition: background 0.5s;
 }
 
 .testimoni-container .container-card-testimoni .card-testimoni:hover{
@@ -893,6 +942,13 @@ body{
     font-size: 16;
     line-height: 20px;
     text-align: center;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 6;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    justify-content: center;
+    align-items: center;
 }
 
 .testimoni-container .container-card-testimoni .card-testimoni .indetity-container-testimoni h4{
@@ -912,6 +968,19 @@ body{
 .container-contactMe{
     background-color: var(--primary-color);
     margin-top: 128px;
+    position: relative;
+}
+
+.container-contactMe .pesawat{
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.container-contactMe .location{
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 .container-contactMe .wrapper-contactMe{
@@ -1033,6 +1102,66 @@ body{
     line-height: 20px;
 }
 
+/* Sembunyikan radio button asli */
+.container-contactMe .wrapper-contactMe .form-contactMe form input[type="radio"] {
+    display: none;
+}
+
+/* Style untuk label radio button */
+.container-contactMe .wrapper-contactMe .form-contactMe form label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 20px;
+}
+
+/* Tambahkan elemen custom sebelum label */
+.container-contactMe .wrapper-contactMe .form-contactMe form label::before {
+    content: "";
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--white-color); /* Border default */
+    margin-right: 8px;
+    background-color: transparent; /* Background default */
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* Saat radio button dipilih, ubah warna */
+.container-contactMe .wrapper-contactMe .form-contactMe form input[type="radio"]:checked + label::before {
+    background-color: #00489A; /* Warna saat dipilih */
+    border-color: #00489A; /* Border berubah jadi merah saat dipilih */
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe form .wrapper-metode{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe form .wrapper-metode .wrapper-email{
+    display: flex;
+    gap: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe form .wrapper-metode .wrapper-email label{
+    color: white;
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe form .wrapper-metode .wrapper-telpon{
+    display: flex;
+    gap: 2px;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-contactMe .wrapper-contactMe .form-contactMe form .wrapper-metode .wrapper-telpon label{
+    color: white;
+}
+
 .container-contactMe .wrapper-contactMe .form-contactMe form .long-text{
     height: 142px;
 }
@@ -1053,3 +1182,95 @@ body{
     box-shadow: 0 0 10px #008cff;
 }
 /* end style contactMe */
+
+/* start style footer */
+footer{
+    margin-top: 96px;
+    background-color: var(--primary-color);
+}
+
+footer .footer-contain{
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding-inline: 96px;
+}
+footer .footer-contain .wrapper-footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 36px ;
+}
+
+footer .footer-contain .wrapper-footer .description{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+footer .footer-contain .wrapper-footer .description p{
+    margin-top: 18px;
+    width: 450px;
+    font-size: 20px;
+    letter-spacing: -0.015em;
+    color: #FCFCFD;
+}
+
+footer .footer-contain .wrapper-footer .description .icon-sosial-media{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+footer .footer-contain .wrapper-footer .quick-links{
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+}
+
+footer .footer-contain .wrapper-footer .quick-links .heading{
+    font-size: 20px;
+    color: var(--white-color);
+    letter-spacing: -0.015em;
+    font-weight: 600;
+}
+
+footer .footer-contain .wrapper-footer .quick-links .link{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+footer .footer-contain .wrapper-footer .quick-links .link a{
+    text-decoration: none;
+}
+
+footer .footer-contain .wrapper-footer .quick-links .link a p{
+    font-size: 16px;
+    letter-spacing: -0.015em;
+    color: var(--white-color);
+}
+
+footer .footer-contain .wrapper-footer .quick-links .link a p:hover{
+    text-decoration: underline;
+    transition: 2s ease-in-out;
+}
+
+footer .footer-contain .border{
+    width: 100%;
+    border: 1px solid var(--white-color);
+}
+
+footer .footer-contain .copyright{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 20px;
+}
+
+footer .footer-contain .copyright p{
+    font-size: 20px;
+    letter-spacing: -0.015em;
+    color: #FFFFFF;
+}
+/* end style footer */

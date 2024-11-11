@@ -32,11 +32,17 @@
         ?>
             <div class="container-navbar">
                 <div class="wrapper-navbar">
+                    <a href="index.php">
+                        <div class="icon-navbar">
+                            <?php iconNavbar();?>
+                        </div>
+                    </a>
 
-                    <div class="icon-navbar">
-                        <?php iconNavbar();?>
+                    <!-- Icon menu untuk tampilan mobile -->
+                    
+                    <div class="menu-icon">
+                        ☰
                     </div>
-
                     <div class="navbar-route">
 
                         <div class="link-nav">
@@ -227,11 +233,30 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="rewards" data-aos="fade-up" data-aos-duration="1000">
-                                    <p>ini adalah tampilan rewards</p>
+                                <div id="rewards" class="container-rewards" data-aos="fade-up" data-aos-duration="1000">
+                                    <ul>
+                                        <li>
+                                            <img src="assets/icon/juara-favorit.png" alt="">
+                                            <p>Juara Favorit Ide Bisnis</p>
+                                        </li>
+                                        <li>
+                                            <img src="assets/icon/juara-1-icon.png" alt="">
+                                            <p>Juara 1 Guntur Cup Bali</p>
+                                        </li>
+                                        <li>
+                                            <img src="assets/icon/juara-3-icon.png" alt="">
+                                            <p>Juara 3 Porjar Denpasar Barat</p>
+                                        </li>
+                                    </ul>
                                 </div>
-                                <div id="education" data-aos="fade-up" data-aos-duration="1000">
-                                    ini adalah tampilan education
+                                <div class="container-education" id="education" data-aos="fade-up" data-aos-duration="1000">
+                                    <div class="container-img">
+                                        <img src="assets/icon/udayana-icon.png" class="beda-ukuran" alt="">
+                                        <img src="assets/icon/logo-ti.png" alt="">
+                                    </div>
+                                    <p>
+                                        I'm studying <span>Information Technology</span> at <span>Udayana University</span>, gaining a strong foundation in computer science, software development, data structures, algorithms, and modern technologies for innovative problem-solving.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -296,8 +321,8 @@
                     </button>
                 </div>
                 <div class="wrapper-services">
-                    <div class="contain-services">
-                        <div class="card" data-aos="fade-right" data-aos-duration="600">
+                    <div class="contain-services" data-aos="fade-right" data-aos-duration="1000">
+                        <div class="card">
                             <div class="icon-services">
                                 <?php iconDesignServices(); ?>
                             </div>
@@ -318,7 +343,7 @@
                                 </a>
                             </div>  
                         </div>
-                        <div class="card" data-aos="fade-right" data-aos-duration="800">
+                        <div class="card">
                             <div class="icon-services">
                                 <?php iconDesignServices(); ?>
                             </div>
@@ -339,7 +364,7 @@
                                 </a>
                             </div>  
                         </div>
-                        <div class="card" data-aos="fade-right" data-aos-duration="1000">
+                        <div class="card">
                             <div class="icon-services">
                                 <?php iconDesignServices(); ?>
                             </div>
@@ -400,8 +425,8 @@
                             What sets our studio apart for your projects?
                         </h1>
                     </div>
-                    <div class="container-card-mileStones">
-                        <div class="card-mileStones" data-aos="fade-right" data-aos-duration="600">
+                    <div class="container-card-mileStones" data-aos="fade-right" data-aos-duration="600">
+                        <div class="card-mileStones" onmouseover="mouseOverMileStones(this)" onmouseout="mouseOutMileStones(this)">
                             <h1>
                                 8300+
                             </h1>
@@ -409,7 +434,7 @@
                                 Figma ipsum component variant main layer. Hand.
                             </p>
                         </div>
-                        <div class="card-mileStones"  data-aos="fade-right" data-aos-duration="800">
+                        <div class="card-mileStones" onmouseover="mouseOverMileStones(this)" onmouseout="mouseOutMileStones(this)">
                             <h1>
                                 100%
                             </h1>
@@ -417,7 +442,7 @@
                                 Figma ipsum component variant main layer. Union.
                             </p>
                         </div> 
-                        <div class="card-mileStones"  data-aos="fade-right" data-aos-duration="1000">
+                        <div class="card-mileStones" onmouseover="mouseOverMileStones(this)" onmouseout="mouseOutMileStones(this)">
                             <h1>
                                 3.5K
                             </h1>
@@ -425,7 +450,7 @@
                                 Figma ipsum component variant main layer.
                             </p>
                         </div>
-                        <div class="card-mileStones"  data-aos="fade-right" data-aos-duration="1200">
+                        <div class="card-mileStones" onmouseover="mouseOverMileStones(this)" onmouseout="mouseOutMileStones(this)">
                             <h1>
                                 240+
                             </h1>
@@ -446,14 +471,40 @@
                 "nama_kegiatan" => "ITCC 2024 Udayana",
                 "deskripsi_kegiatan" => "Information Technology Creative Competition (ITCC) is the largest competition in the field of Information Technology in Bali, which is organized by the Information Technology Student Association (HMTI) of Udayana University.",
                 "kapan_dikerjakan" => "Tahun 2024",
-                "gambar" => "itcc.png"
+                "gambar" => "itcc.png",
+                "project_source" => "https://itcc.hmtiudayana.id/"
             ],
             [
                 "kategori" => "Web Development",
                 "nama_kegiatan" => "Build-IT 2024 Udayana ",
                 "deskripsi_kegiatan" => "Basic Understanding in Learning and Developing Information Technology merupakan kegiatan yang bertujuan mewadahi mahasiswa untuk menerima pemahaman lebih tentang materi dasar perkuliahan dan lomba serta penjurusan dilingkup TI.",
                 "kapan_dikerjakan" => "Tahun 2024",
-                "gambar" => "build-it.png"
+                "gambar" => "build-it.png",
+                "project_source" => "https://buildit.hmtiudayana.id/"
+            ],
+            [
+                "kategori" => "Web Development",
+                "nama_kegiatan" => "Subudi Bali Tour ",
+                "deskripsi_kegiatan" => "Subudi Bali Tour is a tourism service platform that provides the best travel experiences in Bali. This website is designed to facilitate tourists in planning their trips to the Island of the Gods, offering various tour packages, vehicle rental services, and interesting information about popular tourist destinations in Bali.",
+                "kapan_dikerjakan" => "Tahun 2024",
+                "gambar" => "subudi-bali-tour.png",
+                "project_source" => "https://github.com/PutuRifkiDy/Website-Travel"
+            ],
+            [
+                "kategori" => "UI/UX Design",
+                "nama_kegiatan" => "Build IT HMTI",
+                "deskripsi_kegiatan" => "Basic Understanding in Learning and Developing Information Technology merupakan kegiatan yang bertujuan mewadahi mahasiswa untuk menerima pemahaman lebih tentang materi dasar perkuliahan dan lomba serta penjurusan dilingkup TI.",
+                "kapan_dikerjakan" => "Tahun 2024",
+                "gambar" => "uiux-build-it.png",
+                "project_source" => "https://www.figma.com/design/kInJMPGpClt8UZYxXDYxQ6/Build-IT-2024?node-id=0-1&node-type=canvas&t=cV3KxC6DgtrfQZGE-0"
+            ],
+            [
+                "kategori" => "API",
+                "nama_kegiatan" => "API Submission Java",
+                "deskripsi_kegiatan" => "This task is a simple backend API built with Java and Maven, structured for a Subscription Payment System application. The API is used for data manipulation of each entity in the database and can handle GET, POST, PUT, DELETE operations. The responses provided by the API server are in JSON format, and the data is stored in an SQLite DATABASE. The application testing is conducted using the Postman application.",
+                "kapan_dikerjakan" => "Tahun 2024",
+                "gambar" => "api-java.png",
+                "project_source" => "https://github.com/PutuRifki/API-JAVA"
             ]
         ];
         ?>
@@ -467,22 +518,22 @@
                     </h1>
                 </div>
                 <div class="container-ourProject-nav"  data-aos="fade-up" data-aos-duration="1000">
-                    <button>
+                    <button id="btn-all" onclick="filterCard('all')" class="active">
                         All
                     </button>
-                    <button>
+                    <button id="btn-uiux" onclick="filterCard('UI/UX Design')">
                         UI/UX Design
                     </button>
-                    <button>
+                    <button id="btn-web" onclick="filterCard('Web Development')">
                         Web Development
                     </button>
-                    <button>
+                    <button id="btn-api" onclick="filterCard('API')">
                         API
                     </button>
                 </div>
-                <div class="container-card-ourProject">
+                <div class="container-card-ourProject" data-aos="fade-right" data-aos-duration="1000">
                     <?php foreach($dataProjectSaya as $data){?>
-                        <div class="card-ourProject" data-aos="fade-right" data-aos-duration="1000">
+                        <div class="card-ourProject" data-kategori="<?php echo $data["kategori"];?>" >
                             <div class="container-img-ourProject">
                                 <img src="assets/<?php echo $data["gambar"]; ?>" alt="">
                             </div>
@@ -503,7 +554,7 @@
                                         <p><?php echo $data["nama_kegiatan"]; ?></p>
                                     </div>
         
-                                    <a href="">
+                                    <a href="detail-project.php?kategori=<?php echo $data['kategori']; ?>&nama_kegiatan=<?php echo $data['nama_kegiatan']; ?>&deskripsi_kegiatan=<?php echo $data['deskripsi_kegiatan']; ?>&kapan_dikerjakan=<?php echo $data['kapan_dikerjakan'];?>&gambar=<?php echo $data['gambar'];?>&project_source=<?php echo $data['project_source'];?>">
                                         See More
                                     </a>
                                 </div>
@@ -549,6 +600,30 @@
                 "pekerjaan" => "Quality Assurance",
                 "review" => "Proses pengujian dilakukan dengan teliti sehingga memastikan produk bebas dari kesalahan. Tim sangat responsif terhadap feedback yang diberikan.",
                 "gambar" => "tri-darma.png"
+            ],
+            [
+                "nama" => "Putu Rifki Dirkayuda",
+                "pekerjaan" => "Project Manager",
+                "review" => "Pengalaman kerja sama yang luar biasa! Tim bekerja dengan sangat profesional dan selalu memberikan solusi tepat waktu. Saya sangat puas dengan hasil yang diberikan.",
+                "gambar" => "puturifki.png"
+            ],
+            [
+                "nama" => "Nyoman Tri Darma Wahyudi",
+                "pekerjaan" => "Senior Developer",
+                "review" => "Tim ini memiliki dedikasi yang tinggi dalam menyelesaikan proyek dengan kualitas terbaik. Mereka benar-benar memperhatikan detail dan kebutuhan klien.",
+                "gambar" => "tri-darma.png"
+            ],
+            [
+                "nama" => "Gede Candra Wikananta",
+                "pekerjaan" => "UI/UX Designer",
+                "review" => "Desain antarmuka yang dihasilkan sangat menarik dan user-friendly. Saya sangat senang bisa bekerja dengan tim yang kreatif dan inovatif ini.",
+                "gambar" => "candra.png"
+            ],
+            [
+                "nama" => "Putu Devasya Widyadana",
+                "pekerjaan" => "Quality Assurance",
+                "review" => "Proses pengujian dilakukan dengan teliti sehingga memastikan produk bebas dari kesalahan. Tim sangat responsif terhadap feedback yang diberikan.",
+                "gambar" => "tri-darma.png"
             ]
         ];    
         // Belajar menggunakan for
@@ -564,39 +639,41 @@
                     </h4>
                 </div>
                 <div class="testimoni-nav">
-                    <button>
+                    <button onclick="geserCardTestimoni('kiri')" >
                         <?php iconArrowLeft(); ?>
                     </button>
-                    <button>
+                    <button onclick="geserCardTestimoni('kanan')" >
                         <?php iconArrowRight(); ?>
                     </button>
                 </div>
-                <div class="container-card-testimoni">
-                    <?php for($i = 0; $i < $banyakData; $i++){ ?>
-                        <div class="card-testimoni"  data-aos="fade-right" data-aos-duration="1000">
-                            <div class="container-img-testimoni">
-                                <img src="assets/<?php echo $dataReview[$i]["gambar"]; ?>" alt="">
-                            </div>
-                            <div class="star-testimoni">
-                                <?php iconStar(); ?>
-                                <?php iconStar(); ?>
-                                <?php iconStar(); ?>
-                                <?php iconStar(); ?>
-                                <?php iconStar(); ?>
-                            </div>
-                            <p>
-                                <?php echo $dataReview[$i]["review"]; ?>
-                            </p>
-                            <div class="identity-container-testimoni">
-                                <h4>
-                                    <?php echo $dataReview[$i]["nama"]; ?>
-                                </h4>
+                <div class="wrapper-testimoni-card">
+                    <div class="container-card-testimoni" data-aos="fade-right" data-aos-duration="1000">
+                        <?php for($i = 0; $i < $banyakData; $i++){ ?>
+                            <div class="card-testimoni">
+                                <div class="container-img-testimoni">
+                                    <img src="assets/<?php echo $dataReview[$i]["gambar"]; ?>" alt="">
+                                </div>
+                                <div class="star-testimoni">
+                                    <?php iconStar(); ?>
+                                    <?php iconStar(); ?>
+                                    <?php iconStar(); ?>
+                                    <?php iconStar(); ?>
+                                    <?php iconStar(); ?>
+                                </div>
                                 <p>
-                                    <?php echo $dataReview[$i]["pekerjaan"]; ?>
+                                    <?php echo $dataReview[$i]["review"]; ?>
                                 </p>
+                                <div class="identity-container-testimoni">
+                                    <h4>
+                                        <?php echo $dataReview[$i]["nama"]; ?>
+                                    </h4>
+                                    <p>
+                                        <?php echo $dataReview[$i]["pekerjaan"]; ?>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    <?php } ?>
+                        <?php } ?>
+                    </div>
                 </div>
             </div>
         <?php
@@ -658,21 +735,22 @@
                             </div>
                         </div>
 
-                        <form action=""  data-aos="fade-left" data-aos-duration="1000">
+                        <form action=""  data-aos="fade-left" data-aos-duration="1000" onsubmit="return validateBeforeSubmit()">
                             <div class="nameAndEmail-contactMe">
-                                <input type="text" placeholder="Name*">
-                                <input type="email" placeholder="Email Address*">
+                                <input type="text" placeholder="Name*" onfocus="highlight(this)" onblur="removeHighlight(this)" oninput="checkInput(this)">
+                                <input type="text" id="emailField" placeholder="Email Address*" onfocus="highlight(this)" onblur="removeHighlight(this)" oninput="checkInput(this)">
+                                <input type="tel" id="phoneField" placeholder="Phone Number*" id="phoneField" style="display: none;" onfocus="highlight(this)" onblur="removeHighlight(this)" oninput="checkInput(this)">
                             </div>
                             <!-- <input type="text" placeholder="No Telepon"> -->
-                            <textarea class="long-text" type="text" rows="4" cols="50" placeholder="How can we help you?">
+                            <textarea class="long-text" type="text" rows="4" cols="50" placeholder="Type your message here..." onfocus="highlight(this)" onblur="removeHighlight(this)" oninput="checkInput(this)">
                             </textarea>
                             <div class="wrapper-metode">
                                 <div class="wrapper-email">
-                                    <input type="radio" id="kontak_email" name="preferensi_kontak" value="Email" checked>
+                                    <input type="radio" id="kontak_email" name="preferensi_kontak" value="Email" checked onchange="changeInputMethod(this)">
                                     <label for="kontak_email">Email</label>
                                 </div>
                                 <div class="wrapper-telpon">
-                                    <input type="radio" id="kontak_telepon" name="preferensi_kontak" value="Telepon">
+                                    <input type="radio" id="kontak_telepon" name="preferensi_kontak" value="Telepon" onchange="changeInputMethod(this)">
                                     <label for="kontak_telepon">Telepon</label>
                                 </div>
                             </div>

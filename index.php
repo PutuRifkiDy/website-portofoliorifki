@@ -14,13 +14,13 @@
 </head>
 <body>
     <?php navbar(); ?>
-    <?php homePage(); ?>
-    <?php aboutMe(); ?>
-    <?php services(); ?>
-    <?php ourMileStones(); ?>
-    <?php ourProject(); ?>
-    <?php testimoni(); ?>
-    <?php contactMe(); ?>
+        <?php homePage(); ?>
+        <?php aboutMe(); ?>
+        <?php services(); ?>
+        <?php ourMileStones(); ?>
+        <?php ourProject(); ?>
+        <?php testimoni(); ?>
+        <?php contactMe(); ?>
     <?php footer(); ?>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
@@ -28,5 +28,6 @@
     </script>
 
     <script src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>

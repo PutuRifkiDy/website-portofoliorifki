@@ -12,29 +12,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-// fungsi untuk about page
-function menampilkanContentAbout(idKategoriKonten){
+    // fungsi untuk about page
+    function menampilkanContentAbout(idKategoriKonten){
 
-    document.getElementById('main-skill').style.display = 'none';
-    document.getElementById('rewards').style.display = 'none';
-    document.getElementById('education').style.display = 'none';
-    document.getElementById(idKategoriKonten).style.display = 'flex';
+        document.getElementById('main-skill').style.display = 'none';
+        document.getElementById('rewards').style.display = 'none';
+        document.getElementById('education').style.display = 'none';
+        document.getElementById(idKategoriKonten).style.display = 'flex';
 
 
-    document.getElementById('btn-main-skills').classList.remove('active');
-    document.getElementById('btn-awards').classList.remove('active');
-    document.getElementById('btn-education').classList.remove('active');
+        document.getElementById('btn-main-skills').classList.remove('active');
+        document.getElementById('btn-awards').classList.remove('active');
+        document.getElementById('btn-education').classList.remove('active');
 
-    if(idKategoriKonten === 'main-skill'){
-        document.getElementById('btn-main-skills').classList.add('active');
-    } else if(idKategoriKonten === 'rewards'){
-        document.getElementById('btn-awards').classList.add('active');
-    } else if(idKategoriKonten === 'education'){
-        document.getElementById('btn-education').classList.add('active');
+        if(idKategoriKonten === 'main-skill'){
+            document.getElementById('btn-main-skills').classList.add('active');
+        } else if(idKategoriKonten === 'rewards'){
+            document.getElementById('btn-awards').classList.add('active');
+        } else if(idKategoriKonten === 'education'){
+            document.getElementById('btn-education').classList.add('active');
+        }
+
     }
-
-}
-menampilkanContentAbout('main-skill');
+    menampilkanContentAbout('main-skill');
 
 
 

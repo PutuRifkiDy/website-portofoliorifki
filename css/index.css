@@ -1573,8 +1573,8 @@ footer .footer-contain .copyright p{
     .container-homePage .wrapper-homePage .img-homePage{
         position: relative; 
         width: 100%;
-        max-width: 320px;
-        height: 320px;
+        max-width: 300px;
+        height: 300px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -1582,9 +1582,9 @@ footer .footer-contain .copyright p{
     }
     
     .home-img {
-        max-width: 300px;
+        max-width: 200px;
         width: 100%;
-        height: 300px;
+        height: 200px;
         border-radius: 50%;
         overflow: hidden;
         display: flex;
@@ -1605,7 +1605,9 @@ footer .footer-contain .copyright p{
     .container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage{
         display: flex;
         flex-direction: row;
-        gap: 16px;
+        gap: 8px;
+        justify-content: center;
+        align-items: center;
     }
 
     .container-homePage .wrapper-homePage .deskripsi-homePage .button-homePage a{
@@ -1901,7 +1903,6 @@ footer .footer-contain .copyright p{
 
     .container-mileStones .wrapper-mileStones .container-card-mileStones .card-mileStones {
         width: 100%; /* Agar card memenuhi lebar layar */
-        max-width: none;
     }
 }
 

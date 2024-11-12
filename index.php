@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/index.css" />
     <title>Landing Page</title>
     <!-- animate onscroll -->
-    <link rel="icon" href="assets/icon/logo-ti.png.png" />
+    <link rel="icon" href="assets/icon/logo-ti.png" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
 </head>
 <body>

@@ -1,5 +1,8 @@
 <?php 
     include "../components/admin.php";
+    include "../koneksi.php";
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

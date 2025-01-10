@@ -72,6 +72,13 @@ function dashboardPage()
                             <small>Category</small>
                         </a>
                     </li>
+                    <li>
+                        <a href="project.php">
+                            <span class="las la-briefcase" style="color: #85878a">
+                            </span>
+                            <small>Project</small>
+                        </a>
+                    </li>
                     <!-- <li>
                         <a href="combine_chart.html">
                             <span class="fa-solid fa-chart-simple" style="color: #85878a">
@@ -192,7 +199,14 @@ function dashboardPage()
 
 function categoryPage()
 {
-?>
+    include "../koneksi.php"; 
+    $sql = "SELECT * FROM kategori";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    ?>
+
+    
     <input type="checkbox" id="menu-toggle" />
     <div class="side-bar">
         <div class="side-header">
@@ -217,6 +231,13 @@ function categoryPage()
                             <span class="las la-list" style="color: #85878a">
                             </span>
                             <small>Category</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="project.php">
+                            <span class="las la-briefcase" style="color: #85878a">
+                            </span>
+                            <small>Project</small>
                         </a>
                     </li>
                     <!-- 
@@ -263,19 +284,30 @@ function categoryPage()
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Handle</th>
+                            <th scope="col">Nama</th>
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
+                        <?php if ($result->num_rows  > 0) {
+                            $no = 1;
+                        ?>
+                            <?php while ($row = $result->fetch_assoc()) { ?>
+                                <tr>
+                                    <td scope="row"><?php echo $no++; ?></td>
+                                    <td><?php echo $row['nama']; ?></td>
+                                    <td>
+                                        <a href="#" onclick="confirmDelete(<?php echo $row['id_kategori']; ?>)" class="btn btn-danger">Hapus</a> 
+                                        <a href="updateKategory.php?id_kategori=<?php echo $row['id_kategori']; ?>" class="btn btn-success">Update</a>        
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <tr>
+                                <td colspan="2" style="text-align: center;">Data Kategori Belum Tersedia</td>
+                            </tr>
+                        <?php } ?>
+                        <!-- <tr>
                             <th scope="row">2</th>
                             <td>Jacob</td>
                             <td>Thornton</td>
@@ -285,7 +317,7 @@ function categoryPage()
                             <th scope="row">3</th>
                             <td colspan="2">Larry the Bird</td>
                             <td>@twitter</td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
             </div>
@@ -297,6 +329,34 @@ function categoryPage()
 
 function createKategory()
 {
+    include "../koneksi.php";
+    if(isset($_POST['kategori'])){
+        $nama_kategori = $_POST['kategori'];
+    
+        $sql = "INSERT INTO kategori (nama) VALUES (?)";
+    
+        $stmt = $conn->prepare($sql);
+    
+        // Bind parameter (s = string)
+        $stmt->bind_param("s", $nama_kategori);
+    
+        // Eksekusi query
+        if ($stmt->execute()) {
+            header("location: category.php");
+        } else {
+            ?>
+                <script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong!",
+                    });
+                </script>
+            <?php
+        }
+    }
+
+
 ?>
     <input type="checkbox" id="menu-toggle" />
     <div class="side-bar">
@@ -322,6 +382,13 @@ function createKategory()
                             <span class="las la-list" style="color: #85878a">
                             </span>
                             <small>Category</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="project.php">
+                            <span class="las la-briefcase" style="color: #85878a">
+                            </span>
+                            <small>Project</small>
                         </a>
                     </li>
                     <!-- <li>
@@ -368,10 +435,594 @@ function createKategory()
             <p>Tambah Category</p>
 
             <div class="data-dashboard ">
-                <form action="" method="">
+                <form action="" method="POST">
                     <div class="mb-3">
                         <label for="kategori" class="form-label">Kategori</label>
                         <input type="text" class="form-control" id="exampleInputEmail1" name="kategori">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+<?php
+}
+
+function updateKategory()
+{
+    include "../koneksi.php";
+    if(isset($_GET['id_kategori']) && is_numeric($_GET['id_kategori'])){
+        $id_kategori = $_GET['id_kategori'];
+
+        $sql = "SELECT * FROM kategori WHERE id_kategori = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id_kategori);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+            // Cek apakah data ditemukan
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+        } else {
+            echo "Data tidak ditemukan.";
+            exit();
+        }
+    } else {
+        echo "ID tidak valid.";
+        exit();
+    }
+
+    if(isset($_POST["kategori"])){
+        $kategori_baru = $_POST["kategori"];
+
+        $sql = "UPDATE kategori SET nama = ? WHERE id_kategori = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("si", $kategori_baru, $id_kategori);
+        
+        if ($stmt->execute()) {
+            // Redirect ke halaman kategori setelah berhasil update
+            header("Location: category.php");
+            exit();
+        } else {
+            echo "Gagal memperbarui data: " . $stmt->error;
+        }
+
+    }
+
+
+?>
+    <input type="checkbox" id="menu-toggle" />
+    <div class="side-bar">
+        <div class="side-header">
+            <h2>R<span>IF</span></h2>
+        </div>
+        <div class="side-content">
+            <div class="profile">
+                <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
+                <h3>Teknologi Informasi</h3>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+                    <li>
+                        <a href="dashboard.php">
+                            <span class="las la-user-alt" style="color: #85878a"> </span>
+                            <small>Dashboard</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="category.php">
+                            <span class="las la-list" style="color: #85878a">
+                            </span>
+                            <small>Category</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="project.php">
+                            <span class="las la-briefcase" style="color: #85878a">
+                            </span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    <!-- <li>
+                        <a href="combine_chart.html">
+                            <span class="fa-solid fa-chart-simple" style="color: #85878a">
+                            </span>
+                            <small>Grafik Gabungan</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="cpu_usage.html">
+                            <span class="fa-solid fa-server" style="color: #85878a"> </span>
+                            <small>CPU Usage</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="memory_usage.html">
+                            <span class="fa-solid fa-memory" style="color: #85878a"> </span>
+                            <small>Memory Usage</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="storage_usage.html">
+                            <span class="fa-solid fa-database" style="color: #85878a">
+                            </span>
+                            <small>Storage Usage</small>
+                        </a>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <label for="menu-toggle"><span class="las la-bars"></span></label>
+                <a href="">
+                    <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                    Logout
+                </a>
+            </div>
+        </header>
+        <div class="container-dashboard">
+            <p>Tambah Category</p>
+
+            <div class="data-dashboard ">
+                <form action="" method="POST">
+                    <div class="mb-3">
+                        <label for="kategori" class="form-label">Kategori</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" name="kategori" value="<?php echo htmlspecialchars($row['nama']);?>">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+<?php
+}
+
+function projectPage(){
+    include "../koneksi.php"; 
+    $sql = "SELECT * FROM project";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    ?>
+
+    
+    <input type="checkbox" id="menu-toggle" />
+    <div class="side-bar">
+        <div class="side-header">
+            <h2>R<span>IF</span></h2>
+        </div>
+        <div class="side-content">
+            <div class="profile">
+                <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
+                <h3>Teknologi Informasi</h3>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+                    <li>
+                        <a href="dashboard.php">
+                            <span class="las la-user-alt" style="color: #85878a"> </span>
+                            <small>Dashboard</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="category.php">
+                            <span class="las la-list" style="color: #85878a">
+                            </span>
+                            <small>Category</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="project.php">
+                            <span class="las la-briefcase" style="color: #85878a">
+                            </span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    <!-- 
+                    <li>
+                        <a href="cpu_usage.html">
+                            <span class="fa-solid fa-server" style="color: #85878a"> </span>
+                            <small>CPU Usage</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="memory_usage.html">
+                            <span class="fa-solid fa-memory" style="color: #85878a"> </span>
+                            <small>Memory Usage</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="storage_usage.html">
+                            <span class="fa-solid fa-database" style="color: #85878a">
+                            </span>
+                            <small>Storage Usage</small>
+                        </a>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <label for="menu-toggle"><span class="las la-bars"></span></label>
+                <a href="">
+                    <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                    Logout
+                </a>
+            </div>
+        </header>
+        <div class="container-dashboard">
+            <p>Data Project</p>
+            <div class="data-dashboard">
+                <a href="createProject.php">
+                    <button type="button" class="btn btn-primary">Tambah Project</button>
+                </a>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Foto</th>
+                            <th scope="col">Nama Kegiatan</th>
+                            <th scope="col">Deskripsi</th>
+                            <th scope="col">Link Project</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if ($result->num_rows  > 0) {
+                            $no = 1;
+                        ?>
+                            <?php while ($row = $result->fetch_assoc()) { ?>
+                                <tr>
+                                    <td scope="row"><?php echo $no++; ?></td>
+                                    <td><img src="<?php echo $row['photo_path']; ?>" alt="Foto" width="100"></td>
+                                    <td><?php echo $row['nama_kegiatan']; ?></td>
+                                    <td><?php echo $row['deskripsi']; ?></td>
+                                    <td><a href="<?php echo $row['link_project']; ?>" target="_blank">Link</a></td>
+                                    <td>
+                                        <a href="#" onclick="confirmDelete(<?php echo $row['id_project']; ?>)" class="btn btn-danger">Hapus</a> 
+                                        <a href="updateProject.php?id_project=<?php echo $row['id_project']; ?>" class="btn btn-success">Update</a>        
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <tr>
+                                <td colspan="6" style="text-align: center;">Data Project Belum Tersedia</td>
+                            </tr>
+                        <?php } ?>
+                        <!-- <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td>@fat</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td colspan="2">Larry the Bird</td>
+                            <td>@twitter</td>
+                        </tr> -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+<?php
+}
+
+function createProject()
+{
+    include "../koneksi.php";
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $id_kategori = $_POST['id_kategori'];
+        $nama_kegiatan = $_POST['nama_kegiatan'];
+        $deskripsi = $_POST['deskripsi'];
+        $link_project = $_POST['link_project'];
+    
+        // Proses upload file
+        $target_dir = "../assets/uploads/";
+        $target_file = $target_dir . basename($_FILES["photo_path"]["name"]);
+        if (move_uploaded_file($_FILES["photo_path"]["tmp_name"], $target_file)) {
+            // Simpan data ke database
+            $sql = "INSERT INTO project (id_kategori, nama_kegiatan, deskripsi, photo_path, link_project) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("issss", $id_kategori, $nama_kegiatan, $deskripsi, $target_file, $link_project);
+    
+            if ($stmt->execute()) {
+                echo "Proyek berhasil ditambahkan!";
+                header("Location: project.php");
+                exit();
+            } else {
+                echo "Gagal menyimpan data: " . $stmt->error;
+            }
+        } else {
+            echo "Gagal mengupload file.";
+        }
+    }
+
+
+?>
+    <input type="checkbox" id="menu-toggle" />
+    <div class="side-bar">
+        <div class="side-header">
+            <h2>R<span>IF</span></h2>
+        </div>
+        <div class="side-content">
+            <div class="profile">
+                <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
+                <h3>Teknologi Informasi</h3>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+                    <li>
+                        <a href="dashboard.php">
+                            <span class="las la-user-alt" style="color: #85878a"> </span>
+                            <small>Dashboard</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="category.php">
+                            <span class="las la-list" style="color: #85878a">
+                            </span>
+                            <small>Category</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="project.php">
+                            <span class="las la-briefcase" style="color: #85878a">
+                            </span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    <!-- <li>
+                        <a href="combine_chart.html">
+                            <span class="fa-solid fa-chart-simple" style="color: #85878a">
+                            </span>
+                            <small>Grafik Gabungan</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="cpu_usage.html">
+                            <span class="fa-solid fa-server" style="color: #85878a"> </span>
+                            <small>CPU Usage</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="memory_usage.html">
+                            <span class="fa-solid fa-memory" style="color: #85878a"> </span>
+                            <small>Memory Usage</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="storage_usage.html">
+                            <span class="fa-solid fa-database" style="color: #85878a">
+                            </span>
+                            <small>Storage Usage</small>
+                        </a>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <label for="menu-toggle"><span class="las la-bars"></span></label>
+                <a href="">
+                    <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                    Logout
+                </a>
+            </div>
+        </header>
+        <div class="container-dashboard">
+            <p>Tambah Project</p>
+
+            <div class="data-dashboard ">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="nama_kegiatan" class="form-label">Nama Kegiatan</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" name="nama_kegiatan">
+                    </div>
+                    <div class="mb-3">
+                        <label for="kategori" class="form-label">Kategori</label>
+                        <select name="id_kategori" id="id_kategori" required class="form-select">
+                            <?php
+                            $result = $conn->query("SELECT * FROM kategori");
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<option value='{$row['id_kategori']}'>{$row['nama']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deskripsi" class="form-label">Deskripsi</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" name="deskripsi">
+                    </div>
+                    <div class="mb-3">
+                        <label for="photo_path" class="form-label">Foto Project</label>
+                        <input type="file" class="form-control" id="photo_path" name="photo_path" accept="image/*" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="link_project" class="form-label">Link Project</label>
+                        <input type="text" class="form-control" id="link_project" name="link_project">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+<?php
+}
+
+function updateProject()
+{
+    include "../koneksi.php";
+    if(isset($_GET['id_project']) && is_numeric($_GET['id_project'])){
+        $id_project = $_GET['id_project'];
+
+        $sql = "SELECT * FROM project WHERE id_project = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id_project);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+            // Cek apakah data ditemukan
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+        } else {
+            echo "Data tidak ditemukan.";
+            exit();
+        }
+    } else {
+        echo "ID tidak valid.";
+        exit();
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $id_project = $_POST['id_project'];
+        $nama_kegiatan = $_POST['nama_kegiatan'];
+        $deskripsi = $_POST['deskripsi'];
+        $link_project = $_POST['link_project'];
+    
+        $target_file = null;
+        if (!empty($_FILES["photo_path"]["name"])) {
+            $target_dir = "../assets/uploads/";
+            $target_file = $target_dir . basename($_FILES["photo_path"]["name"]);
+            move_uploaded_file($_FILES["photo_path"]["tmp_name"], $target_file);
+        }
+    
+        // Update data
+        $sql = "UPDATE project SET nama_kegiatan = ?, deskripsi = ?, photo_path = ?, link_project = ? WHERE id_project = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssssi", $nama_kegiatan, $deskripsi, $target_file, $link_project, $id_project);
+    
+        if ($stmt->execute()) {
+            header("Location: project.php");
+            exit();
+        } else {
+            echo "Gagal memperbarui data: " . $stmt->error;
+        }
+    }
+
+
+?>
+    <input type="checkbox" id="menu-toggle" />
+    <div class="side-bar">
+        <div class="side-header">
+            <h2>R<span>IF</span></h2>
+        </div>
+        <div class="side-content">
+            <div class="profile">
+                <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
+                <h3>Teknologi Informasi</h3>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+                    <li>
+                        <a href="dashboard.php">
+                            <span class="las la-user-alt" style="color: #85878a"> </span>
+                            <small>Dashboard</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="category.php">
+                            <span class="las la-list" style="color: #85878a">
+                            </span>
+                            <small>Category</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="project.php">
+                            <span class="las la-briefcase" style="color: #85878a">
+                            </span>
+                            <small>Project</small>
+                        </a>
+                    </li>
+                    <!-- <li>
+                        <a href="combine_chart.html">
+                            <span class="fa-solid fa-chart-simple" style="color: #85878a">
+                            </span>
+                            <small>Grafik Gabungan</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="cpu_usage.html">
+                            <span class="fa-solid fa-server" style="color: #85878a"> </span>
+                            <small>CPU Usage</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="memory_usage.html">
+                            <span class="fa-solid fa-memory" style="color: #85878a"> </span>
+                            <small>Memory Usage</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="storage_usage.html">
+                            <span class="fa-solid fa-database" style="color: #85878a">
+                            </span>
+                            <small>Storage Usage</small>
+                        </a>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <label for="menu-toggle"><span class="las la-bars"></span></label>
+                <a href="">
+                    <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                    Logout
+                </a>
+            </div>
+        </header>
+        <div class="container-dashboard">
+            <p>Update Project</p>
+
+            <div class="data-dashboard ">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="id_project" value="<?php echo $row['id_project']; ?>">
+                    <div class="mb-3">
+                        <label for="nama_kegiatan" class="form-label">Nama Kegiatan</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" name="nama_kegiatan" value="<?php echo $row['nama_kegiatan']; ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="kategori" class="form-label">Kategori</label>
+                        <select name="id_kategori" id="id_kategori" required class="form-select">
+                            <?php
+                            $result = $conn->query("SELECT * FROM kategori");
+                            while ($rowKategori = $result->fetch_assoc()) {
+                                echo "<option value='{$rowKategori['id_kategori']}'>{$rowKategori['nama']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deskripsi" class="form-label">Deskripsi</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" name="deskripsi" value="<?php echo $row['deskripsi']; ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="photo_path" class="form-label">Foto Project</label>
+                        <input type="file" class="form-control" id="photo_path" name="photo_path" accept="image/*" value="<?php echo $row['photo_path']; ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="link_project" class="form-label">Link Project</label>
+                        <input type="text" class="form-control" id="link_project" name="link_project" value="<?php echo $row['link_project']; ?>">
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

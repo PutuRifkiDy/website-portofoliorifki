@@ -586,7 +586,9 @@ function updateKategory()
 
 function projectPage(){
     include "../koneksi.php"; 
-    $sql = "SELECT * FROM project";
+    $sql = "SELECT project.*, kategori.nama AS nama_kategori
+     FROM project
+     JOIN kategori ON project.id_kategori = kategori.id_kategori";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -672,6 +674,7 @@ function projectPage(){
                             <th scope="col">#</th>
                             <th scope="col">Foto</th>
                             <th scope="col">Nama Kegiatan</th>
+                            <th scope="col">Kategori</th>
                             <th scope="col">Deskripsi</th>
                             <th scope="col">Link Project</th>
                             <th scope="col">Action</th>
@@ -681,11 +684,14 @@ function projectPage(){
                         <?php if ($result->num_rows  > 0) {
                             $no = 1;
                         ?>
-                            <?php while ($row = $result->fetch_assoc()) { ?>
+                            <?php while ($row = $result->fetch_assoc()) { 
+
+                                ?>
                                 <tr>
                                     <td scope="row"><?php echo $no++; ?></td>
                                     <td><img src="<?php echo $row['photo_path']; ?>" alt="Foto" width="100"></td>
                                     <td><?php echo $row['nama_kegiatan']; ?></td>
+                                    <td><?php echo $row['nama_kategori']; ?></td>
                                     <td><?php echo $row['deskripsi']; ?></td>
                                     <td><a href="<?php echo $row['link_project']; ?>" target="_blank">Link</a></td>
                                     <td>

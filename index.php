@@ -1,5 +1,6 @@
 <?php
     include "components/index.php";
+    include "koneksi.php";
 ?>
 
 <!DOCTYPE html>

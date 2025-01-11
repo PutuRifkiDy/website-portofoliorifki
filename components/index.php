@@ -464,49 +464,17 @@
         <?php
     }
 
-    function ourProject(){
-        $dataProjectSaya = [
-            [	
-                "kategori" => "Web Development",
-                "nama_kegiatan" => "ITCC 2024 Udayana",
-                "deskripsi_kegiatan" => "Information Technology Creative Competition (ITCC) is the largest competition in the field of Information Technology in Bali, which is organized by the Information Technology Student Association (HMTI) of Udayana University.",
-                "kapan_dikerjakan" => "Tahun 2024",
-                "gambar" => "itcc.png",
-                "project_source" => "https://itcc.hmtiudayana.id/"
-            ],
-            [
-                "kategori" => "Web Development",
-                "nama_kegiatan" => "Build-IT 2024 Udayana ",
-                "deskripsi_kegiatan" => "Basic Understanding in Learning and Developing Information Technology merupakan kegiatan yang bertujuan mewadahi mahasiswa untuk menerima pemahaman lebih tentang materi dasar perkuliahan dan lomba serta penjurusan dilingkup TI.",
-                "kapan_dikerjakan" => "Tahun 2024",
-                "gambar" => "build-it.png",
-                "project_source" => "https://buildit.hmtiudayana.id/"
-            ],
-            [
-                "kategori" => "Web Development",
-                "nama_kegiatan" => "Subudi Bali Tour ",
-                "deskripsi_kegiatan" => "Subudi Bali Tour is a tourism service platform that provides the best travel experiences in Bali. This website is designed to facilitate tourists in planning their trips to the Island of the Gods, offering various tour packages, vehicle rental services, and interesting information about popular tourist destinations in Bali.",
-                "kapan_dikerjakan" => "Tahun 2024",
-                "gambar" => "subudi-bali-tour.png",
-                "project_source" => "https://github.com/PutuRifkiDy/Website-Travel"
-            ],
-            [
-                "kategori" => "UI/UX Design",
-                "nama_kegiatan" => "Build IT HMTI",
-                "deskripsi_kegiatan" => "Basic Understanding in Learning and Developing Information Technology merupakan kegiatan yang bertujuan mewadahi mahasiswa untuk menerima pemahaman lebih tentang materi dasar perkuliahan dan lomba serta penjurusan dilingkup TI.",
-                "kapan_dikerjakan" => "Tahun 2024",
-                "gambar" => "uiux-build-it.png",
-                "project_source" => "https://www.figma.com/design/kInJMPGpClt8UZYxXDYxQ6/Build-IT-2024?node-id=0-1&node-type=canvas&t=cV3KxC6DgtrfQZGE-0"
-            ],
-            [
-                "kategori" => "API",
-                "nama_kegiatan" => "API Submission Java",
-                "deskripsi_kegiatan" => "This task is a simple backend API built with Java and Maven, structured for a Subscription Payment System application. The API is used for data manipulation of each entity in the database and can handle GET, POST, PUT, DELETE operations. The responses provided by the API server are in JSON format, and the data is stored in an SQLite DATABASE. The application testing is conducted using the Postman application.",
-                "kapan_dikerjakan" => "Tahun 2024",
-                "gambar" => "api-java.png",
-                "project_source" => "https://github.com/PutuRifki/API-JAVA"
-            ]
-        ];
+    function ourProject(){  
+        include "koneksi.php";
+        $sql = "SELECT project.*, kategori.nama AS nama_kategori
+        FROM project
+        JOIN kategori ON project.id_kategori = kategori.id_kategori";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        
+        
         ?>
             <div class="container-ourProject" id="ourProject">
                 <div class="container-ourProject-heading"  data-aos="fade-up" data-aos-duration="1000">
@@ -532,29 +500,32 @@
                     </button>
                 </div>
                 <div class="container-card-ourProject" data-aos="fade-right" data-aos-duration="1000">
-                    <?php foreach($dataProjectSaya as $data){?>
-                        <div class="card-ourProject" data-kategori="<?php echo $data["kategori"];?>" >
+                    <?php while($row = $result->fetch_assoc()){
+                        $photo_path = $row["photo_path"]; // Jalur yang diambil dari database
+                        $adjusted_path = str_replace("../assets/uploads", "assets/uploads", $photo_path);
+                        ?>
+                        <div class="card-ourProject" data-kategori="<?php echo $row["nama_kategori"];?>" >
                             <div class="container-img-ourProject">
-                                <img src="assets/<?php echo $data["gambar"]; ?>" alt="">
+                                <img src="<?php echo htmlspecialchars($adjusted_path); ?>" alt="">
                             </div>
                             <div class="deskripsi-ourProject">
                                 <h5>
-                                    <?php echo $data["nama_kegiatan"]; ?>
+                                    <?php echo $row["nama_kegiatan"]; ?>
                                 </h5>
                                 <p>
-                                    <?php echo $data["deskripsi_kegiatan"]; ?>
+                                    <?php echo $row["deskripsi"]; ?>
                                 </p>
                             </div>
                             <div class="container-seeMore-ourProject">
                                 <div class="wrapper-seeMore-ourProject">
                                     <div class="container-seeMore-desc">
                                         <h5>
-                                            <?php echo $data["kategori"]; ?>
+                                            <?php echo $row["nama_kategori"]; ?>
                                         </h5>
-                                        <p><?php echo $data["nama_kegiatan"]; ?></p>
+                                        <p><?php echo $row["nama_kegiatan"]; ?></p>
                                     </div>
         
-                                    <a href="detail-project.php?kategori=<?php echo $data['kategori']; ?>&nama_kegiatan=<?php echo $data['nama_kegiatan']; ?>&deskripsi_kegiatan=<?php echo $data['deskripsi_kegiatan']; ?>&kapan_dikerjakan=<?php echo $data['kapan_dikerjakan'];?>&gambar=<?php echo $data['gambar'];?>&project_source=<?php echo $data['project_source'];?>">
+                                    <a href="detail-project.php?id_project=<?php echo $row["id_project"];?>">
                                         See More
                                     </a>
                                 </div>

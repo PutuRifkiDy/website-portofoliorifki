@@ -1,14 +1,23 @@
 <?php 
-    if( !isset($_GET["kategori"]) ||
-       !isset($_GET["nama_kegiatan"]) ||
-       !isset($_GET["deskripsi_kegiatan"]) ||
-       !isset($_GET["kapan_dikerjakan"]) ||
-       !isset($_GET["gambar"]) ||
-       !isset($_GET['project_source']) ){
-            header("Location: index.php");
-            exit;
-       }
-       include "components/index.php";
+    include "koneksi.php";  
+    if(!isset($_GET["id_project"]) ){
+        header("Location: index.php");
+        exit;
+    } else {
+        $id_project = $_GET["id_project"];
+        $sql = "SELECT project.*, kategori.nama AS nama_kategori
+        FROM project
+        JOIN kategori ON project.id_kategori = kategori.id_kategori
+        WHERE id_project = $id_project";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        // Perbaiki jalur file
+        $photo_path = $row["photo_path"];
+        $adjusted_path = str_replace("../assets/uploads", "assets/uploads", $photo_path);
+    }
+    include "components/index.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,28 +36,28 @@
             </div>
             <div class="wrapper-detail-project">
                 <div class="container-img">
-                    <img src="assets/<?php echo $_GET["gambar"];?>" alt="">   
+                    <img src="<?php echo htmlspecialchars($adjusted_path);?>" alt="">   
                 </div>
                 <div class="container-deskripsi">
                     <div class="heading">
                         <h1>
-                            <?php echo $_GET["nama_kegiatan"];?>
+                            <?php echo $row["nama_kegiatan"];?>
                         </h1>
                         <div class="heading-2">
                             <h4>
                                 <img src="assets/icon/icon-category.png" alt="">
-                                <?php echo $_GET["kategori"];?>
+                                <?php echo $row["nama_kategori"];?>
                             </h4>
                             <h4>
                                 <img src="assets/icon/calendar-icon.png" alt="">
-                                <?php echo $_GET["kapan_dikerjakan"];?>
+                                <?php echo $row["tahun"];?>
                             </h4>
                         </div>
                     </div>
                     <p>
-                        <?php echo $_GET["deskripsi_kegiatan"];?>
+                        <?php echo $row["deskripsi"];?>
                     </p>
-                    <a href="<?php echo $_GET['project_source']; ?>">
+                    <a href="<?php echo $row["link_project"]; ?>">
                         Lihat Project Saya
                     </a>
                 </div>

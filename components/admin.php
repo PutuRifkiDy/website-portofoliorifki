@@ -45,6 +45,26 @@ function iconNewsLetter()
 
 function dashboardPage()
 {
+    include "../koneksi.php";
+    $sqlKategori = "SELECT COUNT(*) AS total_rows_kategori FROM kategori";
+    $stmtKategori = $conn->prepare($sqlKategori);
+    $stmtKategori->execute();
+    $resultKategori = $stmtKategori->get_result();
+    $rowKategori = $resultKategori->fetch_assoc();
+
+    $sqlProject = "SELECT COUNT(*) AS total_rows_project FROM project";
+    $stmtProject = $conn->prepare($sqlProject);
+    $stmtProject->execute();
+    $resultProject = $stmtProject->get_result();
+    $rowProject = $resultProject->fetch_assoc();
+
+    $sqlProjectDashboard = "SELECT project.*, kategori.nama AS nama_kategori
+     FROM project
+     JOIN kategori ON project.id_kategori = kategori.id_kategori";
+    $stmtProjectDashboard = $conn->prepare($sqlProjectDashboard);
+    $stmtProjectDashboard->execute();
+    $resultProjectDashboard = $stmtProjectDashboard->get_result();
+    
 ?>
     <input type="checkbox" id="menu-toggle" />
     <div class="side-bar">
@@ -54,7 +74,7 @@ function dashboardPage()
         <div class="side-content">
             <div class="profile">
                 <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
-                <h3>Teknologi Informasi</h3>
+                <h3>Udayana University</h3>
             </div>
 
             <div class="side-menu">
@@ -125,7 +145,7 @@ function dashboardPage()
                 <div class="card-indicator">
                     <div class="text">
                         <h1>Total Category</h1>
-                        <p>12</p>
+                        <p><?php echo $rowKategori['total_rows_kategori'];?></p>
                     </div>
                     <div class="icon-category">
                         <?php iconCategory(); ?>
@@ -134,7 +154,7 @@ function dashboardPage()
                 <div class="card-indicator">
                     <div class="text">
                         <h1>Total Project</h1>
-                        <p>13</p>
+                        <p><?php echo $rowProject['total_rows_project'];?></p>
                     </div>
                     <div class="icon">
                         <?php iconProject(); ?>
@@ -165,29 +185,34 @@ function dashboardPage()
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Handle</th>
+                            <th scope="col">Nama Kegiatan</th>
+                            <th scope="col">Kategori</th>
+                            <th scope="col">Tahun</th>
+                            <th scope="col">Deskripsi</th>
+                            <th scope="col">Link Project</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
-                            <td>@twitter</td>
-                        </tr>
+                    <?php if ($resultProjectDashboard->num_rows  > 0) {
+                            $no = 1;
+                        ?>
+                            <?php while ($rowProjectDashboard = $resultProjectDashboard->fetch_assoc()) { 
+
+                                ?>
+                                <tr>
+                                    <td scope="row"><?php echo $no++; ?></td>
+                                    <td><?php echo $rowProjectDashboard['nama_kegiatan']; ?></td>
+                                    <td><?php echo $rowProjectDashboard['nama_kategori']; ?></td>
+                                    <td><?php echo $rowProjectDashboard['tahun']; ?></td>
+                                    <td width="400" style="text-align: justify;"><?php echo $rowProjectDashboard['deskripsi']; ?></td>
+                                    <td><a href="<?php echo $rowProjectDashboard['link_project']; ?>" target="_blank">Link</a></td>
+                                </tr>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <tr>
+                                <td colspan="6" style="text-align: center;">Data Project Belum Tersedia</td>
+                            </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
@@ -215,7 +240,7 @@ function categoryPage()
         <div class="side-content">
             <div class="profile">
                 <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
-                <h3>Teknologi Informasi</h3>
+                <h3>Udayana University</h3>
             </div>
 
             <div class="side-menu">
@@ -366,7 +391,7 @@ function createKategory()
         <div class="side-content">
             <div class="profile">
                 <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
-                <h3>Teknologi Informasi</h3>
+                <h3>Udayana University</h3>
             </div>
 
             <div class="side-menu">
@@ -501,7 +526,7 @@ function updateKategory()
         <div class="side-content">
             <div class="profile">
                 <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
-                <h3>Teknologi Informasi</h3>
+                <h3>Udayana University</h3>
             </div>
 
             <div class="side-menu">
@@ -603,7 +628,7 @@ function projectPage(){
         <div class="side-content">
             <div class="profile">
                 <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
-                <h3>Teknologi Informasi</h3>
+                <h3>Udayana University</h3>
             </div>
 
             <div class="side-menu">
@@ -675,6 +700,7 @@ function projectPage(){
                             <th scope="col">Foto</th>
                             <th scope="col">Nama Kegiatan</th>
                             <th scope="col">Kategori</th>
+                            <th scope="col">Tahun</th>
                             <th scope="col">Deskripsi</th>
                             <th scope="col">Link Project</th>
                             <th scope="col">Action</th>
@@ -692,7 +718,8 @@ function projectPage(){
                                     <td><img src="<?php echo $row['photo_path']; ?>" alt="Foto" width="100"></td>
                                     <td><?php echo $row['nama_kegiatan']; ?></td>
                                     <td><?php echo $row['nama_kategori']; ?></td>
-                                    <td><?php echo $row['deskripsi']; ?></td>
+                                    <td><?php echo $row['tahun']; ?></td>
+                                    <td width="400" style="text-align: justify;"><?php echo $row['deskripsi']; ?></td>
                                     <td><a href="<?php echo $row['link_project']; ?>" target="_blank">Link</a></td>
                                     <td>
                                         <a href="#" onclick="confirmDelete(<?php echo $row['id_project']; ?>)" class="btn btn-danger">Hapus</a> 
@@ -732,6 +759,7 @@ function createProject()
         $id_kategori = $_POST['id_kategori'];
         $nama_kegiatan = $_POST['nama_kegiatan'];
         $deskripsi = $_POST['deskripsi'];
+        $tahun = $_POST['tahun'];
         $link_project = $_POST['link_project'];
     
         // Proses upload file
@@ -739,9 +767,9 @@ function createProject()
         $target_file = $target_dir . basename($_FILES["photo_path"]["name"]);
         if (move_uploaded_file($_FILES["photo_path"]["tmp_name"], $target_file)) {
             // Simpan data ke database
-            $sql = "INSERT INTO project (id_kategori, nama_kegiatan, deskripsi, photo_path, link_project) VALUES (?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO project (id_kategori, nama_kegiatan, deskripsi, photo_path, link_project, tahun) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("issss", $id_kategori, $nama_kegiatan, $deskripsi, $target_file, $link_project);
+            $stmt->bind_param("isssss", $id_kategori, $nama_kegiatan, $deskripsi, $target_file, $link_project, $tahun);
     
             if ($stmt->execute()) {
                 echo "Proyek berhasil ditambahkan!";
@@ -765,7 +793,7 @@ function createProject()
         <div class="side-content">
             <div class="profile">
                 <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
-                <h3>Teknologi Informasi</h3>
+                <h3>Udayana University</h3>
             </div>
 
             <div class="side-menu">
@@ -862,6 +890,10 @@ function createProject()
                         <label for="link_project" class="form-label">Link Project</label>
                         <input type="text" class="form-control" id="link_project" name="link_project">
                     </div>
+                    <div class="mb-3">
+                        <label for="tahun" class="form-label">Tahun</label>
+                        <input type="text" class="form-control" id="tahun" name="tahun">
+                    </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
@@ -901,6 +933,7 @@ function updateProject()
         $nama_kegiatan = $_POST['nama_kegiatan'];
         $deskripsi = $_POST['deskripsi'];
         $link_project = $_POST['link_project'];
+        $tahun = $_POST['tahun'];
     
         $target_file = null;
         if (!empty($_FILES["photo_path"]["name"])) {
@@ -910,9 +943,9 @@ function updateProject()
         }
     
         // Update data
-        $sql = "UPDATE project SET nama_kegiatan = ?, deskripsi = ?, photo_path = ?, link_project = ? WHERE id_project = ?";
+        $sql = "UPDATE project SET nama_kegiatan = ?, deskripsi = ?, photo_path = ?, link_project = ?, tahun = ? WHERE id_project = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssi", $nama_kegiatan, $deskripsi, $target_file, $link_project, $id_project);
+        $stmt->bind_param("sssssi", $nama_kegiatan, $deskripsi, $target_file, $link_project, $tahun, $id_project);
     
         if ($stmt->execute()) {
             header("Location: project.php");
@@ -932,7 +965,7 @@ function updateProject()
         <div class="side-content">
             <div class="profile">
                 <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
-                <h3>Teknologi Informasi</h3>
+                <h3>Udayana University</h3>
             </div>
 
             <div class="side-menu">
@@ -1029,6 +1062,10 @@ function updateProject()
                     <div class="mb-3">
                         <label for="link_project" class="form-label">Link Project</label>
                         <input type="text" class="form-control" id="link_project" name="link_project" value="<?php echo $row['link_project']; ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="tahun" class="form-label">Tahun</label>
+                        <input type="text" class="form-control" id="tahun" name="tahun" value="<?php echo $row['tahun']; ?>">
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

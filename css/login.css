@@ -1,0 +1,80 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style-type: none;
+    box-sizing: border-box;
+    font-family: "Rubik", sans-serif;
+  }
+
+  body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #D0D5DD;
+    height: 100vh;
+  }
+
+  .container-login{
+    background-color: #FFFFFF;
+    padding: 48px;
+    padding-inline: 64px;
+    border-radius: 20px;
+  }
+
+  .wrapper-login{
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  .wrapper-login form{
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .wrapper-login form .input{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .wrapper-login form .input label{
+    font-weight: 400;
+    color: #344054;
+    font-size: 16px;
+  }
+
+  .wrapper-login form .input input{
+    border-radius: 8px;
+    border: 1px solid #D0D5DD;
+    padding: 13px;
+
+  }
+
+  .wrapper-login form .input input:focus{
+    outline: 3px solid #D1E9FF;
+  }
+
+  .wrapper-login form button{
+    background-color: #1570EF;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    padding: 13px;
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  .wrapper-login form p{
+    color: #98A2B3;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .wrapper-login form p a{
+    color: #1570EF;
+  }

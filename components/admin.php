@@ -1,4 +1,20 @@
 <?php
+
+session_start();
+if (!isset($_SESSION['id_user'])) {
+    header("Location: login.php");
+    exit;
+}
+
+if ($_SESSION['level'] == 0) {
+    // User biasa hanya boleh mengakses halaman tertentu
+    $allowed_pages = ['profile.php', 'reviews.php', 'updateProfile.php', 'updateReviews.php'];
+    $current_page = basename($_SERVER['PHP_SELF']);
+    if (!in_array($current_page, $allowed_pages)) {
+        header("Location: profile.php");
+        exit;
+    }
+}
 function iconUser()
 {
 ?>
@@ -45,6 +61,7 @@ function iconNewsLetter()
 
 function dashboardPage()
 {
+
     include "../koneksi.php";
     $sqlKategori = "SELECT COUNT(*) AS total_rows_kategori FROM kategori";
     $stmtKategori = $conn->prepare($sqlKategori);
@@ -64,12 +81,22 @@ function dashboardPage()
     $stmtProjectDashboard = $conn->prepare($sqlProjectDashboard);
     $stmtProjectDashboard->execute();
     $resultProjectDashboard = $stmtProjectDashboard->get_result();
-    
+
+
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
 ?>
     <input type="checkbox" id="menu-toggle" />
     <div class="side-bar">
         <div class="side-header">
-            <h2>R<span>IF</span></h2>
+            <a href="../index.php" style="text-decoration: none; color: black;">
+                <h2>R<span>IF</span></h2>
+            </a>
         </div>
         <div class="side-content">
             <div class="profile">
@@ -80,25 +107,42 @@ function dashboardPage()
             <div class="side-menu">
                 <ul>
                     <li>
-                        <a href="dashboard.php">
-                            <span class="las la-user-alt" style="color: #85878a"> </span>
-                            <small>Dashboard</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="category.php">
-                            <span class="las la-list" style="color: #85878a">
+                        <a href="profile.php">
+                            <span class="las la-user" style="color: #85878a">
                             </span>
-                            <small>Category</small>
+                            <small>Profile</small>
                         </a>
                     </li>
-                    <li>
-                        <a href="project.php">
-                            <span class="las la-briefcase" style="color: #85878a">
-                            </span>
-                            <small>Project</small>
-                        </a>
-                    </li>
+                    <?php if ($_SESSION['level'] == 1) { ?>
+                        <li>
+                            <a href="dashboard.php">
+                                <span class="las la-chart-bar" style="color: #85878a"></span>
+                                <small>Dashboard</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="category.php">
+                                <span class="las la-list" style="color: #85878a">
+                                </span>
+                                <small>Category</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="project.php">
+                                <span class="las la-briefcase" style="color: #85878a">
+                                </span>
+                                <small>Project</small>
+                            </a>
+                        </li>
+                    <?php } else { ?>
+                        <li>
+                            <a href="reviews.php">
+                                <span class="las la-calendar" style="color: #85878a">
+                                </span>
+                                <small>Review</small>
+                            </a>
+                        </li>
+                    <?php } ?>
                     <!-- <li>
                         <a href="combine_chart.html">
                             <span class="fa-solid fa-chart-simple" style="color: #85878a">
@@ -133,10 +177,17 @@ function dashboardPage()
         <header>
             <div class="header-content">
                 <label for="menu-toggle"><span class="las la-bars"></span></label>
-                <a href="">
-                    <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
-                    Logout
-                </a>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
             </div>
         </header>
         <div class="container-dashboard">
@@ -145,7 +196,7 @@ function dashboardPage()
                 <div class="card-indicator">
                     <div class="text">
                         <h1>Total Category</h1>
-                        <p><?php echo $rowKategori['total_rows_kategori'];?></p>
+                        <p><?php echo $rowKategori['total_rows_kategori']; ?></p>
                     </div>
                     <div class="icon-category">
                         <?php iconCategory(); ?>
@@ -154,7 +205,7 @@ function dashboardPage()
                 <div class="card-indicator">
                     <div class="text">
                         <h1>Total Project</h1>
-                        <p><?php echo $rowProject['total_rows_project'];?></p>
+                        <p><?php echo $rowProject['total_rows_project']; ?></p>
                     </div>
                     <div class="icon">
                         <?php iconProject(); ?>
@@ -193,12 +244,12 @@ function dashboardPage()
                         </tr>
                     </thead>
                     <tbody>
-                    <?php if ($resultProjectDashboard->num_rows  > 0) {
+                        <?php if ($resultProjectDashboard->num_rows  > 0) {
                             $no = 1;
                         ?>
-                            <?php while ($rowProjectDashboard = $resultProjectDashboard->fetch_assoc()) { 
+                            <?php while ($rowProjectDashboard = $resultProjectDashboard->fetch_assoc()) {
 
-                                ?>
+                            ?>
                                 <tr>
                                     <td scope="row"><?php echo $no++; ?></td>
                                     <td><?php echo $rowProjectDashboard['nama_kegiatan']; ?></td>
@@ -224,18 +275,33 @@ function dashboardPage()
 
 function categoryPage()
 {
-    include "../koneksi.php"; 
+
+    include "../koneksi.php";
     $sql = "SELECT * FROM kategori";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $result = $stmt->get_result();
-    ?>
 
-    
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+?>
     <input type="checkbox" id="menu-toggle" />
     <div class="side-bar">
         <div class="side-header">
-            <h2>R<span>IF</span></h2>
+            <a href="../index.php" style="text-decoration: none; color: black;">
+                <h2>R<span>IF</span></h2>
+            </a>
         </div>
         <div class="side-content">
             <div class="profile">
@@ -246,25 +312,42 @@ function categoryPage()
             <div class="side-menu">
                 <ul>
                     <li>
-                        <a href="dashboard.php">
-                            <span class="las la-user-alt" style="color: #85878a"> </span>
-                            <small>Dashboard</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="category.php">
-                            <span class="las la-list" style="color: #85878a">
+                        <a href="profile.php">
+                            <span class="las la-user" style="color: #85878a">
                             </span>
-                            <small>Category</small>
+                            <small>Profile</small>
                         </a>
                     </li>
-                    <li>
-                        <a href="project.php">
-                            <span class="las la-briefcase" style="color: #85878a">
-                            </span>
-                            <small>Project</small>
-                        </a>
-                    </li>
+                    <?php if ($_SESSION['level'] == 1) { ?>
+                        <li>
+                            <a href="dashboard.php">
+                                <span class="las la-chart-bar" style="color: #85878a"></span>
+                                <small>Dashboard</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="category.php">
+                                <span class="las la-list" style="color: #85878a">
+                                </span>
+                                <small>Category</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="project.php">
+                                <span class="las la-briefcase" style="color: #85878a">
+                                </span>
+                                <small>Project</small>
+                            </a>
+                        </li>
+                    <?php } else { ?>
+                        <li>
+                            <a href="reviews.php">
+                                <span class="las la-calendar" style="color: #85878a">
+                                </span>
+                                <small>Review</small>
+                            </a>
+                        </li>
+                    <?php } ?>
                     <!-- 
                     <li>
                         <a href="cpu_usage.html">
@@ -293,10 +376,17 @@ function categoryPage()
         <header>
             <div class="header-content">
                 <label for="menu-toggle"><span class="las la-bars"></span></label>
-                <a href="">
-                    <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
-                    Logout
-                </a>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
             </div>
         </header>
         <div class="container-dashboard">
@@ -322,8 +412,8 @@ function categoryPage()
                                     <td scope="row"><?php echo $no++; ?></td>
                                     <td><?php echo $row['nama']; ?></td>
                                     <td>
-                                        <a href="#" onclick="confirmDelete(<?php echo $row['id_kategori']; ?>)" class="btn btn-danger">Hapus</a> 
-                                        <a href="updateKategory.php?id_kategori=<?php echo $row['id_kategori']; ?>" class="btn btn-success">Update</a>        
+                                        <a href="#" onclick="confirmDelete(<?php echo $row['id_kategori']; ?>)" class="btn btn-danger">Hapus</a>
+                                        <a href="updateKategory.php?id_kategori=<?php echo $row['id_kategori']; ?>" class="btn btn-success">Update</a>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -349,44 +439,54 @@ function categoryPage()
 
         </div>
     </div>
-<?php
+    <?php
 }
 
 function createKategory()
 {
     include "../koneksi.php";
-    if(isset($_POST['kategori'])){
+
+    if (isset($_POST['kategori'])) {
         $nama_kategori = $_POST['kategori'];
-    
+
         $sql = "INSERT INTO kategori (nama) VALUES (?)";
-    
+
         $stmt = $conn->prepare($sql);
-    
+
         // Bind parameter (s = string)
         $stmt->bind_param("s", $nama_kategori);
-    
+
         // Eksekusi query
         if ($stmt->execute()) {
             header("location: category.php");
         } else {
-            ?>
-                <script>
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Something went wrong!",
-                    });
-                </script>
-            <?php
+    ?>
+            <script>
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+            </script>
+    <?php
         }
     }
 
 
-?>
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
+    ?>
     <input type="checkbox" id="menu-toggle" />
     <div class="side-bar">
         <div class="side-header">
-            <h2>R<span>IF</span></h2>
+            <a href="../index.php" style="text-decoration: none; color: black;">
+                <h2>R<span>IF</span></h2>
+            </a>
         </div>
         <div class="side-content">
             <div class="profile">
@@ -397,25 +497,42 @@ function createKategory()
             <div class="side-menu">
                 <ul>
                     <li>
-                        <a href="dashboard.php">
-                            <span class="las la-user-alt" style="color: #85878a"> </span>
-                            <small>Dashboard</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="category.php">
-                            <span class="las la-list" style="color: #85878a">
+                        <a href="profile.php">
+                            <span class="las la-user" style="color: #85878a">
                             </span>
-                            <small>Category</small>
+                            <small>Profile</small>
                         </a>
                     </li>
-                    <li>
-                        <a href="project.php">
-                            <span class="las la-briefcase" style="color: #85878a">
-                            </span>
-                            <small>Project</small>
-                        </a>
-                    </li>
+                    <?php if ($_SESSION['level'] == 1) { ?>
+                        <li>
+                            <a href="dashboard.php">
+                                <span class="las la-chart-bar" style="color: #85878a"></span>
+                                <small>Dashboard</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="category.php">
+                                <span class="las la-list" style="color: #85878a">
+                                </span>
+                                <small>Category</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="project.php">
+                                <span class="las la-briefcase" style="color: #85878a">
+                                </span>
+                                <small>Project</small>
+                            </a>
+                        </li>
+                    <?php } else { ?>
+                        <li>
+                            <a href="reviews.php">
+                                <span class="las la-calendar" style="color: #85878a">
+                                </span>
+                                <small>Review</small>
+                            </a>
+                        </li>
+                    <?php } ?>
                     <!-- <li>
                         <a href="combine_chart.html">
                             <span class="fa-solid fa-chart-simple" style="color: #85878a">
@@ -450,14 +567,26 @@ function createKategory()
         <header>
             <div class="header-content">
                 <label for="menu-toggle"><span class="las la-bars"></span></label>
-                <a href="">
-                    <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
-                    Logout
-                </a>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
             </div>
         </header>
         <div class="container-dashboard">
-            <p>Tambah Category</p>
+            <div class="container-heading-crud">
+                <a href="category.php">
+                    <img src="../assets/icon/arrow-left.png" alt="" width="40" height="40">
+                </a>
+                <p>Tambah Category</p>
+            </div>
 
             <div class="data-dashboard ">
                 <form action="" method="POST">
@@ -477,7 +606,8 @@ function createKategory()
 function updateKategory()
 {
     include "../koneksi.php";
-    if(isset($_GET['id_kategori']) && is_numeric($_GET['id_kategori'])){
+
+    if (isset($_GET['id_kategori']) && is_numeric($_GET['id_kategori'])) {
         $id_kategori = $_GET['id_kategori'];
 
         $sql = "SELECT * FROM kategori WHERE id_kategori = ?";
@@ -487,7 +617,7 @@ function updateKategory()
 
         $result = $stmt->get_result();
 
-            // Cek apakah data ditemukan
+        // Cek apakah data ditemukan
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
         } else {
@@ -499,13 +629,13 @@ function updateKategory()
         exit();
     }
 
-    if(isset($_POST["kategori"])){
+    if (isset($_POST["kategori"])) {
         $kategori_baru = $_POST["kategori"];
 
         $sql = "UPDATE kategori SET nama = ? WHERE id_kategori = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("si", $kategori_baru, $id_kategori);
-        
+
         if ($stmt->execute()) {
             // Redirect ke halaman kategori setelah berhasil update
             header("Location: category.php");
@@ -513,15 +643,23 @@ function updateKategory()
         } else {
             echo "Gagal memperbarui data: " . $stmt->error;
         }
-
     }
+
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
 
 
 ?>
     <input type="checkbox" id="menu-toggle" />
     <div class="side-bar">
         <div class="side-header">
-            <h2>R<span>IF</span></h2>
+            <a href="../index.php" style="text-decoration: none; color: black;">
+                <h2>R<span>IF</span></h2>
+            </a>
         </div>
         <div class="side-content">
             <div class="profile">
@@ -532,25 +670,42 @@ function updateKategory()
             <div class="side-menu">
                 <ul>
                     <li>
-                        <a href="dashboard.php">
-                            <span class="las la-user-alt" style="color: #85878a"> </span>
-                            <small>Dashboard</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="category.php">
-                            <span class="las la-list" style="color: #85878a">
+                        <a href="profile.php">
+                            <span class="las la-user" style="color: #85878a">
                             </span>
-                            <small>Category</small>
+                            <small>Profile</small>
                         </a>
                     </li>
-                    <li>
-                        <a href="project.php">
-                            <span class="las la-briefcase" style="color: #85878a">
-                            </span>
-                            <small>Project</small>
-                        </a>
-                    </li>
+                    <?php if ($_SESSION['level'] == 1) { ?>
+                        <li>
+                            <a href="dashboard.php">
+                                <span class="las la-chart-bar" style="color: #85878a"></span>
+                                <small>Dashboard</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="category.php">
+                                <span class="las la-list" style="color: #85878a">
+                                </span>
+                                <small>Category</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="project.php">
+                                <span class="las la-briefcase" style="color: #85878a">
+                                </span>
+                                <small>Project</small>
+                            </a>
+                        </li>
+                    <?php } else { ?>
+                        <li>
+                            <a href="reviews.php">
+                                <span class="las la-calendar" style="color: #85878a">
+                                </span>
+                                <small>Review</small>
+                            </a>
+                        </li>
+                    <?php } ?>
                     <!-- <li>
                         <a href="combine_chart.html">
                             <span class="fa-solid fa-chart-simple" style="color: #85878a">
@@ -585,20 +740,32 @@ function updateKategory()
         <header>
             <div class="header-content">
                 <label for="menu-toggle"><span class="las la-bars"></span></label>
-                <a href="">
-                    <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
-                    Logout
-                </a>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
             </div>
         </header>
         <div class="container-dashboard">
-            <p>Tambah Category</p>
+            <div class="container-heading-crud">
+                <a href="category.php">
+                    <img src="../assets/icon/arrow-left.png" alt="" width="40" height="40">
+                </a>
+                <p>Update Category</p>
+            </div>
 
             <div class="data-dashboard ">
                 <form action="" method="POST">
                     <div class="mb-3">
                         <label for="kategori" class="form-label">Kategori</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" name="kategori" value="<?php echo htmlspecialchars($row['nama']);?>">
+                        <input type="text" class="form-control" id="exampleInputEmail1" name="kategori" value="<?php echo htmlspecialchars($row['nama']); ?>">
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
@@ -609,21 +776,32 @@ function updateKategory()
 <?php
 }
 
-function projectPage(){
-    include "../koneksi.php"; 
+function projectPage()
+{
+    include "../koneksi.php";
+
     $sql = "SELECT project.*, kategori.nama AS nama_kategori
      FROM project
      JOIN kategori ON project.id_kategori = kategori.id_kategori";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $result = $stmt->get_result();
-    ?>
 
-    
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+?>
+
+
     <input type="checkbox" id="menu-toggle" />
     <div class="side-bar">
         <div class="side-header">
-            <h2>R<span>IF</span></h2>
+            <a href="../index.php" style="text-decoration: none; color: black;">
+                <h2>R<span>IF</span></h2>
+            </a>
         </div>
         <div class="side-content">
             <div class="profile">
@@ -634,25 +812,42 @@ function projectPage(){
             <div class="side-menu">
                 <ul>
                     <li>
-                        <a href="dashboard.php">
-                            <span class="las la-user-alt" style="color: #85878a"> </span>
-                            <small>Dashboard</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="category.php">
-                            <span class="las la-list" style="color: #85878a">
+                        <a href="profile.php">
+                            <span class="las la-user" style="color: #85878a">
                             </span>
-                            <small>Category</small>
+                            <small>Profile</small>
                         </a>
                     </li>
-                    <li>
-                        <a href="project.php">
-                            <span class="las la-briefcase" style="color: #85878a">
-                            </span>
-                            <small>Project</small>
-                        </a>
-                    </li>
+                    <?php if ($_SESSION['level'] == 1) { ?>
+                        <li>
+                            <a href="dashboard.php">
+                                <span class="las la-chart-bar" style="color: #85878a"></span>
+                                <small>Dashboard</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="category.php">
+                                <span class="las la-list" style="color: #85878a">
+                                </span>
+                                <small>Category</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="project.php">
+                                <span class="las la-briefcase" style="color: #85878a">
+                                </span>
+                                <small>Project</small>
+                            </a>
+                        </li>
+                    <?php } else { ?>
+                        <li>
+                            <a href="reviews.php">
+                                <span class="las la-calendar" style="color: #85878a">
+                                </span>
+                                <small>Review</small>
+                            </a>
+                        </li>
+                    <?php } ?>
                     <!-- 
                     <li>
                         <a href="cpu_usage.html">
@@ -681,10 +876,17 @@ function projectPage(){
         <header>
             <div class="header-content">
                 <label for="menu-toggle"><span class="las la-bars"></span></label>
-                <a href="">
-                    <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
-                    Logout
-                </a>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
             </div>
         </header>
         <div class="container-dashboard">
@@ -710,9 +912,9 @@ function projectPage(){
                         <?php if ($result->num_rows  > 0) {
                             $no = 1;
                         ?>
-                            <?php while ($row = $result->fetch_assoc()) { 
+                            <?php while ($row = $result->fetch_assoc()) {
 
-                                ?>
+                            ?>
                                 <tr>
                                     <td scope="row"><?php echo $no++; ?></td>
                                     <td><img src="<?php echo $row['photo_path']; ?>" alt="Foto" width="100"></td>
@@ -722,8 +924,8 @@ function projectPage(){
                                     <td width="400" style="text-align: justify;"><?php echo $row['deskripsi']; ?></td>
                                     <td><a href="<?php echo $row['link_project']; ?>" target="_blank">Link</a></td>
                                     <td>
-                                        <a href="#" onclick="confirmDelete(<?php echo $row['id_project']; ?>)" class="btn btn-danger">Hapus</a> 
-                                        <a href="updateProject.php?id_project=<?php echo $row['id_project']; ?>" class="btn btn-success">Update</a>        
+                                        <a href="#" onclick="confirmDelete(<?php echo $row['id_project']; ?>)" class="btn btn-danger">Hapus</a>
+                                        <a href="updateProject.php?id_project=<?php echo $row['id_project']; ?>" class="btn btn-success">Update</a>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -755,13 +957,14 @@ function projectPage(){
 function createProject()
 {
     include "../koneksi.php";
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id_kategori = $_POST['id_kategori'];
         $nama_kegiatan = $_POST['nama_kegiatan'];
         $deskripsi = $_POST['deskripsi'];
         $tahun = $_POST['tahun'];
         $link_project = $_POST['link_project'];
-    
+
         // Proses upload file
         $target_dir = "../assets/uploads/";
         $target_file = $target_dir . basename($_FILES["photo_path"]["name"]);
@@ -770,7 +973,7 @@ function createProject()
             $sql = "INSERT INTO project (id_kategori, nama_kegiatan, deskripsi, photo_path, link_project, tahun) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("isssss", $id_kategori, $nama_kegiatan, $deskripsi, $target_file, $link_project, $tahun);
-    
+
             if ($stmt->execute()) {
                 echo "Proyek berhasil ditambahkan!";
                 header("Location: project.php");
@@ -783,12 +986,21 @@ function createProject()
         }
     }
 
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
 
 ?>
     <input type="checkbox" id="menu-toggle" />
     <div class="side-bar">
         <div class="side-header">
-            <h2>R<span>IF</span></h2>
+            <a href="../index.php" style="text-decoration: none; color: black;">
+                <h2>R<span>IF</span></h2>
+            </a>
         </div>
         <div class="side-content">
             <div class="profile">
@@ -799,25 +1011,42 @@ function createProject()
             <div class="side-menu">
                 <ul>
                     <li>
-                        <a href="dashboard.php">
-                            <span class="las la-user-alt" style="color: #85878a"> </span>
-                            <small>Dashboard</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="category.php">
-                            <span class="las la-list" style="color: #85878a">
+                        <a href="profile.php">
+                            <span class="las la-user" style="color: #85878a">
                             </span>
-                            <small>Category</small>
+                            <small>Profile</small>
                         </a>
                     </li>
-                    <li>
-                        <a href="project.php">
-                            <span class="las la-briefcase" style="color: #85878a">
-                            </span>
-                            <small>Project</small>
-                        </a>
-                    </li>
+                    <?php if ($_SESSION['level'] == 1) { ?>
+                        <li>
+                            <a href="dashboard.php">
+                                <span class="las la-chart-bar" style="color: #85878a"></span>
+                                <small>Dashboard</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="category.php">
+                                <span class="las la-list" style="color: #85878a">
+                                </span>
+                                <small>Category</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="project.php">
+                                <span class="las la-briefcase" style="color: #85878a">
+                                </span>
+                                <small>Project</small>
+                            </a>
+                        </li>
+                    <?php } else { ?>
+                        <li>
+                            <a href="reviews.php">
+                                <span class="las la-calendar" style="color: #85878a">
+                                </span>
+                                <small>Review</small>
+                            </a>
+                        </li>
+                    <?php } ?>
                     <!-- <li>
                         <a href="combine_chart.html">
                             <span class="fa-solid fa-chart-simple" style="color: #85878a">
@@ -852,14 +1081,26 @@ function createProject()
         <header>
             <div class="header-content">
                 <label for="menu-toggle"><span class="las la-bars"></span></label>
-                <a href="">
-                    <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
-                    Logout
-                </a>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
             </div>
         </header>
         <div class="container-dashboard">
-            <p>Tambah Project</p>
+            <div class="container-heading-crud">
+                <a href="project.php">
+                    <img src="../assets/icon/arrow-left.png" alt="" width="40" height="40">
+                </a>
+                <p>Tambah Project</p>
+            </div>
 
             <div class="data-dashboard ">
                 <form action="" method="POST" enctype="multipart/form-data">
@@ -906,7 +1147,8 @@ function createProject()
 function updateProject()
 {
     include "../koneksi.php";
-    if(isset($_GET['id_project']) && is_numeric($_GET['id_project'])){
+
+    if (isset($_GET['id_project']) && is_numeric($_GET['id_project'])) {
         $id_project = $_GET['id_project'];
 
         $sql = "SELECT * FROM project WHERE id_project = ?";
@@ -916,7 +1158,7 @@ function updateProject()
 
         $result = $stmt->get_result();
 
-            // Cek apakah data ditemukan
+        // Cek apakah data ditemukan
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
         } else {
@@ -934,19 +1176,19 @@ function updateProject()
         $deskripsi = $_POST['deskripsi'];
         $link_project = $_POST['link_project'];
         $tahun = $_POST['tahun'];
-    
+
         $target_file = null;
         if (!empty($_FILES["photo_path"]["name"])) {
             $target_dir = "../assets/uploads/";
             $target_file = $target_dir . basename($_FILES["photo_path"]["name"]);
             move_uploaded_file($_FILES["photo_path"]["tmp_name"], $target_file);
         }
-    
+
         // Update data
         $sql = "UPDATE project SET nama_kegiatan = ?, deskripsi = ?, photo_path = ?, link_project = ?, tahun = ? WHERE id_project = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sssssi", $nama_kegiatan, $deskripsi, $target_file, $link_project, $tahun, $id_project);
-    
+
         if ($stmt->execute()) {
             header("Location: project.php");
             exit();
@@ -955,12 +1197,20 @@ function updateProject()
         }
     }
 
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
 
 ?>
     <input type="checkbox" id="menu-toggle" />
     <div class="side-bar">
         <div class="side-header">
-            <h2>R<span>IF</span></h2>
+            <a href="../index.php" style="text-decoration: none; color: black;">
+                <h2>R<span>IF</span></h2>
+            </a>
         </div>
         <div class="side-content">
             <div class="profile">
@@ -971,25 +1221,42 @@ function updateProject()
             <div class="side-menu">
                 <ul>
                     <li>
-                        <a href="dashboard.php">
-                            <span class="las la-user-alt" style="color: #85878a"> </span>
-                            <small>Dashboard</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="category.php">
-                            <span class="las la-list" style="color: #85878a">
+                        <a href="profile.php">
+                            <span class="las la-user" style="color: #85878a">
                             </span>
-                            <small>Category</small>
+                            <small>Profile</small>
                         </a>
                     </li>
-                    <li>
-                        <a href="project.php">
-                            <span class="las la-briefcase" style="color: #85878a">
-                            </span>
-                            <small>Project</small>
-                        </a>
-                    </li>
+                    <?php if ($_SESSION['level'] == 1) { ?>
+                        <li>
+                            <a href="dashboard.php">
+                                <span class="las la-chart-bar" style="color: #85878a"></span>
+                                <small>Dashboard</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="category.php">
+                                <span class="las la-list" style="color: #85878a">
+                                </span>
+                                <small>Category</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="project.php">
+                                <span class="las la-briefcase" style="color: #85878a">
+                                </span>
+                                <small>Project</small>
+                            </a>
+                        </li>
+                    <?php } else { ?>
+                        <li>
+                            <a href="reviews.php">
+                                <span class="las la-calendar" style="color: #85878a">
+                                </span>
+                                <small>Review</small>
+                            </a>
+                        </li>
+                    <?php } ?>
                     <!-- <li>
                         <a href="combine_chart.html">
                             <span class="fa-solid fa-chart-simple" style="color: #85878a">
@@ -1024,14 +1291,26 @@ function updateProject()
         <header>
             <div class="header-content">
                 <label for="menu-toggle"><span class="las la-bars"></span></label>
-                <a href="">
-                    <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
-                    Logout
-                </a>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
             </div>
         </header>
         <div class="container-dashboard">
-            <p>Update Project</p>
+            <div class="container-heading-crud">
+                <a href="project.php">
+                    <img src="../assets/icon/arrow-left.png" alt="" width="40" height="40">
+                </a>
+                <p>Update Project</p>
+            </div>
 
             <div class="data-dashboard ">
                 <form action="" method="POST" enctype="multipart/form-data">
@@ -1066,6 +1345,342 @@ function updateProject()
                     <div class="mb-3">
                         <label for="tahun" class="form-label">Tahun</label>
                         <input type="text" class="form-control" id="tahun" name="tahun" value="<?php echo $row['tahun']; ?>">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+<?php
+}
+
+function profilePage()
+{
+    include "../koneksi.php";
+
+
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
+
+?>
+    <input type="checkbox" id="menu-toggle" />
+    <div class="side-bar">
+        <div class="side-header">
+            <a href="../index.php" style="text-decoration: none; color: black;">
+                <h2>R<span>IF</span></h2>
+            </a>
+        </div>
+        <div class="side-content">
+            <div class="profile">
+                <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
+                <h3>Udayana University</h3>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+                    <li>
+                        <a href="profile.php">
+                            <span class="las la-user" style="color: #85878a">
+                            </span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    <?php if ($_SESSION['level'] == 1) { ?>
+                        <li>
+                            <a href="dashboard.php">
+                                <span class="las la-chart-bar" style="color: #85878a"></span>
+                                <small>Dashboard</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="category.php">
+                                <span class="las la-list" style="color: #85878a">
+                                </span>
+                                <small>Category</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="project.php">
+                                <span class="las la-briefcase" style="color: #85878a">
+                                </span>
+                                <small>Project</small>
+                            </a>
+                        </li>
+                    <?php } else { ?>
+                        <li>
+                            <a href="reviews.php">
+                                <span class="las la-calendar" style="color: #85878a">
+                                </span>
+                                <small>Review</small>
+                            </a>
+                        </li>
+                    <?php } ?>
+                    <!-- <li>
+                        <a href="combine_chart.html">
+                            <span class="fa-solid fa-chart-simple" style="color: #85878a">
+                            </span>
+                            <small>Grafik Gabungan</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="cpu_usage.html">
+                            <span class="fa-solid fa-server" style="color: #85878a"> </span>
+                            <small>CPU Usage</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="memory_usage.html">
+                            <span class="fa-solid fa-memory" style="color: #85878a"> </span>
+                            <small>Memory Usage</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="storage_usage.html">
+                            <span class="fa-solid fa-database" style="color: #85878a">
+                            </span>
+                            <small>Storage Usage</small>
+                        </a>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <label for="menu-toggle"><span class="las la-bars"></span></label>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div class="container-dashboard">
+            <p>Profile</p>
+
+            <div class="data-dashboard ">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="nama" class="form-label">Nama</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" name="nama" value="<?php echo $user['nama']; ?>" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="exampleInputEmail1" name="password" value="<?php echo $user['password']; ?>" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" value="<?php echo $user['username']; ?>" readonly>
+                    </div>
+                    <div class="mb-3 foto-profile">
+                        <label for="photo_path" class="form-label">Foto</label>
+                        <img src="<?php echo $user['photo_path']; ?>" alt="" width="200" height="200">
+                    </div>
+                    <a href="updateProfile.php" class="btn btn-primary">
+                        Update
+                    </a>
+                </form>
+            </div>
+
+        </div>
+    </div>
+<?php
+}
+
+function updateProfile()
+{
+    include "../koneksi.php";
+
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $id_user = $user['id_user'];
+        $nama = $_POST['nama'];
+        $username = $_POST['username'];
+        // $photo_path = $_POST['photo_path'];
+
+        $check_sql = "SELECT * FROM users WHERE username = ? AND id_user != ?";
+        $check_stmt = $conn->prepare($check_sql);
+        $check_stmt->bind_param("si", $username, $id_user);
+        $check_stmt->execute();
+        $result_check = $check_stmt->get_result();
+
+        if ($result_check->num_rows > 0) {
+            // Username sudah ada, tampilkan alert
+            echo "
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Username sudah terdaftar!'
+                        });
+                    });
+                </script>
+            ";
+        } else {
+            $target_file = null;
+            if (!empty($_FILES["photo_path"]["name"])) {
+                $target_dir = "../assets/uploads/";
+                $target_file = $target_dir . basename($_FILES["photo_path"]["name"]);
+                move_uploaded_file($_FILES["photo_path"]["tmp_name"], $target_file);
+            }
+    
+            // Update data
+            $sql = "UPDATE users SET username = ?, photo_path = ?, nama = ? WHERE id_user = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("sssi", $username, $target_file, $nama, $id_user);
+    
+            if ($stmt->execute()) {
+                header("Location: profile.php");
+                exit();
+            } else {
+                echo "Gagal memperbarui data: " . $stmt->error;
+            }
+        }
+
+    }
+
+?>
+    <input type="checkbox" id="menu-toggle" />
+    <div class="side-bar">
+        <div class="side-header">
+            <a href="../index.php" style="text-decoration: none; color: black;">
+                <h2>R<span>IF</span></h2>
+            </a>
+        </div>
+        <div class="side-content">
+            <div class="profile">
+                <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
+                <h3>Udayana University</h3>
+            </div>
+
+            <div class="side-menu">
+                <ul>
+                    <li>
+                        <a href="profile.php">
+                            <span class="las la-user" style="color: #85878a">
+                            </span>
+                            <small>Profile</small>
+                        </a>
+                    </li>
+                    <?php if ($_SESSION['level'] == 1) { ?>
+                        <li>
+                            <a href="dashboard.php">
+                                <span class="las la-chart-bar" style="color: #85878a"></span>
+                                <small>Dashboard</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="category.php">
+                                <span class="las la-list" style="color: #85878a">
+                                </span>
+                                <small>Category</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="project.php">
+                                <span class="las la-briefcase" style="color: #85878a">
+                                </span>
+                                <small>Project</small>
+                            </a>
+                        </li>
+                    <?php } else { ?>
+                        <li>
+                            <a href="reviews.php">
+                                <span class="las la-calendar" style="color: #85878a">
+                                </span>
+                                <small>Review</small>
+                            </a>
+                        </li>
+                    <?php } ?>
+                    <!-- <li>
+                        <a href="combine_chart.html">
+                            <span class="fa-solid fa-chart-simple" style="color: #85878a">
+                            </span>
+                            <small>Grafik Gabungan</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="cpu_usage.html">
+                            <span class="fa-solid fa-server" style="color: #85878a"> </span>
+                            <small>CPU Usage</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="memory_usage.html">
+                            <span class="fa-solid fa-memory" style="color: #85878a"> </span>
+                            <small>Memory Usage</small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="storage_usage.html">
+                            <span class="fa-solid fa-database" style="color: #85878a">
+                            </span>
+                            <small>Storage Usage</small>
+                        </a>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <label for="menu-toggle"><span class="las la-bars"></span></label>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div class="container-dashboard">
+            <div class="container-heading-crud">
+                <a href="profile.php">
+                    <img src="../assets/icon/arrow-left.png" alt="" width="40" height="40">
+                </a>
+                <p>Update Profile</p>
+            </div>
+
+            <div class="data-dashboard ">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="nama" class="form-label">Nama</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" name="nama" value="<?php echo $user['nama']; ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" value="<?php echo $user['username']; ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="photo_path" class="form-label">Foto</label>
+                        <input type="file" class="form-control" id="photo_path" name="photo_path" accept="image/*">
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

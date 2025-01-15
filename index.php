@@ -13,9 +13,10 @@
     <!-- animate onscroll -->
     <link rel="icon" href="assets/icon/logo-ti.png" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
 </head>
 <body>
-    <?php navbar(); ?>
+        <?php navbar(); ?>
         <?php homePage(); ?>
         <?php aboutMe(); ?>
         <?php services(); ?>
@@ -30,6 +31,10 @@
     </script>
 
     <script src="js/main.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        
+    </script>
 </body>
 </html>

@@ -203,5 +203,25 @@ function validateBeforeSubmit() {
     return true;
 }
 
+// function untuk dropdown pada navbar
+
+document.addEventListener("DOMContentLoaded", function () {
+    const afterLogin = document.querySelector(".after-login");
+    const dropdown = document.querySelector(".dropdown");
+
+    if (afterLogin && dropdown) {
+        afterLogin.addEventListener("click", function (e) {
+            e.preventDefault(); 
+            dropdown.classList.toggle("active"); 
+        });
+
+        document.addEventListener("click", function (e) {
+            if (!afterLogin.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.remove("active");
+            }
+        });
+    }
+});
+
 
 

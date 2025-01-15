@@ -8,7 +8,7 @@ include "../koneksi.php";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Admin</title>
+    <title>Category - Admin</title>
     <link rel="stylesheet" href="../css/admin.css">
     <link
         rel="stylesheet"
@@ -36,6 +36,26 @@ include "../koneksi.php";
                 if (result.isConfirmed) {
                     // Arahkan ke URL untuk penghapusan jika dikonfirmasi
                     window.location.href = `deleteKategory.php?id_kategori=${id}`;
+                }
+            });
+        }
+    </script>
+    <script>
+        function confirmLogout(event) {
+            // SweetAlert konfirmasi
+            event.preventDefault();
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Anda akan keluar dari akun ini!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, keluar!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Arahkan ke URL untuk penghapusan jika dikonfirmasi
+                    window.location.href = '../logout.php';
                 }
             });
         }

@@ -458,17 +458,29 @@ function createKategory()
 
         // Eksekusi query
         if ($stmt->execute()) {
-            header("location: category.php");
-        } else {
-    ?>
+            echo "
             <script>
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Something went wrong!",
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Kategori Berhasil Ditambahkan!'
+                    }).then(() => {
+                        window.location.href = 'category.php';
+                    });
                 });
             </script>
-    <?php
+        ";
+        } else {
+        ?>
+                <script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong!",
+                    });
+                </script>
+        <?php
         }
     }
 
@@ -638,8 +650,19 @@ function updateKategory()
 
         if ($stmt->execute()) {
             // Redirect ke halaman kategori setelah berhasil update
-            header("Location: category.php");
-            exit();
+            echo "
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Kategori Berhasil Diupdate!'
+                    }).then(() => {
+                        window.location.href = 'category.php';
+                    });
+                });
+            </script>
+        ";
         } else {
             echo "Gagal memperbarui data: " . $stmt->error;
         }
@@ -975,9 +998,19 @@ function createProject()
             $stmt->bind_param("isssss", $id_kategori, $nama_kegiatan, $deskripsi, $target_file, $link_project, $tahun);
 
             if ($stmt->execute()) {
-                echo "Proyek berhasil ditambahkan!";
-                header("Location: project.php");
-                exit();
+                echo "
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Project Berhasil Ditambahkan!'
+                            }).then(() => {
+                                window.location.href = 'project.php';
+                            });
+                        });
+                    </script>
+            ";
             } else {
                 echo "Gagal menyimpan data: " . $stmt->error;
             }
@@ -1190,8 +1223,19 @@ function updateProject()
         $stmt->bind_param("sssssi", $nama_kegiatan, $deskripsi, $target_file, $link_project, $tahun, $id_project);
 
         if ($stmt->execute()) {
-            header("Location: project.php");
-            exit();
+            echo "
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Project Berhasil Diupdate!'
+                    }).then(() => {
+                        window.location.href = 'project.php';
+                    });
+                });
+            </script>
+        ";
         } else {
             echo "Gagal memperbarui data: " . $stmt->error;
         }
@@ -1551,8 +1595,19 @@ function updateProfile()
             $stmt->bind_param("sssi", $username, $target_file, $nama, $id_user);
     
             if ($stmt->execute()) {
-                header("Location: profile.php");
-                exit();
+                echo "
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'Profile Berhasil Diupdate!'
+                        }).then(() => {
+                            window.location.href = 'profile.php';
+                        });
+                    });
+                </script>
+            ";
             } else {
                 echo "Gagal memperbarui data: " . $stmt->error;
             }

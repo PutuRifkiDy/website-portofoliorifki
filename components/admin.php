@@ -8,7 +8,7 @@ if (!isset($_SESSION['id_user'])) {
 
 if ($_SESSION['level'] == 0) {
     // User biasa hanya boleh mengakses halaman tertentu
-    $allowed_pages = ['profile.php', 'reviews.php', 'updateProfile.php', 'updateReviews.php'];
+    $allowed_pages = ['profile.php', 'reviews.php', 'createReview.php', 'updateProfile.php', 'updateReview.php'];
     $current_page = basename($_SERVER['PHP_SELF']);
     if (!in_array($current_page, $allowed_pages)) {
         header("Location: profile.php");
@@ -59,37 +59,8 @@ function iconNewsLetter()
 <?php
 }
 
-function dashboardPage()
+function sideBar()
 {
-
-    include "../koneksi.php";
-    $sqlKategori = "SELECT COUNT(*) AS total_rows_kategori FROM kategori";
-    $stmtKategori = $conn->prepare($sqlKategori);
-    $stmtKategori->execute();
-    $resultKategori = $stmtKategori->get_result();
-    $rowKategori = $resultKategori->fetch_assoc();
-
-    $sqlProject = "SELECT COUNT(*) AS total_rows_project FROM project";
-    $stmtProject = $conn->prepare($sqlProject);
-    $stmtProject->execute();
-    $resultProject = $stmtProject->get_result();
-    $rowProject = $resultProject->fetch_assoc();
-
-    $sqlProjectDashboard = "SELECT project.*, kategori.nama AS nama_kategori
-     FROM project
-     JOIN kategori ON project.id_kategori = kategori.id_kategori";
-    $stmtProjectDashboard = $conn->prepare($sqlProjectDashboard);
-    $stmtProjectDashboard->execute();
-    $resultProjectDashboard = $stmtProjectDashboard->get_result();
-
-
-    $user_id = $_SESSION['id_user'];
-    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
-    $stmtUser = $conn->prepare($sqlUser);
-    $stmtUser->bind_param("i", $user_id);
-    $stmtUser->execute();
-    $user = $stmtUser->get_result()->fetch_assoc();
-
 ?>
     <input type="checkbox" id="menu-toggle" />
     <div class="side-bar">
@@ -134,6 +105,20 @@ function dashboardPage()
                                 <small>Project</small>
                             </a>
                         </li>
+                        <li>
+                            <a href="user.php">
+                                <span class="las la-user-plus" style="color: #85878a">
+                                </span>
+                                <small>User</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="review_admin.php">
+                                <span class="las la-user-plus" style="color: #85878a">
+                                </span>
+                                <small>Reviews</small>
+                            </a>
+                        </li>
                     <?php } else { ?>
                         <li>
                             <a href="reviews.php">
@@ -173,6 +158,48 @@ function dashboardPage()
             </div>
         </div>
     </div>
+<?php
+}
+
+function dashboardPage()
+{
+
+    include "../koneksi.php";
+    $sqlKategori = "SELECT COUNT(*) AS total_rows_kategori FROM kategori";
+    $stmtKategori = $conn->prepare($sqlKategori);
+    $stmtKategori->execute();
+    $resultKategori = $stmtKategori->get_result();
+    $rowKategori = $resultKategori->fetch_assoc();
+
+    $sqlProject = "SELECT COUNT(*) AS total_rows_project FROM project";
+    $stmtProject = $conn->prepare($sqlProject);
+    $stmtProject->execute();
+    $resultProject = $stmtProject->get_result();
+    $rowProject = $resultProject->fetch_assoc();
+
+    $sqlProjectDashboard = "SELECT project.*, kategori.nama AS nama_kategori
+     FROM project
+     JOIN kategori ON project.id_kategori = kategori.id_kategori";
+    $stmtProjectDashboard = $conn->prepare($sqlProjectDashboard);
+    $stmtProjectDashboard->execute();
+    $resultProjectDashboard = $stmtProjectDashboard->get_result();
+
+    $sqlUserCount = "SELECT COUNT(*) AS total_rows_user FROM users";
+    $stmtUserCount = $conn->prepare($sqlUserCount);
+    $stmtUserCount->execute();
+    $resultUserCount = $stmtUserCount->get_result();
+    $rowUser = $resultUserCount->fetch_assoc();
+
+
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
+?>
+    <?php sideBar(); ?>
     <div class="main-content">
         <header>
             <div class="header-content">
@@ -182,6 +209,11 @@ function dashboardPage()
                         <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
                         <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
                     </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
                     <a href="#" onclick="confirmLogout(event)">
                         <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
                             <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
@@ -223,7 +255,7 @@ function dashboardPage()
                 <div class="card-indicator">
                     <div class="text">
                         <h1>Total User</h1>
-                        <p>6</p>
+                        <p><?php echo $rowUser['total_rows_user']; ?></p>
                     </div>
                     <div class="icon">
                         <?php iconUser(); ?>
@@ -296,82 +328,7 @@ function categoryPage()
     $stmtUser->execute();
     $user = $stmtUser->get_result()->fetch_assoc();
 ?>
-    <input type="checkbox" id="menu-toggle" />
-    <div class="side-bar">
-        <div class="side-header">
-            <a href="../index.php" style="text-decoration: none; color: black;">
-                <h2>R<span>IF</span></h2>
-            </a>
-        </div>
-        <div class="side-content">
-            <div class="profile">
-                <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
-                <h3>Udayana University</h3>
-            </div>
-
-            <div class="side-menu">
-                <ul>
-                    <li>
-                        <a href="profile.php">
-                            <span class="las la-user" style="color: #85878a">
-                            </span>
-                            <small>Profile</small>
-                        </a>
-                    </li>
-                    <?php if ($_SESSION['level'] == 1) { ?>
-                        <li>
-                            <a href="dashboard.php">
-                                <span class="las la-chart-bar" style="color: #85878a"></span>
-                                <small>Dashboard</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="category.php">
-                                <span class="las la-list" style="color: #85878a">
-                                </span>
-                                <small>Category</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="project.php">
-                                <span class="las la-briefcase" style="color: #85878a">
-                                </span>
-                                <small>Project</small>
-                            </a>
-                        </li>
-                    <?php } else { ?>
-                        <li>
-                            <a href="reviews.php">
-                                <span class="las la-calendar" style="color: #85878a">
-                                </span>
-                                <small>Review</small>
-                            </a>
-                        </li>
-                    <?php } ?>
-                    <!-- 
-                    <li>
-                        <a href="cpu_usage.html">
-                            <span class="fa-solid fa-server" style="color: #85878a"> </span>
-                            <small>CPU Usage</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="memory_usage.html">
-                            <span class="fa-solid fa-memory" style="color: #85878a"> </span>
-                            <small>Memory Usage</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="storage_usage.html">
-                            <span class="fa-solid fa-database" style="color: #85878a">
-                            </span>
-                            <small>Storage Usage</small>
-                        </a>
-                    </li> -->
-                </ul>
-            </div>
-        </div>
-    </div>
+    <?php sideBar(); ?>
     <div class="main-content">
         <header>
             <div class="header-content">
@@ -381,6 +338,11 @@ function categoryPage()
                         <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
                         <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
                     </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
                     <a href="#" onclick="confirmLogout(event)">
                         <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
                             <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
@@ -447,7 +409,7 @@ function createKategory()
     include "../koneksi.php";
 
     if (isset($_POST['kategori'])) {
-        $nama_kategori = $_POST['kategori'];
+        htmlspecialchars($_POST['kategori'], ENT_QUOTES, 'UTF-8');
 
         $sql = "INSERT INTO kategori (nama) VALUES (?)";
 
@@ -472,15 +434,15 @@ function createKategory()
             </script>
         ";
         } else {
-        ?>
-                <script>
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Something went wrong!",
-                    });
-                </script>
-        <?php
+    ?>
+            <script>
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+            </script>
+    <?php
         }
     }
 
@@ -493,88 +455,7 @@ function createKategory()
     $user = $stmtUser->get_result()->fetch_assoc();
 
     ?>
-    <input type="checkbox" id="menu-toggle" />
-    <div class="side-bar">
-        <div class="side-header">
-            <a href="../index.php" style="text-decoration: none; color: black;">
-                <h2>R<span>IF</span></h2>
-            </a>
-        </div>
-        <div class="side-content">
-            <div class="profile">
-                <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
-                <h3>Udayana University</h3>
-            </div>
-
-            <div class="side-menu">
-                <ul>
-                    <li>
-                        <a href="profile.php">
-                            <span class="las la-user" style="color: #85878a">
-                            </span>
-                            <small>Profile</small>
-                        </a>
-                    </li>
-                    <?php if ($_SESSION['level'] == 1) { ?>
-                        <li>
-                            <a href="dashboard.php">
-                                <span class="las la-chart-bar" style="color: #85878a"></span>
-                                <small>Dashboard</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="category.php">
-                                <span class="las la-list" style="color: #85878a">
-                                </span>
-                                <small>Category</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="project.php">
-                                <span class="las la-briefcase" style="color: #85878a">
-                                </span>
-                                <small>Project</small>
-                            </a>
-                        </li>
-                    <?php } else { ?>
-                        <li>
-                            <a href="reviews.php">
-                                <span class="las la-calendar" style="color: #85878a">
-                                </span>
-                                <small>Review</small>
-                            </a>
-                        </li>
-                    <?php } ?>
-                    <!-- <li>
-                        <a href="combine_chart.html">
-                            <span class="fa-solid fa-chart-simple" style="color: #85878a">
-                            </span>
-                            <small>Grafik Gabungan</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="cpu_usage.html">
-                            <span class="fa-solid fa-server" style="color: #85878a"> </span>
-                            <small>CPU Usage</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="memory_usage.html">
-                            <span class="fa-solid fa-memory" style="color: #85878a"> </span>
-                            <small>Memory Usage</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="storage_usage.html">
-                            <span class="fa-solid fa-database" style="color: #85878a">
-                            </span>
-                            <small>Storage Usage</small>
-                        </a>
-                    </li> -->
-                </ul>
-            </div>
-        </div>
-    </div>
+    <?php sideBar(); ?>
     <div class="main-content">
         <header>
             <div class="header-content">
@@ -584,6 +465,11 @@ function createKategory()
                         <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
                         <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
                     </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
                     <a href="#" onclick="confirmLogout(event)">
                         <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
                             <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
@@ -677,88 +563,7 @@ function updateKategory()
 
 
 ?>
-    <input type="checkbox" id="menu-toggle" />
-    <div class="side-bar">
-        <div class="side-header">
-            <a href="../index.php" style="text-decoration: none; color: black;">
-                <h2>R<span>IF</span></h2>
-            </a>
-        </div>
-        <div class="side-content">
-            <div class="profile">
-                <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
-                <h3>Udayana University</h3>
-            </div>
-
-            <div class="side-menu">
-                <ul>
-                    <li>
-                        <a href="profile.php">
-                            <span class="las la-user" style="color: #85878a">
-                            </span>
-                            <small>Profile</small>
-                        </a>
-                    </li>
-                    <?php if ($_SESSION['level'] == 1) { ?>
-                        <li>
-                            <a href="dashboard.php">
-                                <span class="las la-chart-bar" style="color: #85878a"></span>
-                                <small>Dashboard</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="category.php">
-                                <span class="las la-list" style="color: #85878a">
-                                </span>
-                                <small>Category</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="project.php">
-                                <span class="las la-briefcase" style="color: #85878a">
-                                </span>
-                                <small>Project</small>
-                            </a>
-                        </li>
-                    <?php } else { ?>
-                        <li>
-                            <a href="reviews.php">
-                                <span class="las la-calendar" style="color: #85878a">
-                                </span>
-                                <small>Review</small>
-                            </a>
-                        </li>
-                    <?php } ?>
-                    <!-- <li>
-                        <a href="combine_chart.html">
-                            <span class="fa-solid fa-chart-simple" style="color: #85878a">
-                            </span>
-                            <small>Grafik Gabungan</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="cpu_usage.html">
-                            <span class="fa-solid fa-server" style="color: #85878a"> </span>
-                            <small>CPU Usage</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="memory_usage.html">
-                            <span class="fa-solid fa-memory" style="color: #85878a"> </span>
-                            <small>Memory Usage</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="storage_usage.html">
-                            <span class="fa-solid fa-database" style="color: #85878a">
-                            </span>
-                            <small>Storage Usage</small>
-                        </a>
-                    </li> -->
-                </ul>
-            </div>
-        </div>
-    </div>
+    <?php sideBar(); ?>
     <div class="main-content">
         <header>
             <div class="header-content">
@@ -768,6 +573,11 @@ function updateKategory()
                         <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
                         <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
                     </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
                     <a href="#" onclick="confirmLogout(event)">
                         <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
                             <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
@@ -817,84 +627,7 @@ function projectPage()
     $stmtUser->execute();
     $user = $stmtUser->get_result()->fetch_assoc();
 ?>
-
-
-    <input type="checkbox" id="menu-toggle" />
-    <div class="side-bar">
-        <div class="side-header">
-            <a href="../index.php" style="text-decoration: none; color: black;">
-                <h2>R<span>IF</span></h2>
-            </a>
-        </div>
-        <div class="side-content">
-            <div class="profile">
-                <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
-                <h3>Udayana University</h3>
-            </div>
-
-            <div class="side-menu">
-                <ul>
-                    <li>
-                        <a href="profile.php">
-                            <span class="las la-user" style="color: #85878a">
-                            </span>
-                            <small>Profile</small>
-                        </a>
-                    </li>
-                    <?php if ($_SESSION['level'] == 1) { ?>
-                        <li>
-                            <a href="dashboard.php">
-                                <span class="las la-chart-bar" style="color: #85878a"></span>
-                                <small>Dashboard</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="category.php">
-                                <span class="las la-list" style="color: #85878a">
-                                </span>
-                                <small>Category</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="project.php">
-                                <span class="las la-briefcase" style="color: #85878a">
-                                </span>
-                                <small>Project</small>
-                            </a>
-                        </li>
-                    <?php } else { ?>
-                        <li>
-                            <a href="reviews.php">
-                                <span class="las la-calendar" style="color: #85878a">
-                                </span>
-                                <small>Review</small>
-                            </a>
-                        </li>
-                    <?php } ?>
-                    <!-- 
-                    <li>
-                        <a href="cpu_usage.html">
-                            <span class="fa-solid fa-server" style="color: #85878a"> </span>
-                            <small>CPU Usage</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="memory_usage.html">
-                            <span class="fa-solid fa-memory" style="color: #85878a"> </span>
-                            <small>Memory Usage</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="storage_usage.html">
-                            <span class="fa-solid fa-database" style="color: #85878a">
-                            </span>
-                            <small>Storage Usage</small>
-                        </a>
-                    </li> -->
-                </ul>
-            </div>
-        </div>
-    </div>
+    <?php sideBar(); ?>
     <div class="main-content">
         <header>
             <div class="header-content">
@@ -904,6 +637,11 @@ function projectPage()
                         <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
                         <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
                     </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
                     <a href="#" onclick="confirmLogout(event)">
                         <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
                             <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
@@ -1028,88 +766,7 @@ function createProject()
 
 
 ?>
-    <input type="checkbox" id="menu-toggle" />
-    <div class="side-bar">
-        <div class="side-header">
-            <a href="../index.php" style="text-decoration: none; color: black;">
-                <h2>R<span>IF</span></h2>
-            </a>
-        </div>
-        <div class="side-content">
-            <div class="profile">
-                <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
-                <h3>Udayana University</h3>
-            </div>
-
-            <div class="side-menu">
-                <ul>
-                    <li>
-                        <a href="profile.php">
-                            <span class="las la-user" style="color: #85878a">
-                            </span>
-                            <small>Profile</small>
-                        </a>
-                    </li>
-                    <?php if ($_SESSION['level'] == 1) { ?>
-                        <li>
-                            <a href="dashboard.php">
-                                <span class="las la-chart-bar" style="color: #85878a"></span>
-                                <small>Dashboard</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="category.php">
-                                <span class="las la-list" style="color: #85878a">
-                                </span>
-                                <small>Category</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="project.php">
-                                <span class="las la-briefcase" style="color: #85878a">
-                                </span>
-                                <small>Project</small>
-                            </a>
-                        </li>
-                    <?php } else { ?>
-                        <li>
-                            <a href="reviews.php">
-                                <span class="las la-calendar" style="color: #85878a">
-                                </span>
-                                <small>Review</small>
-                            </a>
-                        </li>
-                    <?php } ?>
-                    <!-- <li>
-                        <a href="combine_chart.html">
-                            <span class="fa-solid fa-chart-simple" style="color: #85878a">
-                            </span>
-                            <small>Grafik Gabungan</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="cpu_usage.html">
-                            <span class="fa-solid fa-server" style="color: #85878a"> </span>
-                            <small>CPU Usage</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="memory_usage.html">
-                            <span class="fa-solid fa-memory" style="color: #85878a"> </span>
-                            <small>Memory Usage</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="storage_usage.html">
-                            <span class="fa-solid fa-database" style="color: #85878a">
-                            </span>
-                            <small>Storage Usage</small>
-                        </a>
-                    </li> -->
-                </ul>
-            </div>
-        </div>
-    </div>
+    <?php sideBar(); ?>
     <div class="main-content">
         <header>
             <div class="header-content">
@@ -1119,6 +776,11 @@ function createProject()
                         <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
                         <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
                     </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
                     <a href="#" onclick="confirmLogout(event)">
                         <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
                             <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
@@ -1249,88 +911,7 @@ function updateProject()
     $user = $stmtUser->get_result()->fetch_assoc();
 
 ?>
-    <input type="checkbox" id="menu-toggle" />
-    <div class="side-bar">
-        <div class="side-header">
-            <a href="../index.php" style="text-decoration: none; color: black;">
-                <h2>R<span>IF</span></h2>
-            </a>
-        </div>
-        <div class="side-content">
-            <div class="profile">
-                <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
-                <h3>Udayana University</h3>
-            </div>
-
-            <div class="side-menu">
-                <ul>
-                    <li>
-                        <a href="profile.php">
-                            <span class="las la-user" style="color: #85878a">
-                            </span>
-                            <small>Profile</small>
-                        </a>
-                    </li>
-                    <?php if ($_SESSION['level'] == 1) { ?>
-                        <li>
-                            <a href="dashboard.php">
-                                <span class="las la-chart-bar" style="color: #85878a"></span>
-                                <small>Dashboard</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="category.php">
-                                <span class="las la-list" style="color: #85878a">
-                                </span>
-                                <small>Category</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="project.php">
-                                <span class="las la-briefcase" style="color: #85878a">
-                                </span>
-                                <small>Project</small>
-                            </a>
-                        </li>
-                    <?php } else { ?>
-                        <li>
-                            <a href="reviews.php">
-                                <span class="las la-calendar" style="color: #85878a">
-                                </span>
-                                <small>Review</small>
-                            </a>
-                        </li>
-                    <?php } ?>
-                    <!-- <li>
-                        <a href="combine_chart.html">
-                            <span class="fa-solid fa-chart-simple" style="color: #85878a">
-                            </span>
-                            <small>Grafik Gabungan</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="cpu_usage.html">
-                            <span class="fa-solid fa-server" style="color: #85878a"> </span>
-                            <small>CPU Usage</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="memory_usage.html">
-                            <span class="fa-solid fa-memory" style="color: #85878a"> </span>
-                            <small>Memory Usage</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="storage_usage.html">
-                            <span class="fa-solid fa-database" style="color: #85878a">
-                            </span>
-                            <small>Storage Usage</small>
-                        </a>
-                    </li> -->
-                </ul>
-            </div>
-        </div>
-    </div>
+    <?php sideBar(); ?>
     <div class="main-content">
         <header>
             <div class="header-content">
@@ -1340,6 +921,11 @@ function updateProject()
                         <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
                         <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
                     </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
                     <a href="#" onclick="confirmLogout(event)">
                         <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
                             <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
@@ -1413,88 +999,7 @@ function profilePage()
 
 
 ?>
-    <input type="checkbox" id="menu-toggle" />
-    <div class="side-bar">
-        <div class="side-header">
-            <a href="../index.php" style="text-decoration: none; color: black;">
-                <h2>R<span>IF</span></h2>
-            </a>
-        </div>
-        <div class="side-content">
-            <div class="profile">
-                <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
-                <h3>Udayana University</h3>
-            </div>
-
-            <div class="side-menu">
-                <ul>
-                    <li>
-                        <a href="profile.php">
-                            <span class="las la-user" style="color: #85878a">
-                            </span>
-                            <small>Profile</small>
-                        </a>
-                    </li>
-                    <?php if ($_SESSION['level'] == 1) { ?>
-                        <li>
-                            <a href="dashboard.php">
-                                <span class="las la-chart-bar" style="color: #85878a"></span>
-                                <small>Dashboard</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="category.php">
-                                <span class="las la-list" style="color: #85878a">
-                                </span>
-                                <small>Category</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="project.php">
-                                <span class="las la-briefcase" style="color: #85878a">
-                                </span>
-                                <small>Project</small>
-                            </a>
-                        </li>
-                    <?php } else { ?>
-                        <li>
-                            <a href="reviews.php">
-                                <span class="las la-calendar" style="color: #85878a">
-                                </span>
-                                <small>Review</small>
-                            </a>
-                        </li>
-                    <?php } ?>
-                    <!-- <li>
-                        <a href="combine_chart.html">
-                            <span class="fa-solid fa-chart-simple" style="color: #85878a">
-                            </span>
-                            <small>Grafik Gabungan</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="cpu_usage.html">
-                            <span class="fa-solid fa-server" style="color: #85878a"> </span>
-                            <small>CPU Usage</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="memory_usage.html">
-                            <span class="fa-solid fa-memory" style="color: #85878a"> </span>
-                            <small>Memory Usage</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="storage_usage.html">
-                            <span class="fa-solid fa-database" style="color: #85878a">
-                            </span>
-                            <small>Storage Usage</small>
-                        </a>
-                    </li> -->
-                </ul>
-            </div>
-        </div>
-    </div>
+    <?php sideBar(); ?>
     <div class="main-content">
         <header>
             <div class="header-content">
@@ -1504,6 +1009,11 @@ function profilePage()
                         <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
                         <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
                     </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
                     <a href="#" onclick="confirmLogout(event)">
                         <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
                             <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
@@ -1588,12 +1098,12 @@ function updateProfile()
                 $target_file = $target_dir . basename($_FILES["photo_path"]["name"]);
                 move_uploaded_file($_FILES["photo_path"]["tmp_name"], $target_file);
             }
-    
+
             // Update data
             $sql = "UPDATE users SET username = ?, photo_path = ?, nama = ? WHERE id_user = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("sssi", $username, $target_file, $nama, $id_user);
-    
+
             if ($stmt->execute()) {
                 echo "
                 <script>
@@ -1612,92 +1122,10 @@ function updateProfile()
                 echo "Gagal memperbarui data: " . $stmt->error;
             }
         }
-
     }
 
 ?>
-    <input type="checkbox" id="menu-toggle" />
-    <div class="side-bar">
-        <div class="side-header">
-            <a href="../index.php" style="text-decoration: none; color: black;">
-                <h2>R<span>IF</span></h2>
-            </a>
-        </div>
-        <div class="side-content">
-            <div class="profile">
-                <img src="../assets/icon/logo-ti.png" alt="" class="profile-img">
-                <h3>Udayana University</h3>
-            </div>
-
-            <div class="side-menu">
-                <ul>
-                    <li>
-                        <a href="profile.php">
-                            <span class="las la-user" style="color: #85878a">
-                            </span>
-                            <small>Profile</small>
-                        </a>
-                    </li>
-                    <?php if ($_SESSION['level'] == 1) { ?>
-                        <li>
-                            <a href="dashboard.php">
-                                <span class="las la-chart-bar" style="color: #85878a"></span>
-                                <small>Dashboard</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="category.php">
-                                <span class="las la-list" style="color: #85878a">
-                                </span>
-                                <small>Category</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="project.php">
-                                <span class="las la-briefcase" style="color: #85878a">
-                                </span>
-                                <small>Project</small>
-                            </a>
-                        </li>
-                    <?php } else { ?>
-                        <li>
-                            <a href="reviews.php">
-                                <span class="las la-calendar" style="color: #85878a">
-                                </span>
-                                <small>Review</small>
-                            </a>
-                        </li>
-                    <?php } ?>
-                    <!-- <li>
-                        <a href="combine_chart.html">
-                            <span class="fa-solid fa-chart-simple" style="color: #85878a">
-                            </span>
-                            <small>Grafik Gabungan</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="cpu_usage.html">
-                            <span class="fa-solid fa-server" style="color: #85878a"> </span>
-                            <small>CPU Usage</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="memory_usage.html">
-                            <span class="fa-solid fa-memory" style="color: #85878a"> </span>
-                            <small>Memory Usage</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="storage_usage.html">
-                            <span class="fa-solid fa-database" style="color: #85878a">
-                            </span>
-                            <small>Storage Usage</small>
-                        </a>
-                    </li> -->
-                </ul>
-            </div>
-        </div>
-    </div>
+    <?php sideBar(); ?>
     <div class="main-content">
         <header>
             <div class="header-content">
@@ -1707,6 +1135,11 @@ function updateProfile()
                         <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
                         <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
                     </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
                     <a href="#" onclick="confirmLogout(event)">
                         <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
                             <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
@@ -1746,4 +1179,722 @@ function updateProfile()
 <?php
 }
 
+function userPage()
+{
+    include "../koneksi.php";
+
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
+    $sql = "SELECT * FROM users";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+?>
+    <?php sideBar(); ?>
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <label for="menu-toggle"><span class="las la-bars"></span></label>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div class="container-dashboard">
+            <p>Data User</p>
+            <div class="data-dashboard">
+                <a href="createUser.php">
+                    <button type="button" class="btn btn-primary">Tambah User</button>
+                </a>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Foto</th>
+                            <th scope="col">Nama</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Level</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if ($result->num_rows  > 0) {
+                            $no = 1;
+                        ?>
+                            <?php while ($row = $result->fetch_assoc()) {
+
+                            ?>
+                                <tr>
+                                    <td scope="row"><?php echo $no++; ?></td>
+                                    <td><img src="<?php echo $row['photo_path']; ?>" alt="Foto" width="80"></td>
+                                    <td><?php echo $row['nama']; ?></td>
+                                    <td><?php echo $row['username']; ?></td>
+                                    <td>
+                                        <?php
+                                        if ($row['level'] === 1) {
+                                            echo 'Admin';
+                                        } else if ($row['level'] === 0) {
+                                            echo 'Pengunjung';
+                                        }
+                                        ?>
+                                    </td>
+                                    <?php
+                                    if ($row['username'] === 'Admin Rifki') {
+                                    ?>
+                                        <td style="display: none;">
+                                            <a href="#" onclick="confirmDelete(<?php echo $row['id_user']; ?>)" class="btn btn-danger">Hapus</a>
+                                            <a href="updateUser.php?id_user=<?php echo $row['id_user']; ?>" class="btn btn-success">Update</a>
+                                        </td>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <td>
+                                            <a href="#" onclick="confirmDelete(<?php echo $row['id_user']; ?>)" class="btn btn-danger">Hapus</a>
+                                            <a href="updateUser.php?id_user=<?php echo $row['id_user']; ?>" class="btn btn-success">Update</a>
+                                        </td>
+                                    <?php
+
+                                    }
+                                    ?>
+                                </tr>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <tr>
+                                <td colspan="6" style="text-align: center;">Data Project Belum Tersedia</td>
+                            </tr>
+                        <?php } ?>
+                        <!-- <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td>@fat</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td colspan="2">Larry the Bird</td>
+                            <td>@twitter</td>
+                        </tr> -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+<?php
+}
+
+function createUser()
+{
+    include "../koneksi.php";
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $nama = $_POST['nama'];
+        $username = $_POST['username'];
+        $level = $_POST['level'];
+        $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+
+        // Cek apakah username sudah ada
+        $check_sql = "SELECT * FROM users WHERE username = ?";
+        $check_stmt = $conn->prepare($check_sql);
+        $check_stmt->bind_param("s", $username);
+        $check_stmt->execute();
+        $result = $check_stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            // Username sudah ada, tampilkan alert
+            echo "
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Username sudah terdaftar!'
+                        });
+                    });
+                </script>
+            ";
+        } else {
+            // // Username belum ada, lakukan proses INSERT
+            // $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+            // $stmt = $conn->prepare($sql);
+            // $stmt->bind_param("ss", $username, $password);
+
+            // Proses upload file
+            $target_dir = "../assets/uploads/";
+            $target_file = $target_dir . basename($_FILES["photo_path"]["name"]);
+            if (move_uploaded_file($_FILES["photo_path"]["tmp_name"], $target_file)) {
+                // Simpan data ke database
+                $sql = "INSERT INTO users (username, password, photo_path, level, nama) VALUES (?, ?, ?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("sssss", $username, $password, $target_file, $level, $nama);
+
+                if ($stmt->execute()) {
+                    echo "
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil!',
+                                    text: 'User Berhasil Ditambahkan!'
+                                }).then(() => {
+                                    window.location.href = 'user.php';
+                                });
+                            });
+                        </script>
+                    ";
+                } else {
+                    echo "Gagal menyimpan data: " . $stmt->error;
+                }
+            } else {
+                echo "Gagal mengupload file.";
+            }
+        }
+    }
+
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
+
+?>
+    <?php sideBar(); ?>
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <label for="menu-toggle"><span class="las la-bars"></span></label>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div class="container-dashboard">
+            <div class="container-heading-crud">
+                <a href="project.php">
+                    <img src="../assets/icon/arrow-left.png" alt="" width="40" height="40">
+                </a>
+                <p>Tambah User</p>
+            </div>
+
+            <div class="data-dashboard ">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" name="username">
+                    </div>
+                    <div class="mb-3">
+                        <label for="nama" class="form-label">Nama</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" name="nama">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="exampleInputEmail1" name="password">
+                    </div>
+                    <div class="mb-3">
+                        <label for="photo_path" class="form-label">Foto</label>
+                        <input type="file" class="form-control" id="photo_path" name="photo_path" accept="image/*" required>
+                    </div>
+                    <div class="mb-3">
+                        <select class="form-select" aria-label="Default select example" name="level">
+                            <option value="1">Admin</option>
+                            <option value="0" selected>Pengunjung</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+<?php
+}
+
+function updateUser()
+{
+    include "../koneksi.php";
+
+    if(isset($_GET['id_user'])){
+        $id_user = $_GET['id_user'];
+
+        $sqlUser = 'SELECT * FROM users WHERE id_user = ?';
+        $stmtUser = $conn->prepare($sqlUser);
+        $stmtUser->bind_param('i', $id_user);
+        $stmtUser->execute();
+        $userForUpdate = $stmtUser->get_result()->fetch_assoc();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $nama = $_POST['nama'];
+            $username = $_POST['username'];
+            $level = $_POST['level'];
+    
+            // Cek apakah username sudah ada
+            $check_sql = "SELECT * FROM users WHERE username = ? AND id_user != $id_user";
+            $check_stmt = $conn->prepare($check_sql);
+            $check_stmt->bind_param("s", $username);
+            $check_stmt->execute();
+            $result = $check_stmt->get_result();
+    
+            if ($result->num_rows > 0) {
+                // Username sudah ada, tampilkan alert
+                echo "
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Username sudah terdaftar!'
+                            });
+                        });
+                    </script>
+                ";
+            } else {
+                // // Username belum ada, lakukan proses INSERT
+                // $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+                // $stmt = $conn->prepare($sql);
+                // $stmt->bind_param("ss", $username, $password);
+    
+                // Proses upload file
+                $target_dir = "../assets/uploads/";
+                $target_file = $target_dir . basename($_FILES["photo_path"]["name"]);
+                if (move_uploaded_file($_FILES["photo_path"]["tmp_name"], $target_file)) {
+                    // Simpan data ke database
+                    $sql = "UPDATE users SET username = ?, photo_path = ?, level = ?, nama = ? WHERE id_user = $id_user";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("ssss", $username, $target_file, $level, $nama);
+    
+                    if ($stmt->execute()) {
+                        echo "
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Berhasil!',
+                                        text: 'User Berhasil Diupdate!'
+                                    }).then(() => {
+                                        window.location.href = 'user.php';
+                                    });
+                                });
+                            </script>
+                        ";
+                    } else {
+                        echo "Gagal menyimpan data: " . $stmt->error;
+                    }
+                } else {
+                    echo "Gagal mengupload file.";
+                }
+            }
+        }    
+    }
+
+    
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
+
+?>
+    <?php sideBar(); ?>
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <label for="menu-toggle"><span class="las la-bars"></span></label>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div class="container-dashboard">
+            <div class="container-heading-crud">
+                <a href="user.php">
+                    <img src="../assets/icon/arrow-left.png" alt="" width="40" height="40">
+                </a>
+                <p>Update User</p>
+            </div>
+
+            <div class="data-dashboard ">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" value="<?php echo $userForUpdate['username']; ?>" name="username">
+                    </div>
+                    <div class="mb-3">
+                        <label for="nama" class="form-label">Nama</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" value="<?php echo $userForUpdate['nama'];?>" name="nama">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="exampleInputEmail1" value="<?php echo $userForUpdate['password'];?>" name="password" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="photo_path" class="form-label">Foto</label>
+                        <input type="file" class="form-control" id="photo_path" name="photo_path" accept="image/*" required>
+                    </div>
+                    <div class="mb-3">
+                        <select class="form-select" aria-label="Default select example" name="level">
+                            <?php 
+                                if($userForUpdate['level'] === 1){
+                                    ?>
+                                        <option value="1" selected>Admin</option>
+                                        <option value="0">Pengunjung</option>
+                                        <?php
+                                } else {
+                                    ?>
+                                        <option value="1">Admin</option>
+                                        <option value="0" selected>Pengunjung</option>
+                                    <?php
+                                }
+                            ?>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+<?php
+}
+
+function reviewPage(){
+    include "../koneksi.php";
+
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
+    $sql = "SELECT * FROM reviews WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sql);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $result = $stmtUser->get_result();
+?>
+    <?php sideBar(); ?>
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <label for="menu-toggle"><span class="las la-bars"></span></label>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div class="container-dashboard">
+            <p>Data Review Anda</p>
+            <div class="data-dashboard">
+                <a href="createReview.php">
+                    <button type="button" class="btn btn-primary">Tambah Review</button>
+                </a>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Review</th>
+                            <th scope="col">Created</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if ($result->num_rows  > 0) {
+                            $no = 1;
+                        ?>
+                            <?php while ($row = $result->fetch_assoc()) { ?>
+                                <tr>
+                                    <td scope="row"><?php echo $no++; ?></td>
+                                    <td width="800" style="text-align: justify;"><?php echo $row['review_text']; ?></td>
+                                    <td><?php echo date('Y-F-l',strtotime($row['created_at'])); ?></td>
+                                    <td>
+                                        <a href="#" onclick="confirmDelete(<?php echo $row['id_reviews']; ?>)" class="btn btn-danger">Hapus</a>
+                                        <a href="updateReview.php?id_reviews=<?php echo $row['id_reviews']; ?>" class="btn btn-success">Update</a>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <tr>
+                                <td colspan="2" style="text-align: center;">Data Review Belum Tersedia</td>
+                            </tr>
+                        <?php } ?>
+                        <!-- <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td>@fat</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td colspan="2">Larry the Bird</td>
+                            <td>@twitter</td>
+                        </tr> -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <?php
+}
+
+function createReviewPage(){
+    $id_user = $_SESSION['id_user'];
+
+    include "../koneksi.php";
+
+    if (isset($_POST['review_text'])) {
+        $review_user = htmlspecialchars($_POST['review_text'], ENT_QUOTES, 'UTF-8');
+
+        $sql = "INSERT INTO reviews (id_user, review_text) VALUES (?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("is", $id_user, $review_user);
+
+        // Eksekusi query
+        if ($stmt->execute()) {
+            echo "
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Review Berhasil Ditambahkan!'
+                    }).then(() => {
+                        window.location.href = 'reviews.php';
+                    });
+                });
+            </script>
+        ";
+        } else {
+            ?>
+                    <script>
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Something went wrong!",
+                        });
+                    </script>
+            <?php
+        }
+    }
+
+
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
+    ?>
+    <?php sideBar(); ?>
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <label for="menu-toggle"><span class="las la-bars"></span></label>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div class="container-dashboard">
+            <div class="container-heading-crud">
+                <p>Beri Review Anda</p>
+            </div>
+
+            <div class="data-dashboard ">
+                <form action="" method="POST">
+                    <div class="mb-3">
+                        <label for="review_text" class="form-label">Review</label>
+                        <textarea type="text" class="form-control" id="exampleInputEmail1" name="review_text" style="resize: none; height: 200px;"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+<?php
+}
+
+function updateReview(){
+    $id_user = $_SESSION['id_user'];
+
+    include "../koneksi.php";
+
+    if (isset($_GET['id_reviews']) && is_numeric($_GET['id_reviews'])) {
+        $id_reviews = $_GET['id_reviews'];
+
+        $sqlSelectReview = "SELECT * FROM reviews WHERE id_reviews = ?";
+
+        $stmtReview = $conn->prepare($sqlSelectReview);
+
+        
+        $stmtReview->bind_param("i", $id_reviews);
+
+        $stmtReview->execute();
+        $resultReview = $stmtReview->get_result();
+       
+        if ($resultReview->num_rows > 0) {
+            $rowReview = $resultReview->fetch_assoc();
+        } else {
+            echo "Data tidak ditemukan.";
+            exit();
+        }
+
+        if(isset($_POST["review_text"])){
+            $review_text = $_POST["review_text"];
+
+            $sqlInsertReview = "UPDATE reviews SET review_text = ? WHERE id_reviews = ?";
+            $stmtInsertReview = $conn->prepare($sqlInsertReview);
+            $stmtInsertReview->bind_param("si", $review_text, $id_reviews);
+            
+            if($stmtInsertReview->execute()) {
+                echo "
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Review Berhasil Diupdate!'
+                            }).then(() => {
+                                window.location.href = 'reviews.php';
+                            });
+                        });
+                    </script>
+                ";
+            } else {
+                echo "Gagal di update";
+            }
+        }
+
+    }
+
+
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
+    ?>
+    <?php sideBar(); ?>
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <label for="menu-toggle"><span class="las la-bars"></span></label>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div class="container-dashboard">
+            <div class="container-heading-crud">
+                <a href="reviews.php">
+                    <img src="../assets/icon/arrow-left.png" alt="" width="40" height="40">
+                </a>
+                <p>Update Review</p>
+            </div>
+
+            <div class="data-dashboard ">
+                <form action="" method="POST">
+                    <div class="mb-3">
+                        <label for="review_text" class="form-label">Review</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" name="review_text" style="resize: none; text-align:start;" value="<?php echo $rowReview['review_text']; ?>">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+<?php
+}
 ?>

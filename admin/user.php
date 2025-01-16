@@ -8,7 +8,7 @@ include "../koneksi.php";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Review - Page</title>
+    <title>User - Admin</title>
     <link rel="stylesheet" href="../css/admin.css">
     <link
         rel="stylesheet"
@@ -18,7 +18,7 @@ include "../koneksi.php";
 </head>
 
 <body>
-    <?php reviewPage(); ?>
+    <?php userPage(); ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script>
@@ -35,7 +35,7 @@ include "../koneksi.php";
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Arahkan ke URL untuk penghapusan jika dikonfirmasi
-                    window.location.href = `deleteReview.php?id_reviews=${id}`;
+                    window.location.href = `deleteUser.php?id_user=${id}`;
                 }
             });
         }

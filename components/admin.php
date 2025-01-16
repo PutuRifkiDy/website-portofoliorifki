@@ -114,7 +114,7 @@ function sideBar()
                         </li>
                         <li>
                             <a href="review_admin.php">
-                                <span class="las la-user-plus" style="color: #85878a">
+                                <span class="las la-calendar" style="color: #85878a">
                                 </span>
                                 <small>Reviews</small>
                             </a>
@@ -190,6 +190,12 @@ function dashboardPage()
     $resultUserCount = $stmtUserCount->get_result();
     $rowUser = $resultUserCount->fetch_assoc();
 
+    $sqlReviewsCount = "SELECT COUNT(*) AS total_rows_reviews FROM reviews";
+    $stmtReviewsCount = $conn->prepare($sqlReviewsCount);
+    $stmtReviewsCount->execute();
+    $resultReviews = $stmtReviewsCount->get_result();
+    $rowReviews = $resultReviews->fetch_assoc();
+
 
     $user_id = $_SESSION['id_user'];
     $sqlUser = "SELECT * FROM users WHERE id_user = ?";
@@ -246,7 +252,7 @@ function dashboardPage()
                 <div class="card-indicator">
                     <div class="text">
                         <h1>Total NewsLetter</h1>
-                        <p>5</p>
+                        <p><?php echo $rowReviews['total_rows_reviews']; ?></p>
                     </div>
                     <div class="icon">
                         <?php iconNewsLetter(); ?>
@@ -1878,6 +1884,307 @@ function updateReview(){
         <div class="container-dashboard">
             <div class="container-heading-crud">
                 <a href="reviews.php">
+                    <img src="../assets/icon/arrow-left.png" alt="" width="40" height="40">
+                </a>
+                <p>Update Review</p>
+            </div>
+
+            <div class="data-dashboard ">
+                <form action="" method="POST">
+                    <div class="mb-3">
+                        <label for="review_text" class="form-label">Review</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" name="review_text" style="resize: none; text-align:start;" value="<?php echo $rowReview['review_text']; ?>">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+<?php
+}
+
+
+function reviewAdminPage(){
+    include "../koneksi.php";
+
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
+    $sql = "SELECT reviews.*, users.nama AS nama_user
+    FROM reviews
+    JOIN users ON reviews.id_user = users.id_user";
+    $stmtUser = $conn->prepare($sql);
+    $stmtUser->execute();
+    $result = $stmtUser->get_result();
+?>
+    <?php sideBar(); ?>
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <label for="menu-toggle"><span class="las la-bars"></span></label>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div class="container-dashboard">
+            <p>Data Review Pengunjung</p>
+            <div class="data-dashboard">
+                <a href="createReviewAdmin.php">
+                    <button type="button" class="btn btn-primary">Tambah Review</button>
+                </a>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nama</th>
+                            <th scope="col">Review</th>
+                            <th scope="col">Created</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if ($result->num_rows  > 0) {
+                            $no = 1;
+                        ?>
+                            <?php while ($row = $result->fetch_assoc()) { ?>
+                                <tr>
+                                    <td scope="row"><?php echo $no++; ?></td>
+                                    <td scope="row"><?php echo $row['nama_user']; ?></td>
+                                    <td width="600" style="text-align: justify;"><?php echo $row['review_text']; ?></td>
+                                    <td><?php echo date('Y-F-l',strtotime($row['created_at'])); ?></td>
+                                    <td>
+                                        <a href="#" onclick="confirmDelete(<?php echo $row['id_reviews']; ?>)" class="btn btn-danger">Hapus</a>
+                                        <a href="updateReviewAdmin.php?id_reviews=<?php echo $row['id_reviews']; ?>" class="btn btn-success">Update</a>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <tr>
+                                <td colspan="2" style="text-align: center;">Data Review Belum Tersedia</td>
+                            </tr>
+                        <?php } ?>
+                        <!-- <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td>@fat</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td colspan="2">Larry the Bird</td>
+                            <td>@twitter</td>
+                        </tr> -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <?php
+}
+
+function createReviewAdminPage(){
+    $id_user = $_SESSION['id_user'];
+
+    include "../koneksi.php";
+
+    if (isset($_POST['review_text'])) {
+        $review_user = htmlspecialchars($_POST['review_text'], ENT_QUOTES, 'UTF-8');
+
+        $sql = "INSERT INTO reviews (id_user, review_text) VALUES (?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("is", $id_user, $review_user);
+
+        // Eksekusi query
+        if ($stmt->execute()) {
+            echo "
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Review Berhasil Ditambahkan!'
+                    }).then(() => {
+                        window.location.href = 'review_admin.php';
+                    });
+                });
+            </script>
+        ";
+        } else {
+            ?>
+                    <script>
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Something went wrong!",
+                        });
+                    </script>
+            <?php
+        }
+    }
+
+
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
+    ?>
+    <?php sideBar(); ?>
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <label for="menu-toggle"><span class="las la-bars"></span></label>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div class="container-dashboard">
+            <div class="container-heading-crud">
+                <a href="review_admin.php">
+                    <img src="../assets/icon/arrow-left.png" alt="" width="40" height="40">
+                </a>
+                <p>Beri Review Anda</p>
+            </div>
+
+            <div class="data-dashboard ">
+                <form action="" method="POST">
+                    <div class="mb-3">
+                        <label for="review_text" class="form-label">Review</label>
+                        <textarea type="text" class="form-control" id="exampleInputEmail1" name="review_text" style="resize: none; height: 200px;"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+<?php
+}
+
+function updateReviewAdmin(){
+    $id_user = $_SESSION['id_user'];
+
+    include "../koneksi.php";
+
+    if (isset($_GET['id_reviews']) && is_numeric($_GET['id_reviews'])) {
+        $id_reviews = $_GET['id_reviews'];
+
+        $sqlSelectReview = "SELECT * FROM reviews WHERE id_reviews = ?";
+
+        $stmtReview = $conn->prepare($sqlSelectReview);
+
+        
+        $stmtReview->bind_param("i", $id_reviews);
+
+        $stmtReview->execute();
+        $resultReview = $stmtReview->get_result();
+       
+        if ($resultReview->num_rows > 0) {
+            $rowReview = $resultReview->fetch_assoc();
+        } else {
+            echo "Data tidak ditemukan.";
+            exit();
+        }
+
+        if(isset($_POST["review_text"])){
+            $review_text = $_POST["review_text"];
+
+            $sqlInsertReview = "UPDATE reviews SET review_text = ? WHERE id_reviews = ?";
+            $stmtInsertReview = $conn->prepare($sqlInsertReview);
+            $stmtInsertReview->bind_param("si", $review_text, $id_reviews);
+            
+            if($stmtInsertReview->execute()) {
+                echo "
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Review Berhasil Diupdate!'
+                            }).then(() => {
+                                window.location.href = 'review_admin.php';
+                            });
+                        });
+                    </script>
+                ";
+            } else {
+                echo "Gagal di update";
+            }
+        }
+
+    }
+
+
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
+    ?>
+    <?php sideBar(); ?>
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <label for="menu-toggle"><span class="las la-bars"></span></label>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div class="container-dashboard">
+            <div class="container-heading-crud">
+                <a href="review_admin.php">
                     <img src="../assets/icon/arrow-left.png" alt="" width="40" height="40">
                 </a>
                 <p>Update Review</p>

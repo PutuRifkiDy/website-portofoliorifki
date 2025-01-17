@@ -119,6 +119,13 @@ function sideBar()
                                 <small>Reviews</small>
                             </a>
                         </li>
+                        <li>
+                            <a href="contact.php">
+                                <span class="las la-comments" style="color: #85878a">
+                                </span>
+                                <small>Contacts</small>
+                            </a>
+                        </li>
                     <?php } else { ?>
                         <li>
                             <a href="reviews.php">
@@ -415,7 +422,7 @@ function createKategory()
     include "../koneksi.php";
 
     if (isset($_POST['kategori'])) {
-        htmlspecialchars($_POST['kategori'], ENT_QUOTES, 'UTF-8');
+        $nama_kategori = htmlspecialchars($_POST['kategori'], ENT_QUOTES, 'UTF-8');
 
         $sql = "INSERT INTO kategori (nama) VALUES (?)";
 
@@ -727,10 +734,10 @@ function createProject()
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id_kategori = $_POST['id_kategori'];
-        $nama_kegiatan = $_POST['nama_kegiatan'];
-        $deskripsi = $_POST['deskripsi'];
-        $tahun = $_POST['tahun'];
-        $link_project = $_POST['link_project'];
+        $nama_kegiatan = htmlspecialchars($_POST['nama_kegiatan'], ENT_QUOTES, 'UTF-8');
+        $deskripsi = htmlspecialchars($_POST['deskripsi'], ENT_QUOTES, 'UTF-8');
+        $tahun = htmlspecialchars($_POST['tahun'], ENT_QUOTES, 'UTF-8');
+        $link_project = htmlspecialchars($_POST['link_project'], ENT_QUOTES, 'UTF-8');
 
         // Proses upload file
         $target_dir = "../assets/uploads/";
@@ -804,7 +811,7 @@ function createProject()
             </div>
 
             <div class="data-dashboard ">
-                <form action="" method="POST" enctype="multipart/form-data">
+                <form action="" method="POST" enctype="multipart/form-data" id="projectForm">
                     <div class="mb-3">
                         <label for="nama_kegiatan" class="form-label">Nama Kegiatan</label>
                         <input type="text" class="form-control" id="exampleInputEmail1" name="nama_kegiatan">
@@ -873,10 +880,10 @@ function updateProject()
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id_project = $_POST['id_project'];
-        $nama_kegiatan = $_POST['nama_kegiatan'];
-        $deskripsi = $_POST['deskripsi'];
-        $link_project = $_POST['link_project'];
-        $tahun = $_POST['tahun'];
+        $nama_kegiatan = htmlspecialchars($_POST['nama_kegiatan'], ENT_QUOTES, 'UTF-8');
+        $deskripsi = htmlspecialchars($_POST['deskripsi'], ENT_QUOTES, 'UTF-8');
+        $link_project = htmlspecialchars($_POST['link_project'], ENT_QUOTES, 'UTF-8');
+        $tahun = htmlspecialchars($_POST['tahun'], ENT_QUOTES, 'UTF-8');
 
         $target_file = null;
         if (!empty($_FILES["photo_path"]["name"])) {
@@ -949,7 +956,7 @@ function updateProject()
             </div>
 
             <div class="data-dashboard ">
-                <form action="" method="POST" enctype="multipart/form-data">
+                <form action="" method="POST" enctype="multipart/form-data" id="projectForm">
                     <input type="hidden" name="id_project" value="<?php echo $row['id_project']; ?>">
                     <div class="mb-3">
                         <label for="nama_kegiatan" class="form-label">Nama Kegiatan</label>
@@ -1074,8 +1081,8 @@ function updateProfile()
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id_user = $user['id_user'];
-        $nama = $_POST['nama'];
-        $username = $_POST['username'];
+        $nama = htmlspecialchars($_POST['nama'], ENT_QUOTES, 'UTF-8');
+        $username = htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8');
         // $photo_path = $_POST['photo_path'];
 
         $check_sql = "SELECT * FROM users WHERE username = ? AND id_user != ?";
@@ -1163,7 +1170,7 @@ function updateProfile()
             </div>
 
             <div class="data-dashboard ">
-                <form action="" method="POST" enctype="multipart/form-data">
+                <form action="" method="POST" enctype="multipart/form-data" id="projectForm">
                     <div class="mb-3">
                         <label for="nama" class="form-label">Nama</label>
                         <input type="text" class="form-control" id="exampleInputEmail1" name="nama" value="<?php echo $user['nama']; ?>">
@@ -1312,8 +1319,8 @@ function createUser()
     include "../koneksi.php";
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $nama = $_POST['nama'];
-        $username = $_POST['username'];
+        $nama = htmlspecialchars($_POST['nama'], ENT_QUOTES, 'UTF-8');
+        $username = htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8');
         $level = $_POST['level'];
         $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
@@ -1416,7 +1423,7 @@ function createUser()
             </div>
 
             <div class="data-dashboard ">
-                <form action="" method="POST" enctype="multipart/form-data">
+                <form action="" method="POST" enctype="multipart/form-data" id="projectForm">
                     <div class="mb-3">
                         <label for="username" class="form-label">Username</label>
                         <input type="text" class="form-control" id="exampleInputEmail1" name="username">
@@ -1462,8 +1469,8 @@ function updateUser()
         $userForUpdate = $stmtUser->get_result()->fetch_assoc();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $nama = $_POST['nama'];
-            $username = $_POST['username'];
+            $nama = htmlspecialchars($_POST['nama'], ENT_QUOTES, 'UTF-8');
+            $username = htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8');
             $level = $_POST['level'];
     
             // Cek apakah username sudah ada
@@ -1567,7 +1574,7 @@ function updateUser()
             </div>
 
             <div class="data-dashboard ">
-                <form action="" method="POST" enctype="multipart/form-data">
+                <form action="" method="POST" enctype="multipart/form-data" id="projectForm">
                     <div class="mb-3">
                         <label for="username" class="form-label">Username</label>
                         <input type="text" class="form-control" id="exampleInputEmail1" value="<?php echo $userForUpdate['username']; ?>" name="username">
@@ -1822,7 +1829,7 @@ function updateReview(){
         }
 
         if(isset($_POST["review_text"])){
-            $review_text = $_POST["review_text"];
+            $review_text = htmlspecialchars($_POST["review_text"], ENT_QUOTES, 'UTF-8');
 
             $sqlInsertReview = "UPDATE reviews SET review_text = ? WHERE id_reviews = ?";
             $stmtInsertReview = $conn->prepare($sqlInsertReview);
@@ -2123,7 +2130,7 @@ function updateReviewAdmin(){
         }
 
         if(isset($_POST["review_text"])){
-            $review_text = $_POST["review_text"];
+            $review_text = htmlspecialchars($_POST["review_text"], ENT_QUOTES, 'UTF-8');
 
             $sqlInsertReview = "UPDATE reviews SET review_text = ? WHERE id_reviews = ?";
             $stmtInsertReview = $conn->prepare($sqlInsertReview);

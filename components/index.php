@@ -640,6 +640,17 @@ function  testiMoni()
     ];
     // Belajar menggunakan for
     $banyakData = count($dataReview);
+
+    include "koneksi.php";
+    $sql = "SELECT reviews.*, users.nama AS nama_user, users.photo_path AS foto_profile, users.level AS level_user 
+    FROM reviews
+    JOIN users ON reviews.id_user = users.id_user";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+
+    
 ?>
     <div class="testimoni-container" id="testimoni">
         <div class="testimoni-heading" data-aos="fade-up" data-aos-duration="600">
@@ -660,10 +671,13 @@ function  testiMoni()
         </div>
         <div class="wrapper-testimoni-card">
             <div class="container-card-testimoni" data-aos="fade-right" data-aos-duration="1000">
-                <?php for ($i = 0; $i < $banyakData; $i++) { ?>
+                    <?php while($row = $result->fetch_assoc()){
+                            $photo_path = $row["foto_profile"];
+                            $adjusted_path = str_replace("../assets/uploads", "assets/uploads", $photo_path);
+                        ?>
                     <div class="card-testimoni">
                         <div class="container-img-testimoni">
-                            <img src="assets/<?php echo $dataReview[$i]["gambar"]; ?>" alt="">
+                            <img src="<?php echo $adjusted_path;?>" alt="">
                         </div>
                         <div class="star-testimoni">
                             <?php iconStar(); ?>
@@ -673,18 +687,24 @@ function  testiMoni()
                             <?php iconStar(); ?>
                         </div>
                         <p>
-                            <?php echo $dataReview[$i]["review"]; ?>
+                            <?php echo $row['review_text']; ?>
                         </p>
                         <div class="identity-container-testimoni">
                             <h4>
-                                <?php echo $dataReview[$i]["nama"]; ?>
+                                <?php echo $row['nama_user']; ?>
                             </h4>
                             <p>
-                                <?php echo $dataReview[$i]["pekerjaan"]; ?>
+                                <?php 
+                                    if($row['level_user'] === 1){
+                                        echo "Admin";
+                                    } else {
+                                        echo "Pengunjung";
+                                    }
+                                ?>
                             </p>
                         </div>
                     </div>
-                <?php } ?>
+                    <?php } ?>
             </div>
         </div>
     </div>

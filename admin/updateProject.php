@@ -41,5 +41,55 @@
             });
         }
     </script>
+    <script>
+        document.getElementById("projectForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Mencegah pengiriman form sebelum validasi
+
+            const fileInput = document.getElementById("photo_path");
+            const file = fileInput.files[0];
+            
+            // Validasi apakah file diunggah
+            if (!file) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: "Harap unggah foto project!",
+                });
+                return;
+            }
+
+            // Validasi format file
+            const validExtensions = ["image/jpeg", "image/png", "image/gif"];
+            if (!validExtensions.includes(file.type)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Format Tidak Valid",
+                    text: "Harap unggah file dengan format .jpg, .jpeg, .png, atau .gif.",
+                });
+                return;
+            }
+
+            // Validasi ukuran file (maksimal 2MB)
+            const maxSize = 2 * 1024 * 1024; // 2MB
+            if (file.size > maxSize) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Ukuran File Terlalu Besar",
+                    text: "Ukuran file maksimal adalah 2MB.",
+                });
+                return;
+            }
+
+            // Jika validasi berhasil
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil!",
+                text: "Foto project valid, form akan dikirim.",
+            }).then(() => {
+                // Submit form jika validasi berhasil
+                document.getElementById("projectForm").submit();
+            });
+        });
+    </script>
 </body>
 </html>

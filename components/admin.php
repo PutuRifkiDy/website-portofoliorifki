@@ -8,7 +8,7 @@ if (!isset($_SESSION['id_user'])) {
 
 if ($_SESSION['level'] == 0) {
     // User biasa hanya boleh mengakses halaman tertentu
-    $allowed_pages = ['profile.php', 'reviews.php', 'createReview.php', 'updateProfile.php', 'updateReview.php'];
+    $allowed_pages = ['profile.php', 'reviews.php', 'createReview.php', 'updateProfile.php', 'updateReview.php', 'contact.php', 'updateContact.php'];
     $current_page = basename($_SERVER['PHP_SELF']);
     if (!in_array($current_page, $allowed_pages)) {
         header("Location: profile.php");
@@ -119,13 +119,7 @@ function sideBar()
                                 <small>Reviews</small>
                             </a>
                         </li>
-                        <li>
-                            <a href="contact.php">
-                                <span class="las la-comments" style="color: #85878a">
-                                </span>
-                                <small>Contacts</small>
-                            </a>
-                        </li>
+
                     <?php } else { ?>
                         <li>
                             <a href="reviews.php">
@@ -135,6 +129,13 @@ function sideBar()
                             </a>
                         </li>
                     <?php } ?>
+                    <li>
+                        <a href="contact.php">
+                            <span class="las la-comments" style="color: #85878a">
+                            </span>
+                            <small>Contacts</small>
+                        </a>
+                    </li>
                     <!-- <li>
                         <a href="combine_chart.html">
                             <span class="fa-solid fa-chart-simple" style="color: #85878a">
@@ -203,6 +204,12 @@ function dashboardPage()
     $resultReviews = $stmtReviewsCount->get_result();
     $rowReviews = $resultReviews->fetch_assoc();
 
+    $sqlContactCount = "SELECT COUNT(*) AS total_rows_contact FROM kontak";
+    $stmtContactCount = $conn->prepare($sqlContactCount);
+    $stmtContactCount->execute();
+    $resultContact = $stmtContactCount->get_result();
+    $rowContact = $resultContact->fetch_assoc();
+
 
     $user_id = $_SESSION['id_user'];
     $sqlUser = "SELECT * FROM users WHERE id_user = ?";
@@ -269,6 +276,15 @@ function dashboardPage()
                     <div class="text">
                         <h1>Total User</h1>
                         <p><?php echo $rowUser['total_rows_user']; ?></p>
+                    </div>
+                    <div class="icon">
+                        <?php iconUser(); ?>
+                    </div>
+                </div>
+                <div class="card-indicator">
+                    <div class="text">
+                        <h1>Total Messages  </h1>
+                        <p><?php echo $rowContact['total_rows_contact']; ?></p>
                     </div>
                     <div class="icon">
                         <?php iconUser(); ?>
@@ -1459,7 +1475,7 @@ function updateUser()
 {
     include "../koneksi.php";
 
-    if(isset($_GET['id_user'])){
+    if (isset($_GET['id_user'])) {
         $id_user = $_GET['id_user'];
 
         $sqlUser = 'SELECT * FROM users WHERE id_user = ?';
@@ -1472,14 +1488,14 @@ function updateUser()
             $nama = htmlspecialchars($_POST['nama'], ENT_QUOTES, 'UTF-8');
             $username = htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8');
             $level = $_POST['level'];
-    
+
             // Cek apakah username sudah ada
             $check_sql = "SELECT * FROM users WHERE username = ? AND id_user != $id_user";
             $check_stmt = $conn->prepare($check_sql);
             $check_stmt->bind_param("s", $username);
             $check_stmt->execute();
             $result = $check_stmt->get_result();
-    
+
             if ($result->num_rows > 0) {
                 // Username sudah ada, tampilkan alert
                 echo "
@@ -1498,7 +1514,7 @@ function updateUser()
                 // $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
                 // $stmt = $conn->prepare($sql);
                 // $stmt->bind_param("ss", $username, $password);
-    
+
                 // Proses upload file
                 $target_dir = "../assets/uploads/";
                 $target_file = $target_dir . basename($_FILES["photo_path"]["name"]);
@@ -1507,7 +1523,7 @@ function updateUser()
                     $sql = "UPDATE users SET username = ?, photo_path = ?, level = ?, nama = ? WHERE id_user = $id_user";
                     $stmt = $conn->prepare($sql);
                     $stmt->bind_param("ssss", $username, $target_file, $level, $nama);
-    
+
                     if ($stmt->execute()) {
                         echo "
                             <script>
@@ -1529,10 +1545,10 @@ function updateUser()
                     echo "Gagal mengupload file.";
                 }
             }
-        }    
+        }
     }
 
-    
+
     $user_id = $_SESSION['id_user'];
     $sqlUser = "SELECT * FROM users WHERE id_user = ?";
     $stmtUser = $conn->prepare($sqlUser);
@@ -1581,11 +1597,11 @@ function updateUser()
                     </div>
                     <div class="mb-3">
                         <label for="nama" class="form-label">Nama</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" value="<?php echo $userForUpdate['nama'];?>" name="nama">
+                        <input type="text" class="form-control" id="exampleInputEmail1" value="<?php echo $userForUpdate['nama']; ?>" name="nama">
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="exampleInputEmail1" value="<?php echo $userForUpdate['password'];?>" name="password" readonly>
+                        <input type="password" class="form-control" id="exampleInputEmail1" value="<?php echo $userForUpdate['password']; ?>" name="password" readonly>
                     </div>
                     <div class="mb-3">
                         <label for="photo_path" class="form-label">Foto</label>
@@ -1593,18 +1609,18 @@ function updateUser()
                     </div>
                     <div class="mb-3">
                         <select class="form-select" aria-label="Default select example" name="level">
-                            <?php 
-                                if($userForUpdate['level'] === 1){
-                                    ?>
-                                        <option value="1" selected>Admin</option>
-                                        <option value="0">Pengunjung</option>
-                                        <?php
-                                } else {
-                                    ?>
-                                        <option value="1">Admin</option>
-                                        <option value="0" selected>Pengunjung</option>
-                                    <?php
-                                }
+                            <?php
+                            if ($userForUpdate['level'] === 1) {
+                            ?>
+                                <option value="1" selected>Admin</option>
+                                <option value="0">Pengunjung</option>
+                            <?php
+                            } else {
+                            ?>
+                                <option value="1">Admin</option>
+                                <option value="0" selected>Pengunjung</option>
+                            <?php
+                            }
                             ?>
                         </select>
                     </div>
@@ -1617,7 +1633,8 @@ function updateUser()
 <?php
 }
 
-function reviewPage(){
+function reviewPage()
+{
     include "../koneksi.php";
 
     $user_id = $_SESSION['id_user'];
@@ -1679,7 +1696,7 @@ function reviewPage(){
                                 <tr>
                                     <td scope="row"><?php echo $no++; ?></td>
                                     <td width="800" style="text-align: justify;"><?php echo $row['review_text']; ?></td>
-                                    <td><?php echo date('Y-F-l',strtotime($row['created_at'])); ?></td>
+                                    <td><?php echo date('Y-F-l', strtotime($row['created_at'])); ?></td>
                                     <td>
                                         <a href="#" onclick="confirmDelete(<?php echo $row['id_reviews']; ?>)" class="btn btn-danger">Hapus</a>
                                         <a href="updateReview.php?id_reviews=<?php echo $row['id_reviews']; ?>" class="btn btn-success">Update</a>
@@ -1711,7 +1728,8 @@ function reviewPage(){
     <?php
 }
 
-function createReviewPage(){
+function createReviewPage()
+{
     $id_user = $_SESSION['id_user'];
 
     include "../koneksi.php";
@@ -1739,15 +1757,15 @@ function createReviewPage(){
             </script>
         ";
         } else {
-            ?>
-                    <script>
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Something went wrong!",
-                        });
-                    </script>
-            <?php
+    ?>
+            <script>
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+            </script>
+    <?php
         }
     }
 
@@ -1803,7 +1821,8 @@ function createReviewPage(){
 <?php
 }
 
-function updateReview(){
+function updateReview()
+{
     $id_user = $_SESSION['id_user'];
 
     include "../koneksi.php";
@@ -1815,12 +1834,12 @@ function updateReview(){
 
         $stmtReview = $conn->prepare($sqlSelectReview);
 
-        
+
         $stmtReview->bind_param("i", $id_reviews);
 
         $stmtReview->execute();
         $resultReview = $stmtReview->get_result();
-       
+
         if ($resultReview->num_rows > 0) {
             $rowReview = $resultReview->fetch_assoc();
         } else {
@@ -1828,14 +1847,14 @@ function updateReview(){
             exit();
         }
 
-        if(isset($_POST["review_text"])){
+        if (isset($_POST["review_text"])) {
             $review_text = htmlspecialchars($_POST["review_text"], ENT_QUOTES, 'UTF-8');
 
             $sqlInsertReview = "UPDATE reviews SET review_text = ? WHERE id_reviews = ?";
             $stmtInsertReview = $conn->prepare($sqlInsertReview);
             $stmtInsertReview->bind_param("si", $review_text, $id_reviews);
-            
-            if($stmtInsertReview->execute()) {
+
+            if ($stmtInsertReview->execute()) {
                 echo "
                     <script>
                         document.addEventListener('DOMContentLoaded', function() {
@@ -1853,7 +1872,6 @@ function updateReview(){
                 echo "Gagal di update";
             }
         }
-
     }
 
 
@@ -1864,7 +1882,7 @@ function updateReview(){
     $stmtUser->execute();
     $user = $stmtUser->get_result()->fetch_assoc();
 
-    ?>
+?>
     <?php sideBar(); ?>
     <div class="main-content">
         <header>
@@ -1912,7 +1930,8 @@ function updateReview(){
 }
 
 
-function reviewAdminPage(){
+function reviewAdminPage()
+{
     include "../koneksi.php";
 
     $user_id = $_SESSION['id_user'];
@@ -1977,7 +1996,7 @@ function reviewAdminPage(){
                                     <td scope="row"><?php echo $no++; ?></td>
                                     <td scope="row"><?php echo $row['nama_user']; ?></td>
                                     <td width="600" style="text-align: justify;"><?php echo $row['review_text']; ?></td>
-                                    <td><?php echo date('Y-F-l',strtotime($row['created_at'])); ?></td>
+                                    <td><?php echo date('Y-F-l', strtotime($row['created_at'])); ?></td>
                                     <td>
                                         <a href="#" onclick="confirmDelete(<?php echo $row['id_reviews']; ?>)" class="btn btn-danger">Hapus</a>
                                         <a href="updateReviewAdmin.php?id_reviews=<?php echo $row['id_reviews']; ?>" class="btn btn-success">Update</a>
@@ -2009,7 +2028,8 @@ function reviewAdminPage(){
     <?php
 }
 
-function createReviewAdminPage(){
+function createReviewAdminPage()
+{
     $id_user = $_SESSION['id_user'];
 
     include "../koneksi.php";
@@ -2037,15 +2057,15 @@ function createReviewAdminPage(){
             </script>
         ";
         } else {
-            ?>
-                    <script>
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Something went wrong!",
-                        });
-                    </script>
-            <?php
+    ?>
+            <script>
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+            </script>
+    <?php
         }
     }
 
@@ -2104,7 +2124,8 @@ function createReviewAdminPage(){
 <?php
 }
 
-function updateReviewAdmin(){
+function updateReviewAdmin()
+{
     $id_user = $_SESSION['id_user'];
 
     include "../koneksi.php";
@@ -2116,12 +2137,12 @@ function updateReviewAdmin(){
 
         $stmtReview = $conn->prepare($sqlSelectReview);
 
-        
+
         $stmtReview->bind_param("i", $id_reviews);
 
         $stmtReview->execute();
         $resultReview = $stmtReview->get_result();
-       
+
         if ($resultReview->num_rows > 0) {
             $rowReview = $resultReview->fetch_assoc();
         } else {
@@ -2129,14 +2150,14 @@ function updateReviewAdmin(){
             exit();
         }
 
-        if(isset($_POST["review_text"])){
+        if (isset($_POST["review_text"])) {
             $review_text = htmlspecialchars($_POST["review_text"], ENT_QUOTES, 'UTF-8');
 
             $sqlInsertReview = "UPDATE reviews SET review_text = ? WHERE id_reviews = ?";
             $stmtInsertReview = $conn->prepare($sqlInsertReview);
             $stmtInsertReview->bind_param("si", $review_text, $id_reviews);
-            
-            if($stmtInsertReview->execute()) {
+
+            if ($stmtInsertReview->execute()) {
                 echo "
                     <script>
                         document.addEventListener('DOMContentLoaded', function() {
@@ -2154,7 +2175,6 @@ function updateReviewAdmin(){
                 echo "Gagal di update";
             }
         }
-
     }
 
 
@@ -2165,7 +2185,7 @@ function updateReviewAdmin(){
     $stmtUser->execute();
     $user = $stmtUser->get_result()->fetch_assoc();
 
-    ?>
+?>
     <?php sideBar(); ?>
     <div class="main-content">
         <header>
@@ -2207,6 +2227,328 @@ function updateReviewAdmin(){
                 </form>
             </div>
 
+        </div>
+    </div>
+    <?php
+}
+
+function kontakPage()
+{
+    include "../koneksi.php";
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
+    if ($_SESSION['level'] === 1) {
+        $sqlDataKontakAdmin = "SELECT kontak.*, users.nama AS nama_user
+        FROM kontak
+        JOIN users ON
+        kontak.id_user = users.id_user";
+        $stmt_kontak_admin = $conn->prepare($sqlDataKontakAdmin);
+        $stmt_kontak_admin->execute();
+        $result_admin = $stmt_kontak_admin->get_result();
+    ?>
+        <?php sideBar(); ?>
+        <div class="main-content">
+            <header>
+                <div class="header-content">
+                    <label for="menu-toggle"><span class="las la-bars"></span></label>
+                    <div style="display: flex; flex-direction: row; gap: 10px;">
+                        <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                            <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                            <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                        </div>
+                        <a href="../index.php">
+                            <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                                <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                            </div>
+                        </a>
+                        <a href="#" onclick="confirmLogout(event)">
+                            <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                                <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </header>
+            <div class="container-dashboard">
+
+                <p>Data Pesan Anda</p>
+                <div class="data-dashboard">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nama</th>
+                                <th scope="col">Telepon / Number</th>
+                                <th scope="col">Pesan</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if ($result_admin->num_rows  > 0) {
+                                $no = 1;
+                            ?>
+                                <?php while ($row_admin = $result_admin->fetch_assoc()) { ?>
+                                    <tr>
+                                        <td scope="row"><?php echo $no++; ?></td>
+                                        <td scope="row"><?php echo $row_admin['nama_user']; ?></td>
+                                        <td scope="row">
+                                            <?php
+                                            if ($row_admin['preferensi_kontak'] === 'Email') {
+                                                echo $row_admin['email'];
+                                            } else if ($row_admin['preferensi_kontak'] === 'Telepon') {
+                                                echo $row_admin['phone_number'];
+                                            }
+                                            ?>
+                                        </td>
+                                        <td width="300" style="text-align: justify;"><?php echo $row_admin['pesan']; ?></td>
+                                        <td>
+                                            <a href="#" onclick="confirmDelete(<?php echo $row_admin['id_kontak']; ?>)" class="btn btn-danger">Hapus</a>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            <?php } else { ?>
+                                <tr>
+                                    <td colspan="2" style="text-align: center;">Data Kontak Belum Tersedia</td>
+                                </tr>
+                            <?php } ?>
+                            <!-- <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td>@fat</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td colspan="2">Larry the Bird</td>
+                            <td>@twitter</td>
+                        </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    <?php
+    } else if ($_SESSION['level'] === 0) {
+        $id_user_admin = $_SESSION['id_user'];
+        $sqlDataKontakUser = "SELECT kontak.*, users.nama AS nama_user
+        FROM kontak
+        JOIN users ON
+        kontak.id_user = users.id_user WHERE kontak.id_user = ?";
+        $stmt_kontak = $conn->prepare($sqlDataKontakUser);
+        $stmt_kontak->bind_param("i", $id_user_admin);
+        $stmt_kontak->execute();
+        $result = $stmt_kontak->get_result();
+    ?>
+        <?php sideBar(); ?>
+        <div class="main-content">
+            <header>
+                <div class="header-content">
+                    <label for="menu-toggle"><span class="las la-bars"></span></label>
+                    <div style="display: flex; flex-direction: row; gap: 10px;">
+                        <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                            <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                            <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                        </div>
+                        <a href="../index.php">
+                            <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                                <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                            </div>
+                        </a>
+                        <a href="#" onclick="confirmLogout(event)">
+                            <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                                <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </header>
+            <div class="container-dashboard">
+                <p>Data Pesan Anda</p>
+                <div class="data-dashboard">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nama</th>
+                                <th scope="col">Telepon / Number</th>
+                                <th scope="col">Pesan</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if ($result->num_rows  > 0) {
+                                $no = 1;
+                            ?>
+                                <?php while ($row = $result->fetch_assoc()) { ?>
+                                    <tr>
+                                        <td scope="row"><?php echo $no++; ?></td>
+                                        <td scope="row"><?php echo $row['nama_user']; ?></td>
+                                        <td scope="row">
+                                            <?php
+                                            if ($row['preferensi_kontak'] === 'Email') {
+                                                echo $row['email'];
+                                            } else if ($row['preferensi_kontak'] === 'Telepon') {
+                                                echo $row['phone_number'];
+                                            }
+                                            ?>
+                                        </td>
+                                        <td width="300" style="text-align: justify;"><?php echo $row['pesan']; ?></td>
+                                        <td>
+                                            <a href="#" onclick="confirmDelete(<?php echo $row['id_kontak']; ?>)" class="btn btn-danger">Hapus</a>
+                                            <a href="updateContact.php?id_kontak=<?php echo $row['id_kontak']; ?>" class="btn btn-success">Update</a>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            <?php } else { ?>
+                                <tr>
+                                    <td colspan="2" style="text-align: center;">Data Kontak Belum Tersedia</td>
+                                </tr>
+                            <?php } ?>
+                            <!-- <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td>@fat</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td colspan="2">Larry the Bird</td>
+                            <td>@twitter</td>
+                        </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    <?php
+    }
+}
+
+function updateKontakPage()
+{
+    include "../koneksi.php";
+    $user_id = $_SESSION['id_user'];
+    $sqlUser = "SELECT * FROM users WHERE id_user = ?";
+    $stmtUser = $conn->prepare($sqlUser);
+    $stmtUser->bind_param("i", $user_id);
+    $stmtUser->execute();
+    $user = $stmtUser->get_result()->fetch_assoc();
+
+    if(isset($_GET['id_kontak'])){
+        $id_kontak = $_GET['id_kontak'];
+        $sql = "SELECT * FROM kontak WHERE id_kontak = ? AND id_user = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ii", $id_kontak, $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        // if ($result->num_rows === 0) {
+        //     echo "Data tidak ditemukan atau tidak memiliki akses.";
+        //     return;
+        // }
+    
+        $data = $result->fetch_assoc();
+    
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if(isset($_POST['email'])){
+                $email = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
+                $pesan = htmlspecialchars($_POST['pesan'], ENT_QUOTES, 'UTF-8');
+                $sqlUpdate = "UPDATE kontak SET email = ?, pesan = ? WHERE id_kontak = ? AND id_user = ?";
+                $stmtUpdate = $conn->prepare($sqlUpdate);
+                $stmtUpdate->bind_param("ssii", $email, $pesan, $id_kontak, $user_id);
+            } else if(isset($_POST['phone_number'])){
+                $phone_number = htmlspecialchars($_POST['phone_number'], ENT_QUOTES, 'UTF-8');
+                $pesan = htmlspecialchars($_POST['pesan'], ENT_QUOTES, 'UTF-8');
+                $sqlUpdate = "UPDATE kontak SET phone_number = ?, pesan = ? WHERE id_kontak = ? AND id_user = ?";
+                $stmtUpdate = $conn->prepare($sqlUpdate);
+                $stmtUpdate->bind_param("ssii", $phone_number, $pesan, $id_kontak, $user_id);
+            }
+    
+    
+            if ($stmtUpdate->execute()) {
+                echo "
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Data kontak berhasil diperbarui.'
+                            }).then(() => {
+                                window.location.href = 'contact.php';
+                            });
+                        });
+                    </script>
+                ";
+            } else {
+                echo "Gagal memperbarui data: " . $stmtUpdate->error;
+            }
+        }
+    }
+    // Ambil data kontak berdasarkan id_kontak dan id_user
+    ?>
+    <?php sideBar(); ?>
+    <div class="main-content">
+        <header>
+            <div class="header-content">
+                <label for="menu-toggle"><span class="las la-bars"></span></label>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div style="display: flex; flex-direction:flex; justify-content: center; align-items: center; gap: 10px; ">
+                        <img src="../assets/icon/icon-user.png" alt="" width="20px" height="20px">
+                        <p style="display:flex; justify-content: center; align-items: center; text-align: center; padding-right: 10px; color: #000000"><?php echo $user['nama']; ?></p>
+                    </div>
+                    <a href="../index.php">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-home.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                    <a href="#" onclick="confirmLogout(event)">
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center; ">
+                            <img src="../assets/icon/icon-leave.png" alt="" width="30px" height="30px">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <div class="container-dashboard">
+            <div class="container-heading-crud">
+                <a href="contact.php">
+                    <img src="../assets/icon/arrow-left.png" alt="" width="40" height="40">
+                </a>
+                <p>Update Pesan Anda</p>
+            </div>
+            <div class="data-dashboard">
+                <form action="" method="POST">
+                    <?php 
+                        if(isset($data['email'])){
+                            ?>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" value="<?php echo $data['email']; ?>" required>
+                                </div>
+                            <?php
+                        } else if(isset($data['phone_number'])){
+                            ?>
+                                <div class="mb-3">
+                                    <label for="phone_number" class="form-label">Nomor Telepon</label>
+                                    <input type="text" class="form-control" name="phone_number" value="<?php echo $data['phone_number']; ?>">
+                                </div>
+                            <?php
+                        }
+                    ?>
+                    <div class="mb-3">
+                        <label for="pesan" class="form-label">Pesan</label>
+                        <textarea class="form-control" name="pesan"><?php echo $data['pesan']; ?></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
         </div>
     </div>
 <?php

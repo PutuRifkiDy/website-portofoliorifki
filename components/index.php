@@ -733,6 +733,38 @@ function iconLocation()
 
 function contactMe()
 {
+
+    include "koneksi.php";
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $id_user = $_SESSION['id_user']; // Mendapatkan id_user dari session
+        $email = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
+        $phone_number = htmlspecialchars($_POST['phone_number'], ENT_QUOTES, 'UTF-8');
+        $pesan = htmlspecialchars($_POST['pesan'], ENT_QUOTES, 'UTF-8');
+        $preferensi_kontak = htmlspecialchars($_POST['preferensi_kontak'], ENT_QUOTES, 'UTF-8');
+
+        // Menyimpan data ke database
+        $sql = "INSERT INTO kontak (id_user, email, phone_number, pesan, preferensi_kontak) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("issss", $id_user, $email, $phone_number, $pesan, $preferensi_kontak);
+
+        if ($stmt->execute()) {
+            echo "
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'Pesan Berhasil Dikirim!'
+                        }).then(() => {
+                            window.location.href = 'index.php';
+                        });
+                    });
+                </script>
+            ";
+        } else {
+            echo "Gagal menyimpan data: " . $stmt->error;
+        }
+    }
 ?>
     <div class="container-contactMe" id="contactMe">
         <div class="pesawat">
@@ -770,14 +802,13 @@ function contactMe()
                     </div>
                 </div>
 
-                <form action="" data-aos="fade-left" data-aos-duration="1000" onsubmit="return validateBeforeSubmit()">
+                <form action="" method="post" data-aos="fade-left" data-aos-duration="1000" onsubmit="return validateBeforeSubmit()">
                     <div class="nameAndEmail-contactMe">
-                        <input type="text" placeholder="Name*" onfocus="highlight(this)" onblur="removeHighlight(this)" oninput="checkInput(this)">
-                        <input type="text" id="emailField" placeholder="Email Address*" onfocus="highlight(this)" onblur="removeHighlight(this)" oninput="checkInput(this)">
-                        <input type="tel" id="phoneField" placeholder="Phone Number*" id="phoneField" style="display: none;" onfocus="highlight(this)" onblur="removeHighlight(this)" oninput="checkInput(this)">
+                        <input type="text" name="email" id="emailField" placeholder="Email Address*" onfocus="highlight(this)" onblur="removeHighlight(this)" oninput="checkInput(this)">
+                        <input type="tel" name="phone_number" id="phoneField" placeholder="Phone Number*" id="phoneField" style="display: none;" onfocus="highlight(this)" onblur="removeHighlight(this)" oninput="checkInput(this)">
                     </div>
                     <!-- <input type="text" placeholder="No Telepon"> -->
-                    <textarea class="long-text" type="text" rows="4" cols="50" placeholder="Type your message here..." onfocus="highlight(this)" onblur="removeHighlight(this)" oninput="checkInput(this)" style="resize: none;">
+                    <textarea class="long-text" name="pesan" type="text" rows="4" cols="50" placeholder="Type your message here..." onfocus="highlight(this)" onblur="removeHighlight(this)" oninput="checkInput(this)" style="resize: none;">
                             </textarea>
                     <div class="wrapper-metode">
                         <div class="wrapper-email">
@@ -789,7 +820,18 @@ function contactMe()
                             <label for="kontak_telepon">Telepon</label>
                         </div>
                     </div>
-                    <button type="submit">Request Now</button>
+                    
+                        <?php 
+                        if(isset($_SESSION['id_user'])){
+                            ?>
+                                <button type="submit">Request now</button>
+                            <?php
+                        } else {
+                            echo '<button type="button"><a href="login.php" style="text-decoration: none; color: white;">Login to Request</a></button>';
+                        }
+
+                        ?>
+                    
                 </form>
             </div>
         </div>

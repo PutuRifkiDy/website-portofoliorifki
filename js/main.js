@@ -167,7 +167,6 @@ function changeInputMethod(radio){
 }
 
 function validateBeforeSubmit() {
-    const name = document.querySelector('input[placeholder="Name*"]').value;
     const emailField = document.getElementById("emailField");
     const phoneField = document.getElementById("phoneField");
 
@@ -177,7 +176,7 @@ function validateBeforeSubmit() {
     // Ambil nilai kontak berdasarkan pilihan radio button
     const contactValue = emailSelected ? emailField.value : phoneField.value;
 
-    if (!name || !contactValue) {
+    if (!contactValue) {
         Swal.fire({
             icon: "error",
             title: "Oops...",

@@ -900,6 +900,7 @@ function updateProject()
         $deskripsi = htmlspecialchars($_POST['deskripsi'], ENT_QUOTES, 'UTF-8');
         $link_project = htmlspecialchars($_POST['link_project'], ENT_QUOTES, 'UTF-8');
         $tahun = htmlspecialchars($_POST['tahun'], ENT_QUOTES, 'UTF-8');
+        $id_kategori = htmlspecialchars($_POST['id_kategori'], ENT_QUOTES, 'UTF-8');
 
         $target_file = null;
         if (!empty($_FILES["photo_path"]["name"])) {
@@ -909,9 +910,9 @@ function updateProject()
         }
 
         // Update data
-        $sql = "UPDATE project SET nama_kegiatan = ?, deskripsi = ?, photo_path = ?, link_project = ?, tahun = ? WHERE id_project = ?";
+        $sql = "UPDATE project SET id_kategori = ?, nama_kegiatan = ?, deskripsi = ?, photo_path = ?, link_project = ?, tahun = ? WHERE id_project = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssssi", $nama_kegiatan, $deskripsi, $target_file, $link_project, $tahun, $id_project);
+        $stmt->bind_param("isssssi", $id_kategori, $nama_kegiatan, $deskripsi, $target_file, $link_project, $tahun, $id_project);
 
         if ($stmt->execute()) {
             echo "
